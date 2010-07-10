@@ -1,0 +1,334 @@
+/* Basic CSS */
+body
+{
+	font: 12px Arial, Helvetica, sans-serif;
+    background-color: #000000;
+	color: #ffc800;
+	margin: 0;
+	height: 100%;
+	line-height: 150%;
+	background-image: url('../../images/wow/backgrounds/bg.jpg');
+	background-repeat: no-repeat;
+	background-position: 50% 0;
+}
+img
+{
+	border: 0;
+}
+h3
+{
+	margin: 2px;
+}
+a
+{
+	color: #ffc800;
+	text-decoration: underline;
+}
+a:hover
+{
+	background: inherit;
+	text-decoration: none;
+}
+hr
+{
+	height: 1px;
+	margin: 5px 0;
+	border: #1a4d7c solid 1px;
+}
+legend
+{
+	color: #ffc800;
+}
+/* IDS And Classes */
+
+.top
+{
+	margin:0 5% 1% 5%;
+	border:#1a4d7c solid 2px;
+	border-top: none;
+	background: url('../../images/wow/gradients/module-drk.png') transparent;
+}
+
+.main
+{
+	float: left;
+	width: 65%;
+	margin:0 0 10px 5%;
+	border:#1a4d7c solid 2px;
+	border-top: none;
+	background: url('../../images/wow/gradients/module-drk.png') transparent;
+}
+.main_redirect
+{
+	margin: 25%;
+	border:#1a4d7c solid 2px;
+	border-top: none;
+	background: url('../../images/wow/gradients/module-drk.png') transparent;
+}
+.main_title
+{
+	background: url('../../images/wow/misc/main_title.png') repeat-x;
+	height: 60px;
+	padding: 8px 5px 0 5px;
+	font-weight: bold;
+	font-variant: small-caps;
+}
+
+.content
+{
+	border:#1a4d7c solid 1px;
+	padding:5px 5px 5px 5px;
+	margin: 0 10px 10px 10px;
+}
+.content .ie
+{
+	width: 100%;
+}
+.content_title_left
+{
+	background:url(../../images/wow/misc/content-title-left.png) no-repeat;
+	float: left;
+	height:32px;
+	width:25px;
+}
+.content_title
+{
+	background:url(../../images/wow/misc/content-title.png) repeat-x;
+	height:32px;
+	padding-top: 5px;
+}
+.content_title_right
+{
+	background:url(../../images/wow/misc/content-title-right.png) no-repeat;
+	height:32px;
+	width:54px;
+	float: right;
+}
+.rightside
+{
+	float: right;
+	width: 23%;
+	margin:0 5% 0 0;
+}
+.rightside .main_right
+{
+	margin-bottom: 10px;
+	border:#1a4d7c solid 2px;
+	border-top: none;
+	background:url(../../images/wow/gradients/module-drk.png) transparent;
+}
+
+.footer
+{
+	clear:both;
+	margin: 0 5% 0 5%;
+	border:#1a4d7c solid 2px;
+	border-top: none;
+	background:url(../../images/wow/gradients/module-drk.png) transparent;
+}
+.footer_right
+{
+	float: right;
+	border:#1a4d7c solid 1px;
+	padding:5px 5px 5px 5px;
+	margin: 0 10px 10px 10px;
+	width: 30%;
+}
+#footer_loading
+{
+	position: fixed;
+	bottom: 0px;
+	border-bottom: 5px solid #447722;
+	width: 100%;
+	display: none;
+}
+#footer_loading_text
+{
+	width: 100px;
+	margin: 0 auto;
+	padding: 5px;
+	background-color: #447722;
+	text-align: center;
+	color: #aaff55;
+	font-weight: bold;
+	-webkit-border-radius: 7px 7px 0px 0px;
+	-moz-border-radius: 7px 7px 0px 0px;
+	border: 1px solid #55bb00;
+	border-bottom: 0px;
+}
+
+.logo
+{
+	background:url(../../images/wow/backgrounds/logo.png) no-repeat;
+	text-align: center;
+	height: 130px;
+	width: 253px;
+}
+
+.header
+{
+	background:url(../../images/wow/backgrounds/bg-top.jpg) repeat-x;
+}
+
+.bottom
+{
+	clear: both;
+	background: url("../../images/wow/misc/bottom.jpg") repeat-x;
+	height: 15px;
+	bottom: 0px;
+}
+
+.lichking
+{
+	background:url(../../images/wow/backgrounds/lk.png) no-repeat;
+	height:148px;
+	width:379px;
+	Z-index: -1;
+}
+
+/* BOXES */
+.errorbox
+{
+	background: url('../../images/wow/icons/warning.png') #990000 no-repeat 0 2px;
+	border: 1px solid #FF0000;
+	padding: 5px 5px 5px 25px;
+}
+.successbox
+{
+	background: url('../../images/wow/icons/check.png') #009911 no-repeat 1% 5px;
+	border: 1px solid #00FF00;
+	padding: 5px 5px 5px 25px;
+}
+.noticebox
+{
+	background: url('../../images/wow/icons/information.png') #7777ff no-repeat 0 2px;
+	border: 1px solid #dddddd;
+	padding: 5px 5px 5px 25px;
+}
+.inputerror
+{
+	border: 1px solid #FF0000;
+}
+.date
+{
+	text-align: right;
+	border-top: 2px solid #1a4d7c;
+	font-size: 11px;
+}
+
+/* FLOAT */
+.right
+{
+	float: right;
+}
+.left
+{
+	float: left;
+}
+.clear
+{
+	clear: both;
+}
+
+/* Characters */
+
+.characters
+{
+	clear: both;
+	margin-bottom: 5px;
+	padding: 2px;
+	border: 2px solid #ffc800;
+	min-height: 100px;
+	height: auto !important;
+	height: 100px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	background-color: #333333;
+}
+.characters .cleft
+{
+	float: left;
+	width: 86px;
+}
+.characters .cright
+{
+	float: right;
+	width: 150px;
+	margin: 5px;
+	padding: 5px;
+	text-align: center;
+	border: 1px solid #ffc800;
+}
+.characters #cselected
+{
+	background-color: #ffdd77;
+}
+.avatar
+{
+	margin: 0 auto; text-align: center;
+}
+
+.avatar .shell
+{
+	position: relative; margin: 10px auto; width: 64px; height: 64px;
+}
+
+.avatar .frame
+{
+	position: absolute; background: url('../../images/avatars/default.gif') no-repeat; width: 82px; height: 83px; top: -8px; left: -8px; z-index: 200;
+}
+
+.avatar .iconPosition
+{
+	position: absolute; top: 50px; left: 46px; width: 24px; text-align: center; color: #FFD823; z-index: 300;
+}
+
+/* Tooltip */
+.tooltip
+{
+	padding: 5px;
+	background-color: #000000;
+	border: 1px solid #777777;
+	color: #eeeeee;
+	width: expression(this.offsetWidth > 350 ? '350px' : '');
+	max-width: 350px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+/* Item Quality Colors */ 
+.qc-artifact, .qc-artifact a, .qc-heirloom, .qc-heirloom a { color: #E6CC80; }
+.qc-legendary, .qc-legendary a { color: #ff8000; }
+.qc-epic, .qc-epic a { color: #a335ee; }
+.qc-rare, .qc-rare a { color: #0070FF; }
+.qc-uncommon, .qc-uncommon a { color: #1EFF00; }
+.qc-common, .qc-common a { color: #ffffff; }
+.qc-poor, .qc-poor a { color: #9D9D9D; }
+
+/* Reward Bit And Vote Gateway Bit */
+.reward_bit
+{
+	border: 1px solid;
+	padding: 5px;
+	cursor: pointer;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+.vg_bit
+{
+	border: 1px solid;
+	padding: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+.online_player_bit:hover
+{
+	cursor: pointer;
+	background-color: #444444;
+}
+.timestamp
+{
+	text-align: right;
+	font-size: 10px;
+}
