@@ -25,7 +25,7 @@
 		Once inside your "data" Folder, there will be a folder either named "enUS", "enGB", "frFR", "esES" or something like that, double click that folder
 		there will be a file named "realmlist.wtf" or just "realmlist", right click it click on "Open" or "Open with", if it asks which program choose notepad
 		or wordpad and empty the whole file, replace the whole file with:<br />
-		<code>set realmlist logon.cataclysmicwow.com</code><br />
+		<code>set realmlist <?php print $LOGON_REALMLIST; ?></code><br />
 		Save the file, and then close it!
 		</fieldset>
 	
