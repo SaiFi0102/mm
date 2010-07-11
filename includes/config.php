@@ -29,7 +29,7 @@ $LOGON_DATABASE = array(
 	'db'	=> 'realmd', //Database with the stored tables
 );
 
-$LOGON_REALMLIST = "127.0.0.1";
+$LOGON_REALMLIST = "logon.dominationwow.com";
 
 $REALM = array(); //$REALM[realmid] = array(CH_DATABASE=array,W_DATABASE=array,CAP,IP,PORT,SOAP=array)
 $REALM[1] = array(
