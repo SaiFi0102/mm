@@ -1,8 +1,8 @@
 <div class="main">
-	<div class="main_title">Buy Donation Items</div>
+	<div class="main_title">Buy Domination Items</div>
 	<div class="content">
 		<div align="center">
-			<h3><a href="donate.php">[Donation Form and Info]</a> - <a href="donate.php?act=spend">[Buy Donation Items]</a></h3>
+			<h3><a href="dominate.php">[Domination Form and Info]</a> - <a href="dominate.php?act=spend">[Buy Domination Items]</a></h3>
 		</div><br />
 		<?php 
 		print $cms->ErrorOutput();
@@ -43,7 +43,7 @@
 		<fieldset>
 			<legend>Step #3</legend>
 			<h3>Review and Buy!</h3>
-			<b>Your Donation Points:</b> <?php print $USER['donationpoints']; ?><br />
+			<b>Your Domination Points:</b> <?php print $USER['donationpoints']; ?><br />
 			<div align="center">
 				<input type="submit" name="submit" value="Claim Reward!" />
 			</div>

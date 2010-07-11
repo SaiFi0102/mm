@@ -3,7 +3,7 @@
 	
 	<!-- ----------- PoPuP START ----------- -->
 	<?php
-	if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "donate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
+	if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
 	{
 		if($USER['loggedin'])
 		{
@@ -62,10 +62,10 @@
 					</ul>
 				</li>
 				
-				<li><a href="donate.php">Donate</a>
+				<li><a href="dominate.php">Dominate</a>
 					<ul>
-						<li><a href="donate.php">Donation Overview</a></li>
-						<li><a href="donate.php?act=spend">Claim Donation Rewards</a></li>
+						<li><a href="dominate.php">Domination Overview</a></li>
+						<li><a href="dominate.php?act=spend">Claim Domination Rewards</a></li>
 					</ul>
 				</li>
 				

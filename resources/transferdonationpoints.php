@@ -26,7 +26,7 @@ $old = $LOGONDB->Select("itemname", "paypal_payment_info", "WHERE item_given = '
 foreach($old as $val)
 {
 	$CHARACTERDB[1]->Insert(array("guid"=>"'%s'", "donated"=>"'1'"), "character_mm_extend", true, $val['itemname']);
-	prrrint("Updated Vote/Donate Status for account ". $val['itemname'] ."<br /><br />");
+	prrrint("Updated Vote/Domination Status for account ". $val['itemname'] ."<br /><br />");
 }
 unset($old);
 

@@ -1,25 +1,25 @@
 <div class="main">
-	<div class="main_title">Donation Form</div>
+	<div class="main_title">Domination Form</div>
 	<div class="content">
 		<div align="center">
-			<h3><a href="donate.php">[Donation Form and Info]</a> - <a href="donate.php?act=spend">[Buy Donation Items]</a></h3>
+			<h3><a href="dominate.php">[Domination Form and Info]</a> - <a href="dominate.php?act=spend">[Buy Domination Items]</a></h3>
 		</div>
 		
 		<div class="noticebox">
-			When you donate you will recieve donation points per the amount you donate, these donation points can be used to purchase donation items from <a href="donate.php?act=rewards">here</a>. 
-			Donations are used for keeping the servers running and lag free by paying for the servers and host, none of the donation are used for personal means.<br /><br />
-			You will receive donation points instantly after your payment is successful, sometimes it requires upto 12hours to process.
+			When you make a payment you will recieve Domination Points per the amount you paid, these Domination Points can be used to purchase Domination Items from <a href="dominate.php?act=rewards">here</a>. 
+			<br /><br />
+			You will receive Domination Points instantly after your payment is successful, sometimes it requires upto 12hours to process.
 		</div><br />
 		
 		<div align="center">
 			<b>Your Statistics</b><br />
-			Donation Points: <?php print $USER['donationpoints']; ?><br />
-			Times Donated: <?php print $USER['donated']; ?>
+			Domination Points: <?php print $USER['donationpoints']; ?><br />
+			Times Dominated: <?php print $USER['donated']; ?>
 		</div><br />
 		
 		<div align="center">
 			<form action="https://<?php print PAYPAL_GATEWAY_URL; ?>/cgi-bin/webscr" method="post" target="paypal">
-			<b>Amount to donate:</b><br />
+			<b>Domination Points:</b><br />
 			<b>$</b> <input type="text" id="amount" name="amount" value="10" />
 			<br /><br />
 			<!--
@@ -27,8 +27,8 @@
 			you won't get your reward if you try! Totally secure
 			-->
 			<input type="hidden" name="cmd" value="_xclick">
-			<input type="hidden" name="notify_url" value="<?php print $cms->config['websiteurl']; ?>/donate.php?act=validate" />
-			<input type="hidden" name="item_name" value="Donation from <?php print $USER['username']; ?> to <?php print $cms->config['websitename']; ?>" />
+			<input type="hidden" name="notify_url" value="<?php print $cms->config['websiteurl']; ?>/dominate.php?act=validate" />
+			<input type="hidden" name="item_name" value="Payment from <?php print $USER['username']; ?> to <?php print $cms->config['websitename']; ?>" />
 			<input type="hidden" name="custom" value="<?php print $USER['id']; ?>" />
 			<input type="hidden" name="no_note" value="1">
 			<input type="hidden" name="no_shipping" value="1">

@@ -214,7 +214,7 @@ class Realm
 			$command  = ".send items ";
 			$command .= $character['name']; //Character Name
 			$command .= " \"Thank you!\""; //Subject
-			$command .= " \"Dear ". FirstCharUpper($character['name']) .",\r\n\r\nThank you for supporting our server. We hope you enjoy your play!\r\n\r\nRegards,\r\nCataclysmic Domination Staff\""; //Body
+			$command .= " \"Dear ". FirstCharUpper($character['name']) .",\r\n\r\nThank you for supporting our server. We hope you enjoy your play!\r\n\r\nRegards,\r\nDomination WoW Staff\""; //Body
 			//Items
 			foreach($rarr as $r)
 			{
@@ -244,7 +244,7 @@ class Realm
 			$command  = ".send money ";
 			$command .= $character['name']; //Character Name
 			$command .= " \"Thank you!\""; //Subject
-			$command .= " \"Dear ". FirstCharUpper($character['name']) .",\r\n\r\nThank you for supporting our server. We hope you enjoy your play!\r\n\r\nRegards,\r\nCataclysmic Domination Staff\""; //Body
+			$command .= " \"Dear ". FirstCharUpper($character['name']) .",\r\n\r\nThank you for supporting our server. We hope you enjoy your play!\r\n\r\nRegards,\r\nDomination WoW Staff\""; //Body
 			$command .= $reward['gold'];
 			
 			//Now connect to SOAP and send the gold

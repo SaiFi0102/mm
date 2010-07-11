@@ -1,5 +1,5 @@
 <div class="main">
-	<div class="main_title">How to Connect and Play on Cataclysmic Domination</div>
+	<div class="main_title">How to Connect and Play on Domination WoW</div>
 	<div class="content">
 		<fieldset><legend><b>Step One: Register</b></legend>
 		The first step is to make an account(In-game and web-account both) <a href="register.php" target="_blank">(Click here to register)</a>.<br />
@@ -36,6 +36,6 @@
 		Now everything is done, start your WoW either by double clicking on the Shortcut icon on the desktop or open "WoW.exe" or "Launcher.exe" from the WoW Folder.<br />
 		When WoW starts, login with the details you registered with and DONT FORGET TO HAVE FUN!!!</fieldset>
 	
-		<b>Remember to vote every 12hours to gain vote points to turn them into VOTE REWARD items from <a href="vote.php">HERE</a>! or <a href="donate.php">Donate</a> to support the server and get very powerful rewards</b>
+		<b>Remember to vote every 12hours to gain vote points to turn them into VOTE REWARD items from <a href="vote.php">HERE</a>! or <a href="dominate.php">Buy Domination Points</a> to support the server and get very powerful rewards</b>
 	</div>
 </div>

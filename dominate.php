@@ -21,7 +21,7 @@ $PayPal = new PayPal();
 WoW::getZonesArray();
 
 //################ General Variables ################
-$page_name[] = array("Donate"=>"donate.php");
+$page_name[] = array("Dominate"=>"dominate.php");
 
 //################ Constants ################
 
@@ -77,7 +77,7 @@ switch($action)
 		}
 		else
 		{
-			$page_name[] = array("Buy Donation Rewards"=>"donate.php?act=spend");
+			$page_name[] = array("Buy Domination Rewards"=>"dominate.php?act=spend");
 			$page_name[] = array($REALM[$_GET['rid']]['NAME']=>$_SERVER['REQUEST_URI']);
 			$rclass = new Realm($_GET['rid']);
 			
@@ -108,7 +108,7 @@ switch($action)
 			//If there is an error
 			if($cms->ErrorExists())
 			{
-				$tplname = "donation_spend";
+				$tplname = "dominationion_spend";
 			}
 			else //Or else we'll continue on sending the items
 			{
@@ -124,14 +124,14 @@ switch($action)
 						$cms->ErrorPopulate($result['message']);
 					}
 				}
-				$tplname = "donation_spend";
+				$tplname = "domination_spend";
 			}
 		}
 	break;
 	
 	default:
 		$transactions = FetchTransactions($USER['id']);
-		$tplname = "donation_info";
+		$tplname = "domination_info";
 	break;
 }
 

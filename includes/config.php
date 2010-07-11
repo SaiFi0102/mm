@@ -68,7 +68,7 @@ $REALM[1] = array(
 $email = array();
 $email['adminemail'][] = "saif@fistrive.com"; // Email address of administrator(To add another admin email address just copy/paste this line and change the email address)
 
-$email['from'] = array("saif@fistrive.com" => "Cataclysmic Domination"); //From which email to send emails
+$email['from'] = array("saif@fistrive.com" => "Domination WoW"); //From which email to send emails
 $email['type'] = MAIL_PHPMAIL; //Use MAIL_SMTP or MAIL_PHPMAIL
 $email['copy'] = false; //Send copy mails to all admin's email
 
