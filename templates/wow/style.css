@@ -26,7 +26,6 @@ a
 }
 a:hover
 {
-	background: inherit;
 	text-decoration: none;
 }
 hr
@@ -189,18 +188,21 @@ legend
 /* BOXES */
 .errorbox
 {
+	color: #ffcccc;
 	background: url('../../images/wow/icons/warning.png') #990000 no-repeat 0 2px;
 	border: 1px solid #FF0000;
 	padding: 5px 5px 5px 25px;
 }
 .successbox
 {
+	color: #ccffcc;
 	background: url('../../images/wow/icons/check.png') #009911 no-repeat 1% 5px;
 	border: 1px solid #00FF00;
 	padding: 5px 5px 5px 25px;
 }
 .noticebox
 {
+	color: #ffffff;
 	background: url('../../images/wow/icons/information.png') #7777ff no-repeat 0 2px;
 	border: 1px solid #dddddd;
 	padding: 5px 5px 5px 25px;

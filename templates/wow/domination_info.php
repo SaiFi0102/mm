@@ -2,8 +2,8 @@
 	<div class="main_title">Domination Form</div>
 	<div class="content">
 		<div align="center">
-			<h3><a href="dominate.php">[Domination Form and Info]</a> - <a href="dominate.php?act=spend">[Buy Domination Items]</a></h3>
-		</div>
+			<h3><a href="dominate.php">[Form and Overview]</a> - <a href="dominate.php?act=spend">[Domination Items]</a> - <a href="dominate.php?act=faq">[Domination Faq]</a></h3>
+		</div><br />
 		
 		<div class="noticebox">
 			When you make a payment you will recieve Domination Points per the amount you paid, these Domination Points can be used to purchase Domination Items from <a href="dominate.php?act=rewards">here</a>. 
@@ -12,9 +12,9 @@
 		</div><br />
 		
 		<div align="center">
-			<b>Your Statistics</b><br />
-			Domination Points: <?php print $USER['donationpoints']; ?><br />
-			Times Dominated: <?php print $USER['donated']; ?>
+			<h3>Your Statistics</h3><br />
+			<b>Domination Points:</b> <?php print $USER['donationpoints']; ?><br />
+			<b>Times Dominated:</b> <?php print $USER['donated']; ?>
 		</div><br />
 		
 		<div align="center">

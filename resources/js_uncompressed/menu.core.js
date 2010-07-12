@@ -8,7 +8,7 @@ $.fn.droppy = function() {
     
     var root = this, zIndex = 1000;
     $(this).prepend("<span id='links_move'></span>");
-    $('li:has(li) > a', this).append(" >");
+    $('li:has(li) > a', this).append(" &raquo;");
     
     function getSubnav(ele) {
       if (ele.nodeName.toLowerCase() == 'li') {
@@ -27,29 +27,36 @@ $.fn.droppy = function() {
       }
     }
     
-    function hide() {
-      var subnav = getSubnav(this);
-      if (!subnav) return;
-      $.data(subnav, 'cancelHide', false);
-      setTimeout(function() {
-        if (!$.data(subnav, 'cancelHide')) {
-          $(subnav).hide();
-        }
-      }, 500);
+    function hide()
+    {
+    	var subnav = getSubnav(this);
+    	if (!subnav) return;
+    	$.data(subnav, 'cancelHide', false);
+    	setTimeout(function()
+    	{
+    		if (!$.data(subnav, 'cancelHide'))
+    		{
+    			$(subnav).hide(500);
+    		}
+    	}, 500);
     }
   
-    function show() {
+    function show() 
+    {
       var subnav = getSubnav(this);
       $(subnav).stop(true, true);
       if (!subnav) return;
       $.data(subnav, 'cancelHide', true);
-      $(subnav).css({zIndex: zIndex++}).show();
+      $(subnav).css({zIndex: zIndex++}).show(500);
       if (this.nodeName.toLowerCase() == 'ul') {
         var li = getActuator(this);
       }
     }
+    
     $('ul, li', this).hover(show, hide);
-    $('li:not(li li)', this).hover(function() {
+    
+    $('li:not(li li)', this).hover(function()
+    {
     	//OvEr
     	var that = this;
     	var offset = $(this).offset();
@@ -60,7 +67,8 @@ $.fn.droppy = function() {
     		width: $(that).width()
     	}, {duration: 250, queue: false});
     },
-    function() {
+    function()
+    {
     	//OuT
     	var that = this;
     	$('#links_move').stop(true).animate({

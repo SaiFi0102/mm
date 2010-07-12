@@ -130,6 +130,15 @@ function FirstCharUpper($str)
 	return $firstletter.$restletters;
 }
 
+function FirstCharUpperThenLower($str)
+{
+	$firstletter = substr($str, 0, 1);
+	$restletters = substr($str, 1);
+	$firstletter = strtoupper($firstletter);
+	$restletters = strtolower($restletters);
+	return $firstletter.$restletters;
+}
+
 /**
  * Converts MySQL Timestamp to date(); format
  *

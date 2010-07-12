@@ -7,7 +7,7 @@ require_once(DOC_ROOT."/includes/PayPal.gateway.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(true);
-if($_GET['act'] == 'validate')
+if($_GET['act'] == 'validate' || $_GET['act'] == 'faq')
 {
 	eval($cms->SetPageAccess(ACCESS_ALL));
 }
@@ -108,7 +108,7 @@ switch($action)
 			//If there is an error
 			if($cms->ErrorExists())
 			{
-				$tplname = "dominationion_spend";
+				$tplname = "domination_spend";
 			}
 			else //Or else we'll continue on sending the items
 			{
@@ -127,6 +127,11 @@ switch($action)
 				$tplname = "domination_spend";
 			}
 		}
+	break;
+	
+	case "faq":
+		$page_name[] = array("FAQ"=>$_SERVER['REQUEST_URI']);
+		$tplname = "domination_faq";
 	break;
 	
 	default:

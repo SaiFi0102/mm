@@ -1,7 +1,7 @@
 /* Basic code - don't modify */
  
  #links { display: block; margin: 0; padding: 0; position: relative; }
-  #links li { display: block; list-style: none; margin: 0; padding: 0; float: left; position: relative; }
+  #links li { display: block; list-style: none; margin: 0; padding: 0; float: left; position: relative; color: #ffffff; }
   #links a { display: block; }
   #links ul { display: none; position: absolute; left: 0; margin: 0; padding: 0; }
   * html #links ul { line-height: 0; } /* IE6 "fix" */
@@ -17,15 +17,16 @@
 {
 	position: absolute;
 	background: #001177;
-	display: block;
 	z-index: 0;
 	left: 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 /* Everything else is theming */
  
 #links { height: 24px; }
-#links a { border-right: #1a4d7c solid 2px; font-size: 12px; padding: 6px; line-height: 1; }
+#links a { border-right: #1a4d7c solid 1px; font-size: 12px; padding: 6px; line-height: 1; }
   #links li.hover a { background: #001177; }
   #links ul { top: 25px; }
     #links ul li a { background: #001177; }

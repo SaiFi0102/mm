@@ -64,6 +64,7 @@
 				
 				<li><a href="dominate.php">Dominate</a>
 					<ul>
+						<li><a href="dominate.php?act=faq">Domination FAQ</a></li>
 						<li><a href="dominate.php">Domination Overview</a></li>
 						<li><a href="dominate.php?act=spend">Claim Domination Rewards</a></li>
 					</ul>

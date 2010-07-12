@@ -2,7 +2,7 @@
 	<div class="main_title">Buy Domination Items</div>
 	<div class="content">
 		<div align="center">
-			<h3><a href="dominate.php">[Domination Form and Info]</a> - <a href="dominate.php?act=spend">[Buy Domination Items]</a></h3>
+			<h3><a href="dominate.php">[Form and Overview]</a> - <a href="dominate.php?act=spend">[Domination Items]</a> - <a href="dominate.php?act=faq">[Domination Faq]</a></h3>
 		</div><br />
 		<?php 
 		print $cms->ErrorOutput();
