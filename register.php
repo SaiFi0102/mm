@@ -64,7 +64,8 @@ $emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",
 We've received a request to reset your password, please follow the link below to complete this process:
 ".$GLOBALS['cms']->config['websiteurl']."/register.php?act=reset&resetcode={$resetcode}&uid={$emailcheck['id']}
 
-If you haven't made this request please follow the link below to cancel the request:"
+If you haven't made this request please follow the link below to cancel the request:
+"
 .$GLOBALS['cms']->config['websiteurl']."/register.php?act=cancelreset&resetcode={$resetcode}&uid={$emailcheck['id']}
 
 Regards,
