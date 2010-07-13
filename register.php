@@ -87,7 +87,7 @@ function ResetPassword()
 	
 	$LOGONDB->Update(array("sha_pass_hash"=>"'%s'"), "account", "WHERE id='%s'", Sha1Pass($data['username'], $newpass), $_GET['uid']);
 	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid = '%s'", $_GET['uid']);
-	SendEmail($data['email'], "Your new password", "//BODY//");
+	SendEmail($data['email'], "Your new password", $emailbody);
 	return $newpass;
 }
 function RemoveResetCode()
