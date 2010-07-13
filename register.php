@@ -59,7 +59,16 @@ function GenerateAndSendPasswordReset()
 		return false;
 	}
 	
-	$emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",\r\n\r\nWe've received a request to reset your password, please follow the link below to complete this process:\r\n".$GLOBALS['cms']->config['websiteurl']."/register.php?act=reset&resetcode={$resetcode}&uid={$emailcheck['id']}\r\n\r\nIf you haven't made this request please follow the link below to cancel the request:\r\n".$GLOBALS['cms']->config['websiteurl']."/register.php?act=cancelreset&resetcode={$resetcode}&uid={$emailcheck['id']}\r\n\r\nRegards,\r\nDomination WoW Staff";
+$emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",
+
+We've received a request to reset your password, please follow the link below to complete this process:
+".$GLOBALS['cms']->config['websiteurl']."/register.php?act=reset&resetcode={$resetcode}&uid={$emailcheck['id']}
+
+If you haven't made this request please follow the link below to cancel the request:
+".$GLOBALS['cms']->config['websiteurl']."/register.php?act=cancelreset&resetcode={$resetcode}&uid={$emailcheck['id']}
+
+Regards,
+Domination WoW Staff";
 	
 	$LOGONDB->Update(array("resetcode"=>"'%s'"), "account_mm_extend", "WHERE accountid='%s'", $resetcode, $emailcheck['id']);
 	SendEmail($_POST['email'], "Instructions to reset your password", $emailbody);
@@ -83,7 +92,17 @@ function ResetPassword()
 	}
 	
 	$newpass = strtolower(RandomCharacters(rand(8,12)));
-	$emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",\r\n\r\nYour password has been successfully changed to:\r\n{$newpass}\r\n\r\nPlease login as soon as possible and change the password to your own choice from the link below\r\n".$GLOBALS['cms']->config['websiteurl']."/account.php\r\n\r\nRegards,\r\nDomination WoW Staff";
+	
+$emailbody = "Dear ".FirstCharUpperThenLower($data['username']).",
+
+Your password has been successfully changed to:
+{$newpass}
+
+Please login as soon as possible and change the password to your own choice from the link below
+".$GLOBALS['cms']->config['websiteurl']."/account.php
+
+Regards,
+Domination WoW Staff";
 	
 	$LOGONDB->Update(array("sha_pass_hash"=>"'%s'"), "account", "WHERE id='%s'", Sha1Pass($data['username'], $newpass), $_GET['uid']);
 	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid = '%s'", $_GET['uid']);
