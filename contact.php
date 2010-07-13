@@ -24,8 +24,8 @@ if(isset($_POST['submit']))
 		$userstr .= "[$ukey] => $udata\r\n";
 	}
 	
-	$body  = $userstr;
-	$body .= $_POST['body'];
+	$body  = $_POST['body'];
+	$body .= "\r\n\r\nDetails:\r\n".$userstr;
 	
 	$result = SendEmail($email['adminemail'], "Contact us form by {$USER['username']}", $body, $_POST['email']);
 	if($result['result'])
