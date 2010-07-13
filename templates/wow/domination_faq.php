@@ -8,8 +8,8 @@
 		You can get Domination Points by the following:
 		<ul>
 			<li>Purchase Domination Points from <a href="dominate.php">Domination Page</a>. You get a point for each $.</li>
-			<li><a href="refer.php">Refer friends and others</a>. You can give the referral link to the player, your name will be entered on the registration page or you can tell the player to enter your name when they are registering.</li>
-			<li>You get 1 Domination Point for each 10 posts on the forums and 1 Domination Point for each 5 threads you start. Please read "Why were my Points deducted" below! <span style="color: red; font-weight: bold">WARNING: This method is under construction and will not work. Please check again soon.</span></li>
+			<li><a href="refer.php">Refer friends and others</a>. You can give the referral link to the player, your name will be entered on the registration page or you can tell the player to enter your name when they are registering. You will get a point for every 2 referred player. <span style="color: red; font-weight: bold">WARNING: This method is currently under construction and will not work. Please check again soon.</span></li>
+			<li>You get 1 Domination Point for each 10 posts on the forums and 1 Domination Point for each 5 threads you start. Please read "Why were my Points deducted" below! <span style="color: red; font-weight: bold">WARNING: This method is currently under construction and will not work. Please check again soon.</span></li>
 		</ul><br /><br />
 		
 		<h3>Why were my Domination Points deducted?</h3>

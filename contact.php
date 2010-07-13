@@ -1,6 +1,5 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
-exit("UNDERCONSTRUCTION"); //TODO
 
 //################ Required Files ################
 require_once("init.php");
@@ -12,28 +11,33 @@ eval($cms->SetPageAccess(ACCESS_REGISTERED));
 //################ Resources ################ 
 
 //################ General Variables ################
-$page_name[] = array("Referrals"=>"refer.php");
+$page_name[] = array("Contact Us"=>$_SERVER['REQUEST_URI']);
 
 //################ Constants ################
 
 //################ Page Functions ################
-function GetRefferedPlayersString()
+if(isset($_POST['submit']))
 {
-	global $LOGONDB, $USER;
-	$q = $LOGONDB->Select("(SELECT username FROM account WHERE id=account_mm_extend.accountid) AS username", "account_mm_extend", "WHERE referred='%s'", false, $USER['id']);
-	
-	$return = null;
-	foreach($q as $qz)
+	$userstr = null;
+	foreach($USER as $ukey => $udata)
 	{
-		$return .= FirstCharUpperThenLower($qz['username']);
-		$return .= ", ";
+		$userstr .= "[$ukey] => $udata\r\n";
 	}
-	$return = substr($return, 0, -2);
 	
-	return $return;
+	$body  = $userstr;
+	$body .= $_POST['body'];
+	
+	$result = SendEmail($email['adminemail'], "Contact us form by {$USER['username']}", $body, $_POST['email']);
+	if($result['result'])
+	{
+		$success = true;
+	}
+	else
+	{
+		$error = true;
+	}
 }
 
 //################ Template's Output ################
-$referredbyme = GetRefferedPlayersString();
-eval($templates->Output("refer"));
+eval($templates->Output("contact"));
 ?>

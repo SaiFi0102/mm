@@ -86,6 +86,8 @@
 					</ul>
 				</li>
 				
+				<li><a href="contact.php">Contact Us</a></li>
+				
 				<!-- Login/Register/Logout -->
 				<?php if(!$USER['loggedin']) { ?>
 				<li><a href="login.php?ref=<?php print urlencode(RemoveGetRefFromLogin($_SERVER['REQUEST_URI'])); ?>">Login</a></li>
@@ -146,7 +148,7 @@
 		<div class="main_right">
 			<div class="main_title">Server Status</div>
 			<div class="content" align="center">
-				<b>Realmlist:</b> <?php print $LOGON_REALMLIST; ?>
+				set realmlist <?php print $LOGON_REALMLIST; ?>
 				<?php
 				foreach($REALM as $rid => $rdata)
 				{

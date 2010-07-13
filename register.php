@@ -59,7 +59,7 @@ function GenerateAndSendPasswordReset()
 		return false;
 	}
 	
-	$emailbody = "Dear ".FirstCharUpper($emailcheck['username']).",\r\n\r\nWe've received a request to reset your password, please follow the link below to complete this process:\r\n".$GLOBALS['cms']->config['websiteurl']."/register.php?act=reset&resetcode={$resetcode}&uid={$emailcheck['id']}\r\n\r\nRegards,\r\nCataclysmic Domination Staff";
+	$emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",\r\n\r\nWe've received a request to reset your password, please follow the link below to complete this process:\r\n".$GLOBALS['cms']->config['websiteurl']."/register.php?act=reset&resetcode={$resetcode}&uid={$emailcheck['id']}\r\n\r\nIf you haven't made this request please follow the link below to cancel the request:\r\n".$GLOBALS['cms']->config['websiteurl']."/register.php?act=cancelreset&resetcode={$resetcode}&uid={$emailcheck['id']}\r\n\r\nRegards,\r\nDomination WoW Staff";
 	
 	$LOGONDB->Update(array("resetcode"=>"'%s'"), "account_mm_extend", "WHERE accountid='%s'", $resetcode, $emailcheck['id']);
 	SendEmail($_POST['email'], "Instructions to reset your password", $emailbody);
@@ -83,11 +83,22 @@ function ResetPassword()
 	}
 	
 	$newpass = strtolower(RandomCharacters(rand(8,12)));
+	$emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",\r\n\r\nYour password has been successfully changed to:\r\n{$newpass}\r\n\r\nPlease login as soon as possible and change the password to your own choice from the link below\r\n".$GLOBALS['cms']->config['websiteurl']."/account.php\r\n\r\nRegards,\r\nDomination WoW Staff";
 	
 	$LOGONDB->Update(array("sha_pass_hash"=>"'%s'"), "account", "WHERE id='%s'", Sha1Pass($data['username'], $newpass), $_GET['uid']);
 	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid = '%s'", $_GET['uid']);
 	SendEmail($data['email'], "Your new password", "//BODY//");
 	return $newpass;
+}
+function RemoveResetCode()
+{
+	global $LOGONDB;
+	if(empty($_GET['resetcode']))
+	{
+		return false;
+	}
+	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid='%s' AND resetcode='%s'", $_GET['uid'], $_GET['resetcode']);
+	return $LOGONDB->AffectedRows;
 }
 
 //################ Template's Output ################
@@ -134,6 +145,35 @@ switch($_GET['act'])
 			}
 		}
 		eval($templates->Output("register_reset"));
+	break;
+	
+	case "cancelreset":
+		$page_name[] = array("Cancel Password Reset Request");
+		if(isset($_GET['uid']) && isset($_GET['resetcode']))
+		{
+			$removal = RemoveResetCode();
+			if($removal)
+			{
+				$page_name[] = array("Success");
+				eval($templates->Output("register_cancelreset_success"));
+				exit();
+			}
+			else
+			{
+				$page_name[] = array("Error");
+				eval($templates->Output("register_cancelreset_error"));
+				exit();
+			}
+		}
+		else
+		{
+			$REDIRECT_MESSAGE = "No password reset code was given. Please follow the link from the email address!";
+			$REDIRECT_LOCATION = "index.php";
+			$REDIRECT_INTERVAL = 5000;
+			$REDIRECT_TYPE = "error";
+			eval($templates->Redirect());
+			exit();
+		}
 	break;
 	
 	default:
