@@ -116,7 +116,7 @@
 				<?php
 				if($USER['loggedin'])
 				{?>
-					<h3>Welcome back, <?php print FirstCharUpper($USER['username']); ?>!</h3><br />
+					<h3>Welcome back, <?php print FirstCharUpperThenLower($USER['username']); ?>!</h3><br />
 					
 					<?php if($USER['last_login'] != '0000-00-00 00:00:00') print "Your last login from game was at " . ConvertMysqlTimestamp($USER['last_login']) . " with IP " . $USER['last_ip']; else print "Never logged in from game"; ?><br /><br />
 					

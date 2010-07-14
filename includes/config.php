@@ -56,6 +56,12 @@ $REALM[1] = array(
 		'pass'	=> 'REMOTEACCESSONLY', //Password
 		'port'	=> 7878, //Port of SOAP server
 	),
+	'UNSTUCK' => array(
+		'alliance'	=> 'alliancemall',
+		'horde'		=> 'hordemall',
+	),
+	'DESC_LONG'	=> //Description of the server's role and game play below in the quotes
+	"This realm is all about KILLING, no matter the opponent is a horde or alliance. Everyone is your enemy! You do not have to focus on leveling or anything like getting ready for PvP by raiding for items or trading for gold. You start as a full leveled player at a shopping mall, all you have to do it just your favorite items from the mall and start killing in our PvP Arenas! For every kill you are rewarded [Badge of Justice] which can be turned-in for PvP Gear! Login now to find out what more we have!",
 );
 
 /**

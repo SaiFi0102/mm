@@ -724,7 +724,7 @@ function RandomCharacters($length)
  * 
  * @return array
  */
-function SendEmail($to, $subject, $body, $from = '', $bodytype = 'text', $attatch = '', $characterset = 'UTF-8')
+function SendEmail($to, $subject, $body, $from = '', $bodytype = 'text/plain', $attatch = '', $characterset = 'UTF-8')
 {
 	global $email;
 	
@@ -759,6 +759,8 @@ function SendEmail($to, $subject, $body, $from = '', $bodytype = 'text', $attatc
 	$message->setFrom($from);
 	$message->setTo($to);
 	if($attatch) $message->attach(Swift_Attachment::fromPath($attatch));
+	
+	print $body;
 	
 	//Ready and Send the message
 	$mailer = Swift_Mailer::newInstance($transport);
