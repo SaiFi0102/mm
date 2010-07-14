@@ -62,11 +62,11 @@ if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $US
 			$location = null;
 			if(WoW::$arrFactionId[$_cdata['race']] == 1)
 			{
-				$location = "mall";
+				$location = $REALM[$_GET['rid']]['UNSTUCK']['alliance'];
 			}
 			if(WoW::$arrFactionId[$_cdata['race']] == 2)
 			{
-				$location = "wetlandsmall";
+				$location = $REALM[$_GET['rid']]['UNSTUCK']['horde'];
 			}
 			$result = $rclass->ExecuteSoapCommand("tele name {$_cdata['name']} {$location}");
 			if(!$result['sent'])
