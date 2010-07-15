@@ -3,7 +3,7 @@
 define("START_TIME", microtime());
 
 //############### ERRORS/PHP INI #################
-ini_set("log_error", 1);
+ini_set("log_errors", 1);
 if(!isset($AJAX_PAGE))
 {
 	ini_set("error_log", dirname(__FILE__)."/administration/logs/php_errors.log");
