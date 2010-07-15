@@ -760,8 +760,6 @@ function SendEmail($to, $subject, $body, $from = '', $bodytype = 'text/plain', $
 	$message->setTo($to);
 	if($attatch) $message->attach(Swift_Attachment::fromPath($attatch));
 	
-	print $body;
-	
 	//Ready and Send the message
 	$mailer = Swift_Mailer::newInstance($transport);
 	$result = $mailer->send($message, $fail);
