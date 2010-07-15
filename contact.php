@@ -27,7 +27,7 @@ if(isset($_POST['submit']))
 	$body  = $_POST['body'];
 	$body .= "\r\n\r\nDetails:\r\n".$userstr;
 	
-	$result = SendEmail($email['adminemail'], "Contact us form by {$USER['username']}", $body, $_POST['email']);
+	$result = SendEmail($email['adminemail'], "{$USER['username']} contacted for '{$_POST['reason']}'", $body, array($_POST['email'] => $USER['username']));
 	if($result['result'])
 	{
 		$success = true;

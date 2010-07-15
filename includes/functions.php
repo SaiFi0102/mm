@@ -724,7 +724,7 @@ function RandomCharacters($length)
  * 
  * @return array
  */
-function SendEmail($to, $subject, $body, $from = '', $bodytype = 'text/plain', $attatch = '', $characterset = 'UTF-8')
+function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain', $attatch = null, $characterset = 'UTF-8')
 {
 	global $email;
 	
@@ -751,7 +751,7 @@ function SendEmail($to, $subject, $body, $from = '', $bodytype = 'text/plain', $
 	if($bodytype == 'plain') $bodytype = 'text/plain';
 	if($bodytype == 'html') $bodytype = 'text/html';
 	
-	if(!$from) $from = $email['from'];
+	if(empty($from)) $from = $email['from'];
 	
 	$message = Swift_Message::newInstance()->setCharset($characterset);
 	$message->setSubject($subject);
