@@ -34,7 +34,7 @@
 			<input type="hidden" name="no_shipping" value="1">
 			<input type="hidden" name="business" value="<?php print $cms->config['donationemail']; ?>" />
 			<input type="hidden" name="currency_code" value="USD" />
-			<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+			<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 			</form>
 		</div>
 	</div>
