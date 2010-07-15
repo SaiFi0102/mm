@@ -11,7 +11,7 @@ eval($cms->SetPageAccess(ACCESS_ALL));
 //################ Resources ################ 
 
 //################ General Variables ################
-$page_name[] = array("Player PvP Statistics"=>$_SERVER['REQUEST_URI']);
+$page_name[] = array("Player PvP Statistics"=>"pvp.php");
 $template = "pvp_stats"; //The template to use for the page. Dont include .tpl inside quotes.
 
 //################ Constants ################

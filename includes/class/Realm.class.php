@@ -87,14 +87,7 @@ class Realm
 	
 	function CheckRealmStatusAndOnlinePlayers($rid)
 	{
-		try
-		{
-			$status = fsockopen($this->realmconf['IP'], $this->realmconf['PORT'], $errno, $errstr, 10);
-		}
-		catch(Exception $e)
-		{
-			$status = false;
-		}
+		$status = fsockopen($this->realmconf['IP'], $this->realmconf['PORT'], $errno, $errstr, 5);
 		if($status == false)
 		{
 			return array("status"=>false, "online"=>0);
