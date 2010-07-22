@@ -1,16 +1,3 @@
-<?php 
-$_numqueries = 0;
-$_numqueries += $DB->numQueries;
-$_numqueries += $LOGONDB->numQueries;
-foreach($CHARACTERDB as $CHDB)
-{
-	$_numqueries += $CHDB->numQueries;
-}
-foreach($WORLDDB as $WDB)
-{
-	$_numqueries += $WDB->numQueries;
-}
-?>
 <?php if($DEBUG) { ?>
 	<div class="main">
 		<div class="main_title">SQL Queries</div>
@@ -38,7 +25,6 @@ foreach($WORLDDB as $WDB)
 		</div>
 	</div>
 <?php } ?>
-	<!-- ----------- Footer ----------- -->
 	<div class="footer">
 		<div class="main_title">Status and Information</div>
 		<?php foreach($REALM as $rid => $rdata) { ?>
@@ -56,6 +42,20 @@ foreach($WORLDDB as $WDB)
 			?>
 		</div><?php } ?>
 		
+<?php 
+$_numqueries = 0;
+$_numqueries += $DB->numQueries;
+$_numqueries += $LOGONDB->numQueries;
+foreach($CHARACTERDB as $CHDB)
+{
+	$_numqueries += $CHDB->numQueries;
+}
+foreach($WORLDDB as $WDB)
+{
+	$_numqueries += $WDB->numQueries;
+}
+?>
+
 		<div class="footer_right">
 			<?php print $COPYRIGHT; ?><br />
 			<b>Queries:</b> <?php print $_numqueries; ?>, <b>Execution Time:</b> <?php print $executiontime; ?><br /><br />
@@ -66,7 +66,7 @@ foreach($WORLDDB as $WDB)
 	
 	<div class="lichking"></div>
 	<div class="bottom"></div>
-	<!-- ----------- Footer END ----------- -->
+	
 	<div id="footer_loading">
 		<div id="footer_loading_text"></div>
 	</div>

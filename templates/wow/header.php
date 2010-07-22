@@ -1,7 +1,6 @@
 <body>
 	<a name="top"></a>
 	
-	<!-- ----------- PoPuP START ----------- -->
 	<?php
 	if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
 	{
@@ -19,13 +18,9 @@
 		}
 	}
 	?>
-	<!-- ----------- PoPuP END ----------- -->
 	
-	<!-- ----------- Header START ----------- -->
 	<div class="header" align="center"><div class="logo"></div></div>
-	<!-- ----------- Header END ----------- -->
 	
-	<!-- ----------- Top Part START ----------- -->
 	<div class="top">
 		<div class="main_title" align="center" style="font-size: 16px;"><?php print $PAGETITLE; ?></div>
 		<div class="content">
@@ -105,9 +100,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- ----------- Top Part END ----------- -->
 	
-	<!-- ----------- Right Side START ----------- -->
 	<div class="rightside">
 	
 		<div class="main_right">
@@ -159,7 +152,10 @@
 					</div>";
 					?>
 					<script type="text/javascript">
+					function LoadStatus()
+					{
 						$(document).ready(function(){
+							$("#server_status_<?php print $rid; ?>").html("<img src='images/loading-small.gif' alt='Loading' />");
 							$.ajax({
 								url: "includes/ajax/server_status.php",
 								dataType: "json",
@@ -183,6 +179,9 @@
 								}
 							});
 						});
+						setTimeout("LoadStatus()", 60000);
+					}
+					LoadStatus();
 					</script>
 				<?php
 				}
@@ -191,4 +190,3 @@
 		</div>
 		
 	</div>
-	<!-- ----------- Right Side END ----------- -->
