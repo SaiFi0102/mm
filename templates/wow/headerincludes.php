@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="javascripts/ajax.core.js"></script>
 	<script type="text/javascript" src="javascripts/tooltip.core.js"></script>
 	<script type="text/javascript" src="javascripts/menu.core.js"></script>
+	<script type="text/javascript" src="javascripts/PageSort.core.js"></script>
 
 	<script type="text/javascript">
 	  var _gaq = _gaq || [];

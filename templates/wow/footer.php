@@ -1,8 +1,9 @@
 <?php if($DEBUG) { ?>
 	<div class="main">
 		<div class="main_title">SQL Queries</div>
-		<div class="content" id="jstest"></div>
-		<div class="content">
+		<div class="content" id="ajaxerrortest"><ul></ul></div>
+		<div class="content" id="jstest">JSTEST<br /></div>
+		<div class="content" style="white-space: normal">
 			<?php
 			print '<h3>$DB</h3>';
 			_print_r($DB->ArrQry);

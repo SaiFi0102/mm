@@ -39,7 +39,8 @@ function FetchComments($limit)
 //################ Template's Output ################
 if(isset($_GET['id']))
 {
-	$news = FetchNewsById($_GET['id']);
+	//TODO news_id
+	/*$news = FetchNewsById($_GET['id']);
 	$comments = FetchComments("0,5");
 	if($news)
 	{
@@ -49,11 +50,10 @@ if(isset($_GET['id']))
 	else
 	{
 		//TODO If no news found
-	}
+	}*/
 }
 else
 {
-	$newsarr = FetchNews("0,5");
 	eval($templates->Output('news_home'));
 }
 ?>
