@@ -22,13 +22,14 @@ $.fn.PageSort = function(o)
 			OrderMethod: "DESC", //Order by method: ASC or DESC only
 			
 			Columns: {}, //{nameincolumn: "nameindatabase"}
+			ExtraPostData: {},
 			
 			PagesTableContainer: null,
 			PagesTableNum: 3,
 			PagesTableStyle: "3ColWide", //Values: 3ColWide
 			
 			CallBeforeLoadTotal: function (){},
-			CallAfterLoadTotal: function (TotalElements){},
+			CallAfterLoadTotal: function (TotalElements, TotalPages){},
 			CallOnLoadTotalError: function (XMLHttpRequest, textStatus, errorThrown){},
 			
 			CallBeforeLoad: function (){},
@@ -62,11 +63,11 @@ $.fn.PageSort = function(o)
 				{
 					TotalElements = parseInt(total);
 					TotalPages = Math.floor(TotalElements/o.ElementsPerPage);
-					if(CurrentPage > TotalPages)
+					if(CurrentPage > TotalPages && TotalPages != 0)
 					{
 						CurrentPage = TotalPages;
 					}
-					o.CallAfterLoadTotal(total);
+					o.CallAfterLoadTotal(TotalElements, TotalPages);
 					callback();
 				},
 				
@@ -81,6 +82,10 @@ $.fn.PageSort = function(o)
 		
 		function LoadJSONData(callback)
 		{
+			if(TotalElements < 1)
+			{
+				return;
+			}
 			//Call before loading data
 			o.CallBeforeLoad();
 			
@@ -105,21 +110,12 @@ $.fn.PageSort = function(o)
 					PageSortError = true;
 				}
 			});
-			
-			//Return bool
-			if(PageSortError == true)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
 		}
 		
 		function GetLimit()
 		{
-			limit = (o.ElementsPerPage * (CurrentPage - 1));
+			start = (o.ElementsPerPage * (CurrentPage - 1));
+			limit = start;
 			limit += ",";
 			limit += o.ElementsPerPage;
 			

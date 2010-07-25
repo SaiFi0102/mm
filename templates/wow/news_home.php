@@ -14,7 +14,13 @@
 <div id="newsloaderror" style="display: none;">
 	<div class="main">
 		<div class="main_title">Error Loading News</div>
-		<div class="content"><div class="errorbox"><h3>There was an error while loading news. Please reload page.</h3></div></div>
+		<div class="content"><div class="errorbox" align="center"><h3>There was an error while loading news. Please reload page.</h3></div></div>
+	</div>
+</div>
+<div id="newsnotexists" style="display: none;">
+	<div class="main">
+		<div class="main_title">News</div>
+		<div class="content"><div class="noticebox" align="center"><h3>There are no new updates.</h3></div></div>
 	</div>
 </div>
 
@@ -29,8 +35,11 @@ function LoadNews()
 		PagesTableContainer: "#newspagestable",
 		CallBeforeLoadTotal: function()
 		{
-			$("#newscontainer").stop(true,true).hide();
-			$("#newsloader").stop(true,true).fadeIn(500);
+			$("#newscontainer").stop(true,true).hide();$("#newsloader").stop(true,true).fadeIn(500);
+		},
+		CallAfterLoadTotal: function(totalelements, totalpages)
+		{
+			if(totalelements < 1){$("#newscontainer").hide();$("#newsloader").hide();$("#newsnotexists").fadeIn(1000);}
 		},
 		CallAfterLoad: function(JSONData)
 		{
@@ -40,15 +49,11 @@ function LoadNews()
 				nc_html += '<div class="main"><div class="main_title"><a href="index.php?id=' + JSONData[x]['id'] + '">' + JSONData[x]['title'] + '</a></div>';
 				nc_html += '<div class="content">' + JSONData[x]['body'] + '<div class="timestamp">Posted on ' + JSONData[x]['date'] + ' by ' + JSONData[x]['by'] + '</div></div></div>';
 			}
-			$("#newscontainer").html(nc_html);delete nc_html;
-			$("#newsloader").stop(true,true).hide();
-			$("#newscontainer").stop(true,true).fadeIn(1000);
+			$("#newscontainer").html(nc_html);delete nc_html;$("#newsloader").stop(true,true).hide();$("#newscontainer").stop(true,true).fadeIn(1000);
 		},
-		CallOnError: function()
+		CallOnError: function(XMLHttpRequest, textStatus, errorThrown)
 		{
-			$("#newscontainer").hide();
-			$("#newsloader").hide();
-			$("#newsloaderror").fadeIn(1000);
+			$("#newscontainer").hide();$("#newsloader").hide();$("#newsloaderror").fadeIn(1000);
 		}
 	});
 }

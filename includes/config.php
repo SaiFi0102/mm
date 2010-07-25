@@ -49,7 +49,7 @@ $REALM[1] = array(
 	),
 	'NAME'	=> "Funserver",
 	'CAP'	=> 200,
-	'IP'	=> '127.0.0.1',
+	'IP'	=> '204.93.160.11',
 	'PORT'	=> 8085,
 	'SOAP'	=> array(
 		'user'	=> 'RAREMOTE', //Username of account with gmlevel 4 in UPPERCASE

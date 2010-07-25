@@ -70,7 +70,8 @@ switch($_POST['data'])
 		{
 			exit;
 		}
-		print json_encode(FetchNews($_POST['ordercolumn'], $_POST['ordermethod'], $_POST['limit']));
+		$fetchnews = FetchNews($_POST['ordercolumn'], $_POST['ordermethod'], $_POST['limit']);
+		print json_encode($fetchnews);
 	break;
 }
 

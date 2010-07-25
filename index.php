@@ -17,13 +17,6 @@ $page_name[] = array("News"=>"index.php");
 //################ Constants ################
 
 //################ Page Functions ################
-function FetchNews($limit = "0,5")
-{
-	global $DB;
-	$q = $DB->Select(array('*', '(SELECT COUNT(*) FROM news_comments WHERE newsid = news.id) AS commentcount'),
-	"news", "ORDER BY sticky DESC,date ASC LIMIT {$limit}", false);
-	return $q;
-}
 function FetchNewsById($nid)
 {
 	global $DB;
@@ -39,8 +32,7 @@ function FetchComments($limit)
 //################ Template's Output ################
 if(isset($_GET['id']))
 {
-	//TODO news_id
-	/*$news = FetchNewsById($_GET['id']);
+	$news = FetchNewsById($_GET['id']);
 	$comments = FetchComments("0,5");
 	if($news)
 	{
@@ -50,7 +42,7 @@ if(isset($_GET['id']))
 	else
 	{
 		//TODO If no news found
-	}*/
+	}
 }
 else
 {
