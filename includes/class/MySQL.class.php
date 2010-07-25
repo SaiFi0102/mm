@@ -102,7 +102,7 @@ $errorstring = "\r\n
 	*/
 	public function __destruct()
 	{
-		if($this->con)
+		if(isset($this->con))
 		{
 			$this->con->close();
 		}
