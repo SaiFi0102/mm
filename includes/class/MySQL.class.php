@@ -60,6 +60,7 @@ class MySQL
 	public function __construct($host, $user, $pass, $db, $port = 3306)
 	{
 		$this->con = new mysqli($host, $user, $pass, $db, $port);
+		$this->con->set_charset("utf8");
 		
 		if(mysqli_connect_errno())
 		{
@@ -74,12 +75,7 @@ class MySQL
 			$file = $_SERVER['PHP_SELF'];
 			$request = $_SERVER['REQUEST_URI'];
 			
-$errorstring = "\r\n
-|----------------------------Connection Error-----------------------------------
-|Date: $date, Time: $time, From: $ip
-|Where: $file($request) Error Code: $errorcode
-|Error: $error
-|----------------------------Connection Error-----------------------------------";
+$errorstring = "|----------------------------Connection Error-----------------------------------\r\n|Date: $date, Time: $time, From: $ip\r\n|Where: $file($request) Error Code: $errorcode\r\n|Error: $error\r\n|----------------------------Connection Error-----------------------------------\r\n\r\n";
 			
 			$f = fopen(DOC_ROOT."/administration/logs/mysqlerror.log", "a+");
 			fwrite($f, $errorstring);
@@ -488,13 +484,7 @@ $errorstring = "\r\n
 		$file = $_SERVER['PHP_SELF'];
 		$request = $_SERVER['REQUEST_URI'];
 		
-$errorstring = "\r\n
-|------------------------------Query Error-------------------------------------
-|Date: $date, Time: $time, From: $ip
-|Where: $file($request) Error Code: $errorcode
-|Query: $query
-|Error: $error
-|------------------------------Query Error-------------------------------------";
+$errorstring = "|------------------------------Query Error-------------------------------------\r\n|Date: $date, Time: $time, From: $ip\r\n|Where: $file($request) Error Code: $errorcode\r\n|Query: $query|Error: $error\r\n|------------------------------Query Error-------------------------------------\r\n\r\n";
 		
 		$f = fopen(DOC_ROOT."/administration/logs/mysqlerror.log", "a+");
 		fwrite($f, $errorstring);

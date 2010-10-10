@@ -160,7 +160,7 @@ class Templates
 		//Page Name Title Array
 		if(!$intemplate)
 		{
-			$pagetitle = "";
+			$pagetitle .= "<a href='index.php'>".$cms->config['websitename']."</a> &#187; ";
 			$htmltitle = "";
 			if(is_array($page_name))
 			{
@@ -171,19 +171,19 @@ class Templates
 						if(!$name)
 						{
 							//In case there is no url key($name) will be 0 and value($url) will be the name
-							$pagetitle .= $url . " - ";
-							$htmltitle .= $url . " - ";
+							$pagetitle .= $url . " &#187; ";
+							$htmltitle .= $url . " &#187; ";
 						}
 						else
 						{
-							$pagetitle .= "<a href='{$url}'>" . $name . "</a> - ";
-							$htmltitle .= $name . " - ";
+							$pagetitle .= "<a href='{$url}'>" . $name . "</a> &#187; ";
+							$htmltitle .= $name . " &#187; ";
 						}
 					}
 				}
 			}
-			$pagetitle .= "<a href='index.php'>".$cms->config['websitename']."</a>";
-			$htmltitle .= $cms->config['websitename'];
+			$pagetitle = substr($pagetitle, 0, -8);
+			$htmltitle .= $cms->config['websitetitle'];
 			
 			$return .= '$COPYRIGHT = $cms->config["copyright"];		
 			$TITLE = "'.$htmltitle.'";

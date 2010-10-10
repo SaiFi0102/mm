@@ -87,14 +87,21 @@ class Realm
 	
 	function CheckRealmStatusAndOnlinePlayers($rid)
 	{
+		global $LOGONDB;
 		$status = fsockopen($this->realmconf['IP'], $this->realmconf['PORT'], $errno, $errstr, 5);
+		
+		$uptime = $LOGONDB->Select(array("starttime"), "uptime", "WHERE realmid='%s' ORDER BY starttime DESC LIMIT 1", true, $this->rid);
+		$maxonline = $LOGONDB->Select("maxplayers", "uptime", "WHERE realmid='%s' ORDER BY maxplayers DESC LIMIT 1", true, $this->rid);
+		$struptime = $uptime['starttime'];
+		$struptime = StrDateDiff(time(), $struptime);
+		
 		if($status == false)
 		{
-			return array("status"=>false, "online"=>0);
+			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$maxonline['maxplayers']);
 		}
 		
-		$q = $this->chdb->Select("guid", "characters", "WHERE online <> '0'", true);
-		return array("status"=>true, "online"=>$this->chdb->AffectedRows);
+		$online = $this->chdb->Select("guid", "characters", "WHERE online <> '0'", true);
+		return array("status"=>true, "online"=>$this->chdb->AffectedRows, "uptime"=>$struptime, "maxplayers"=>$maxonline['maxplayers']);
 	}
 	
 	/**

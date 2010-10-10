@@ -1,4 +1,4 @@
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">You are banned!</div>
 	<div class="content">
 		<div style='color: #ff0000;'>

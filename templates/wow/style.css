@@ -133,28 +133,6 @@ legend
 	margin: 0 10px 10px 10px;
 	width: 30%;
 }
-#footer_loading
-{
-	position: fixed;
-	bottom: 0px;
-	border-bottom: 5px solid #447722;
-	width: 100%;
-	display: none;
-}
-#footer_loading_text
-{
-	width: 100px;
-	margin: 0 auto;
-	padding: 5px;
-	background-color: #447722;
-	text-align: center;
-	color: #aaff55;
-	font-weight: bold;
-	-webkit-border-radius: 7px 7px 0px 0px;
-	-moz-border-radius: 7px 7px 0px 0px;
-	border: 1px solid #55bb00;
-	border-bottom: 0px;
-}
 
 .logo
 {

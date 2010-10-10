@@ -3,7 +3,6 @@ define("INCLUDED", true); //This is for returning a die message if INCLUDED is n
 
 //################ Required Files ################
 require_once("init.php");
-require_once(DOC_ROOT."/includes/PayPal.gateway.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(true);
@@ -17,29 +16,14 @@ else
 }
 
 //################ Resources ################ 
-$PayPal = new PayPal();
 WoW::getZonesArray();
 
 //################ General Variables ################
-$page_name[] = array("Dominate"=>"dominate.php");
+$page_name[] = array("Donate"=>"donate.php");
 
 //################ Constants ################
 
 //################ Page Functions ################
-function ModifyDonationPoints($accountid, $amount)
-{
-	global $LOGONDB;
-	if($amount < 1)
-	{
-		$times = 0;
-	}
-	else
-	{
-		$times = 1;
-	}
-	$LOGONDB->Update(array("donationpoints"=>"donationpoints + '%s'", "donated"=>"donated + '{$times}'"), "account_mm_extend", "WHERE accountid = '%s'", $amount, $accountid);
-	return $LOGONDB->AffectedRows;
-}
 function FetchTransactions($uid)
 {
 	global $DB;
@@ -59,16 +43,6 @@ function FetchDonationRewards($rid)
 $action = $_GET['act'];
 switch($action)
 {
-	//PayPal's IPN Listener
-	case "validate":
-		$tplname = false;
-		$validation = $PayPal->ValidateTransaction();
-		if($validation != false && is_array($validation))
-		{
-			ModifyDonationPoints($validation['accountid'], $validation['amount']);
-		}
-	break;
-	
 	case "spend":
 		if(empty($_GET['rid']) || empty($REALM[$_GET['rid']]))
 		{
@@ -77,7 +51,7 @@ switch($action)
 		}
 		else
 		{
-			$page_name[] = array("Buy Domination Rewards"=>"dominate.php?act=spend");
+			$page_name[] = array("Buy Donation Rewards"=>"donate.php?act=spend");
 			$page_name[] = array($REALM[$_GET['rid']]['NAME']=>$_SERVER['REQUEST_URI']);
 			$rclass = new Realm($_GET['rid']);
 			
@@ -108,7 +82,7 @@ switch($action)
 			//If there is an error
 			if($cms->ErrorExists())
 			{
-				$tplname = "domination_spend";
+				$tplname = "donation_spend";
 			}
 			else //Or else we'll continue on sending the items
 			{
@@ -124,19 +98,19 @@ switch($action)
 						$cms->ErrorPopulate($result['message']);
 					}
 				}
-				$tplname = "domination_spend";
+				$tplname = "donation_spend";
 			}
 		}
 	break;
 	
 	case "faq":
 		$page_name[] = array("FAQ"=>$_SERVER['REQUEST_URI']);
-		$tplname = "domination_faq";
+		$tplname = "donation_faq";
 	break;
 	
 	default:
 		$transactions = FetchTransactions($USER['id']);
-		$tplname = "domination_info";
+		$tplname = "donation_info";
 	break;
 }
 

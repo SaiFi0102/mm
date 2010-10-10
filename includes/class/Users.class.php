@@ -34,10 +34,13 @@ class Users
 		$this->db = $DB;
 		
 		$this->SetUserGlobals($uvar);
-		$this->ClearOfflineUsers();
-		$this->ClearExpiredVotes();
-		$this->BanStatus();
-		$this->LoginUpdate();
+		if($GLOBALS['AJAX_PAGE'] != true)
+		{
+			$this->ClearOfflineUsers();
+			$this->ClearExpiredVotes();
+			$this->BanStatus();
+			$this->LoginUpdate();
+		}
 	}
 	
 	/**

@@ -12,7 +12,7 @@ foreach($WORLDDB as $WDB)
 }
 ?>
 <?php if($DEBUG) { ?>
-	<div class="main">
+	<div class="left_top"></div><div class="left_content">
 		<div class="main_title">SQL Queries</div>
 		<div class="content" id="jstest"></div>
 		<div class="content">

@@ -4,7 +4,7 @@ $url = preg_replace(array("#\?rid=(.+)&#i", "#&rid=(.+)&#i", "#\?rid=(.+)#i", "#
 $get = preg_match("#\?(.*?)#i", $url) ?  "&" :  "?";
 $url = $url.$get."rid=";
 ?>
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Realm's List</div>
 	<div class="content">
 		<h3>Please select a realm from the list below</h3>

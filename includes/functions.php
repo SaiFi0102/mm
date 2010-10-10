@@ -631,6 +631,89 @@ function StrTimeLeft($integer)
 	return $return;
 }
 
+function DateDiff($date, $date2 = 0)
+{
+    if(!$date2)
+        $date2 = mktime();
+
+    $date_diff = array('seconds'  => '',
+                       'minutes'  => '',
+                       'hours'    => '',
+                       'days'     => '',
+                       'weeks'    => '',
+                       
+                       'tseconds' => '',
+                       'tminutes' => '',
+                       'thours'   => '',
+                       'tdays'    => '',
+                       'tdays'    => '');
+
+    ////////////////////
+    
+    if($date2 > $date)
+        $tmp = $date2 - $date;
+    else
+        $tmp = $date - $date2;
+
+    $seconds = $tmp;
+
+    // Relative ////////
+    $date_diff['weeks'] = floor($tmp/604800);
+    $tmp -= $date_diff['weeks'] * 604800;
+
+    $date_diff['days'] = floor($tmp/86400);
+    $tmp -= $date_diff['days'] * 86400;
+
+    $date_diff['hours'] = floor($tmp/3600);
+    $tmp -= $date_diff['hours'] * 3600;
+
+    $date_diff['minutes'] = floor($tmp/60);
+    $tmp -= $date_diff['minutes'] * 60;
+
+    $date_diff['seconds'] = $tmp;
+    
+    // Total ///////////
+    $date_diff['tweeks'] = floor($seconds/604800);
+    $date_diff['tdays'] = floor($seconds/86400);
+    $date_diff['thours'] = floor($seconds/3600);
+    $date_diff['tminutes'] = floor($seconds/60);
+    $date_diff['tseconds'] = $seconds;
+
+    return $date_diff;
+}
+
+function StrDateDiff($date, $date2=0)
+{
+	$DateDiff = DateDiff($date, $date2);
+	
+	$return = null;
+	if($DateDiff['tweeks'] > 0)
+	{
+		$return .= $DateDiff['weeks']." Weeks, ";
+	}
+	if($DateDiff['tdays'] > 0)
+	{
+		$return .= $DateDiff['days']." Days, ";
+	}
+	if($DateDiff['thours'] > 0)
+	{
+		$return .= $DateDiff['hours']." Hours, ";
+	}
+	if($DateDiff['tminutes'] > 0)
+	{
+		$return .= $DateDiff['minutes']." Minutes, ";
+	}
+	
+	if($return != null)
+	{
+		$return .= "and ";
+	}
+	$return .= $DateDiff['seconds']." Seconds";
+	
+	return $return;
+}
+	
+	
 /**
  * Returns random 50 player names with thier guid
  * @param $rid

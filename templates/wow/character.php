@@ -1,4 +1,4 @@
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Character Details and Tools</div>
 	<div class="content">
 		<?php
@@ -16,7 +16,7 @@
 <?php
 if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $USER['id'])
 {?>
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Character Unstuck</div>
 	<div class="content">
 		<?php print $cms->ErrorOutput(); ?>

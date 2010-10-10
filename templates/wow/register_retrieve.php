@@ -1,4 +1,4 @@
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Retrieve lost password</div>
 	<div class="content">
 		<?php print $cms->ErrorOutput(); ?>

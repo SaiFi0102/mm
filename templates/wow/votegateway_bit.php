@@ -5,7 +5,7 @@
 	<div class='right'>
 		<img src='{$vg_data['image']}' alt='{$vg_data['name']}' />
 	</div>
-	<h3>{$vg_data['name']}</h3>";
+	<h5>{$vg_data['name']}</h5>";
 	if(isset($previousvotes[$vg_data['id']]))
 	{
 		print VoteTimeLeft($previousvotes[$vg_data['id']]['time']);

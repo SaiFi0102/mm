@@ -1,5 +1,5 @@
 		<!-- MAIN Start -->
-		<div class="main">
+		<div class="left_top"></div><div class="left_content">
 			<div class="main_title">Login or Logout</div>
 			<div class="content">
 				<?php if(isset($loggedin)) print_r($loggedin); ?>

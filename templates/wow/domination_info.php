@@ -1,4 +1,4 @@
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Domination Form</div>
 	<div class="content">
 		<div align="center">
@@ -40,7 +40,7 @@
 	</div>
 </div>
 
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Transactions</div>
 	<div class="content">
 		<table cellspacing="0" cellpadding="3px" width="100%" border="1px">

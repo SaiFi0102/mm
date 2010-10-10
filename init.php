@@ -3,17 +3,17 @@
 define("START_TIME", microtime());
 
 //############### ERRORS/PHP INI #################
+error_reporting(E_ALL ^ E_NOTICE);
 ini_set("log_errors", 1);
+ini_set("display_errors", 0);
 if(!isset($AJAX_PAGE))
 {
 	ini_set("error_log", dirname(__FILE__)."/administration/logs/php_errors.log");
-	ini_set("display_errors", 0);
 }
 else
 {
-	ini_set("error_log", dirname(__FILE__)."/administration/logs/ajax_errors.log");
-	ini_set("display_errors", 0);
 	error_reporting(E_ERROR);
+	ini_set("error_log", dirname(__FILE__)."/administration/logs/ajax_errors.log");
 }
 
 //################ Redirect if not included ################
@@ -62,6 +62,11 @@ require_once(DOC_ROOT."/includes/class/Authorization.class.php");
 $auth = new Authorization();
 require_once(DOC_ROOT."/includes/class/Users.class.php");
 $uclass = new Users($auth->UserGlobals(), $USER);
+if((int)$USER['access'] >= 4)
+{
+	ini_set("display_errors", 1);
+}
+date_default_timezone_set('America/New_York');
 require_once(DOC_ROOT."/includes/class/Templates.class.php");
 $templates = new Templates($usetemplate);
 require_once(DOC_ROOT."/includes/class/WoW.class.php");
@@ -78,5 +83,15 @@ function InitWorldDb(&$WORLDDB, $rid)
 	}
 	$WORLDDB[$rid] = new MySQL($REALM[$rid]['W_DATABASE']['host'], $REALM[$rid]['W_DATABASE']['user'], $REALM[$rid]['W_DATABASE']['pass'], $REALM[$rid]['W_DATABASE']['db'], $REALM[$rid]['W_DATABASE']['port']);
 	return $WORLDDB;
+}
+
+//################ Maintenance ################
+if($OFFLINE_MAINTENANCE && $USER['access'] < 4 && strpos($_SERVER['PHP_SELF'], 'login.php') === false)
+{
+	$cms->BannedAccess(true);
+	eval($cms->SetPageAccess(ACCESS_ALL));
+	$page_name[] = array("Under Maintenance");
+	eval($templates->Output("maintenance"));
+	exit();
 }
 ?>

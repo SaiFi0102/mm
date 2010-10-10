@@ -119,7 +119,7 @@ switch($action)
 		}
 		else
 		{
-			$page_name[] = array("Buy Vote Rewards"=>$_SERVER['REQUEST_URI']);
+			$page_name[] = array("Buy Vote Rewards"=>"vote.php?act=spend");
 			$page_name[] = array($REALM[$_GET['rid']]['NAME']=>$_SERVER['REQUEST_URI']);
 			$rclass = new Realm($_GET['rid']);
 			

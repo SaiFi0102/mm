@@ -1,4 +1,4 @@
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">How to Connect and Play on Domination WoW</div>
 	<div class="content">
 		<fieldset><legend><b>Step One: Register</b></legend>

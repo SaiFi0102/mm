@@ -1,4 +1,4 @@
-<div class="main">
+<div class="left_top"></div><div class="left_content">
 	<div class="main_title">Your Characters</div>
 	<div class="content">
 		<h3>Below are a list of realms with your characters</h3>

@@ -1,4 +1,7 @@
-document.write("<div id='aToolTip' style='position:absolute;'></div>");
+$(document).ready(function()
+{
+	$("body").append("<div id='aToolTip' style='position:absolute;'></div>");
+});
 var timeout1 = null;
 var timeout2 = null;
 $.fn.tooltip = function(o, extra)
@@ -9,7 +12,7 @@ $.fn.tooltip = function(o, extra)
 			content: (typeof o == "string") ? o : null, //string content for tooltip.
 			ajax: null, //path to content for tooltip
 			html: false, //Allow HTML or not
-			follow: true, //does tooltip follow the cursor?
+			follow: false, //does tooltip follow the cursor?
 			offsetY: 10, //offsetY and offsetX properties designate position from the cursor
 			offsetX: 10,
 			callBefore: function(tooltip,element,settings,event) {}, //called when mouse enters the area
@@ -27,7 +30,6 @@ $.fn.tooltip = function(o, extra)
 		var tooltip = document.getElementById('aToolTip');
 		var hovered = false;
 		var active = false;
-		var html = document.getElementsByTagName("html")[0];
 		                                                 
 		
 		$(tooltip).hide();

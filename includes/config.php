@@ -49,8 +49,8 @@ $REALM[1] = array(
 	),
 	'NAME'	=> "Funserver",
 	'CAP'	=> 200,
-	'IP'	=> '127.0.0.1',
-	'PORT'	=> 8085,
+	'IP'	=> '66.219.29.67',
+	'PORT'	=> 8129,
 	'SOAP'	=> array(
 		'user'	=> 'RAREMOTE', //Username of account with gmlevel 4 in UPPERCASE
 		'pass'	=> 'REMOTEACCESSONLY', //Password
@@ -62,6 +62,13 @@ $REALM[1] = array(
 	),
 	'DESC_LONG'	=> //Description of the server's role and game play below in the quotes
 	"This realm is all about KILLING, no matter the opponent is a horde or alliance. Everyone is your enemy! You do not have to focus on leveling or anything like getting ready for PvP by raiding for items or trading for gold. You start as a full leveled player at a shopping mall, all you have to do it just your favorite items from the mall and start killing in our PvP Arenas! For every kill you are rewarded [Badge of Justice] which can be turned-in for PvP Gear! Login now to find out what more we have!",
+);
+
+$mailtext = array(
+	'votegoldsent' 		=> "",
+	'voteitemsent' 		=> "",
+	'donategoldsent'	=> "",
+	'donateitemsent'	=> "",
 );
 
 /**
@@ -87,7 +94,7 @@ $email['smtp']['password'] = ''; //Leave empty if using anonymous
 $email['smtp']['encrypted'] = false;
 
 //OTHER CONFIGS
-$usetemplate = "wow";
+$usetemplate = "mmopro";
 
 $COOKIECONF = array(
 	'cookiepath' => '',
@@ -104,14 +111,7 @@ $USERTIMEOUT = 5;
 $configfile['fullpath'] = "";
 $configfile['language'] = "english"; // Language must be lowercase, To see a list of languages check /languages directory
 $DEBUG = false; //Shows Debug messages on the footer
-
-
-/**
- * *********************************************************
- * **************** Other Configurations *******************
- * *** DO NOT CHANGE IF YOU DONT KNOW WHAT YOU ARE DOING ***
- * *********************************************************
- */
+$OFFLINE_MAINTENANCE = false;
 
 
 ?>
