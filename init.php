@@ -1,6 +1,7 @@
 <?php
 //################ Page Start Time ################
 define("START_TIME", microtime());
+ob_start("ob_gzhandler");
 
 //############### ERRORS/PHP INI #################
 error_reporting(E_ALL ^ E_NOTICE);

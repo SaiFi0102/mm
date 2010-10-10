@@ -50,7 +50,7 @@ function FinalRegister($username, $password, $email, $flags)
 }
 function GenerateAndSendPasswordReset()
 {
-	global $LOGONDB;
+	global $LOGONDB, $cms;
 	$resetcode = RandomCharacters(20);
 	
 	$emailcheck = $LOGONDB->Select("id, username", "account", "WHERE email='%s'", true, $_POST['email']);
@@ -68,7 +68,7 @@ If you haven't made this request please follow the link below to cancel the requ
 ".$GLOBALS['cms']->config['websiteurl']."/register.php?act=cancelreset&resetcode={$resetcode}&uid={$emailcheck['id']}
 
 Regards,
-Domination WoW Staff";
+{$cms->config['websitename']} Staff";
 	
 	$LOGONDB->Update(array("resetcode"=>"'%s'"), "account_mm_extend", "WHERE accountid='%s'", $resetcode, $emailcheck['id']);
 	SendEmail($_POST['email'], "Instructions to reset your password", $emailbody);
@@ -76,7 +76,7 @@ Domination WoW Staff";
 }
 function ResetPassword()
 {
-	global $LOGONDB;
+	global $LOGONDB, $cms;
 	$data = $LOGONDB->Select("*", "account","LEFT JOIN account_mm_extend ON account.id = account_mm_extend.accountid WHERE id='%s'", true, $_GET['uid']);
 	if(!$LOGONDB->AffectedRows)
 	{
@@ -102,7 +102,7 @@ Please login as soon as possible and change the password to your own choice from
 ".$GLOBALS['cms']->config['websiteurl']."/account.php
 
 Regards,
-Domination WoW Staff";
+{$cms->config['websitename']} Staff";
 	
 	$LOGONDB->Update(array("sha_pass_hash"=>"'%s'"), "account", "WHERE id='%s'", Sha1Pass($data['username'], $newpass), $_GET['uid']);
 	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid = '%s'", $_GET['uid']);

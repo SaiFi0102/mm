@@ -258,7 +258,7 @@ class PayPal
 			"last_name"				=> "'%s'",
 			"post_data"				=> "'%s'",
 			"extra_information"		=> "'SUCCESSFUL PAYMENT!'",
-			"details"				=> "'$details, %s Domination Points were added to your account!'",
+			"details"				=> "'$details, %s Points were added to your account!'",
 		), "log_payments_paypal", false,
 		$txn_id,$real_txn_id,$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata, floor($_POST['mc_gross']));
 		
@@ -292,7 +292,7 @@ class PayPal
 			"last_name"				=> "'%s'",
 			"post_data"				=> "'%s'",
 			"extra_information"		=> "'REVERSED PAYMENT!'",
-			"details"				=> "'Transaction was reversed or refunded, %s Domination Points was deducted from your account!'",
+			"details"				=> "'Transaction was reversed or refunded, %s Points was deducted from your account!'",
 		), "log_payments_paypal", false,
 		$_POST['parent_txn_id'],$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata, floor($amount));
 
@@ -324,7 +324,7 @@ class PayPal
 			"last_name"			=> "'%s'",
 			"post_data"			=> "'%s'",
 			"extra_information"	=> "'UNFINISHED PAYMENT!'",
-			"details"			=> "'Transaction is currently pending, %s Domination Points will be added once the trasaction is completed'",
+			"details"			=> "'Transaction is currently pending, %s Points will be added once the trasaction is completed'",
 		), "log_payments_paypal", false,
 		$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata,floor($_POST['mc_gross']));
 		

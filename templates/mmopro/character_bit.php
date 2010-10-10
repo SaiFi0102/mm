@@ -34,9 +34,9 @@ $CDATA_ZONEID = $_cdata['zone'];
 		</div>
 		
 		<div style="text-align: center;">
-			<img alt="" src="<?php print WoW::$raceIcons[$CDATA_GENDER][$CDATA_RACE]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrRace[$CDATA_RACE]); ?>');" />
-			<?php if($CDATA_ONLINE) print '<img src="images/icons/uparrow.gif" onmouseover="toolTip(this, \'Online\');" />' ?>
-			<img alt="" src="<?php print WoW::$classIcons[$CDATA_CLASS]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrClass[$CDATA_CLASS] . " - " . WoW::$arrGender[$CDATA_GENDER]); ?>');" />
+			<img alt="" height="18" width="18" src="<?php print WoW::$raceIcons[$CDATA_GENDER][$CDATA_RACE]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrRace[$CDATA_RACE]); ?>');" />
+			<?php if($CDATA_ONLINE) print '<img src="images/icons/uparrow.gif" onmouseover="toolTip(this, \'Online\');" height="19" width="18" />' ?>
+			<img alt="" height="18" width="18" src="<?php print WoW::$classIcons[$CDATA_CLASS]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrClass[$CDATA_CLASS] . " - " . WoW::$arrGender[$CDATA_GENDER]); ?>');" />
 		</div>
 		
 	</div>
@@ -47,7 +47,7 @@ $CDATA_ZONEID = $_cdata['zone'];
 		<div class="cright">
 			<table border="0" cellpadding="0" cellspacing="0" align="center">
 			<tr valign="middle" align="center">
-				<td><a href="character.php?act=unstuck&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>"><img src="images/icons/unstuck.png" alt="" onmouseover="toolTip(this, 'If your character is stuck or is lost, use this unstuck tool to teleport your self to your hearthstone location');" /></a></td>
+				<td><a href="character.php?act=unstuck&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>"><img src="images/icons/unstuck.png" height="40" width="40" alt="" onmouseover="toolTip(this, 'If your character is stuck or is lost, use this unstuck tool to teleport your self to your hearthstone location');" /></a></td>
 			</tr>
 			<tr valign="middle" align="center">
 				<td><u>Unstuck Character</u></td>

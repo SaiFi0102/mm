@@ -40,8 +40,8 @@ foreach($WORLDDB as $WDB)
 </div>
 		<div id="page_right">
 		<?php if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) {?>
-			<div><a href="vote.php" title="Vote Now!"><img src="images/mmopro/vote.png" alt="" class="png" /></a></div>
-			<div><a href="donate.php" title="Donate To Support Us"><img src="images/mmopro/donate.png" alt="" class="png" /></a></div>
+			<div><a href="vote.php" title="Vote Now!"><img src="images/mmopro/vote.png" alt="" class="png" height="107" width="309" /></a></div>
+			<div><a href="donate.php" title="Donate To Support Us!"><img src="images/mmopro/donate.png" alt="" class="png" height="107" width="309" /></a></div>
 
 					<div class="box2">
 						<div class="box_top"></div>
@@ -58,15 +58,15 @@ foreach($WORLDDB as $WDB)
 										</tr>
 										<tr>
 											<td>State:</td>
-											<td><div id="server_status_state_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' /></div></td>
+											<td><div id="server_status_state_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
 										</tr>
 										<tr>
 											<td>Online Players:</td>
-											<td><div id="server_status_online_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' /></div></td>
+											<td><div id="server_status_online_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
 										</tr>
 										<tr>
 											<td>Uptime:</td>
-											<td><div id="server_status_uptime_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' /></div></td>
+											<td><div id="server_status_uptime_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
 										</tr>
 <script type="text/javascript">
 function LoadStatus_<?php print $rid; ?>()
@@ -77,10 +77,10 @@ function LoadStatus_<?php print $rid; ?>()
 		success: function(msg){
 			$("#server_status_state_<?php print $rid; ?>").hide();$("#server_status_online_<?php print $rid; ?>").hide();$("#server_status_uptime_<?php print $rid; ?>").hide();
 			if(msg['status']){
-				$("#server_status_state_<?php print $rid; ?>").html("<img src='images/icons/uparrow.gif' alt='Online' />");
+				$("#server_status_state_<?php print $rid; ?>").html("<img src='images/icons/uparrow.gif' alt='Online' height='19' width='18' />");
 			}
 			else{
-				$("#server_status_state_<?php print $rid; ?>").html("<img src='images/icons/downarrow.gif' alt='Offline' />");
+				$("#server_status_state_<?php print $rid; ?>").html("<img src='images/icons/downarrow.gif' alt='Offline' height='19' width='18' />");
 			}
 			$("#server_status_state_<?php print $rid; ?>").fadeIn(750);$("#server_status_online_<?php print $rid; ?>").html("<a href='online.php?rid=<?php print $rid; ?>'>" + msg['online']+" (Maximum Online "+msg['maxplayers']+")</a>").fadeIn(750);$("#server_status_uptime_<?php print $rid; ?>").html(msg['uptime']).fadeIn(750);
 		},
@@ -136,7 +136,7 @@ LoadStatus_<?php print $rid; ?>();
 </div>
 <div class="box_in"></div>
 <!-- Footer -->
-<div class="footer_top"><img src="images/mmopro/pixel.gif" alt="" /></div>
+<div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">
 		<div id="footer_cont" align="left">
 			<?php foreach($REALM as $rid => $rdata) { ?>
@@ -161,7 +161,7 @@ LoadStatus_<?php print $rid; ?>();
  <div class="footer_bottom"> </div>
 
 
-<div class="footer_top"><img src="images/mmopro/pixel.gif" alt="" /></div>
+<div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">
 		<div id="footer_cont">
 			<div class="float_left">

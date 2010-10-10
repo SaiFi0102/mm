@@ -88,7 +88,7 @@ $.fn.tooltip = function(o, extra)
 				$(tooltip).attr({opacity: o.opacity});
 			}
 			opacity = o.opacity / 100;
-			$(tooltip).css('opacity',opacity)
+			$(tooltip).css('opacity',opacity);
 			clearTimeout(timeout2);
 			timeout1 = setTimeout(function() {
 				if(hovered && !active)
@@ -154,8 +154,9 @@ $.fn.tooltip = function(o, extra)
 			}
 			else
 			{
-				var top = $(root).offset().top;
-				var left = $(root).offset().left + $(root).width();
+				var offset = $(root).position();
+				var top = offset.top;
+				var left = offset.left + $(root).width();
 				if(o.constantx == "left") left += o.offsetX;
 				if(o.constanty == "top") top += o.offsetY;
 			}

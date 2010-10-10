@@ -382,19 +382,19 @@ function ParseGold(&$str)
 		$moneyhtml = null;
 		if($money['gold'])
 		{
-			$moneyhtml .= $money['gold']." <img src='images/icons/money_gold.gif' alt='Gold' /> ";
+			$moneyhtml .= $money['gold']." <img src='images/icons/money_gold.gif' alt='Gold' height='13' width='13' /> ";
 		}
 		if($money['silver'])
 		{
-			$moneyhtml .= $money['silver']." <img src='images/icons/money_silver.gif' alt='Silver' /> ";
+			$moneyhtml .= $money['silver']." <img src='images/icons/money_silver.gif' alt='Silver' height='13' width='13' /> ";
 		}
 		if($money['copper'])
 		{
-			$moneyhtml .= $money['copper']." <img src='images/icons/money_copper.gif' alt='Copper' />";
+			$moneyhtml .= $money['copper']." <img src='images/icons/money_copper.gif' alt='Copper' height='13' width='13' />";
 		}
 		$str = str_replace($moneyy, $moneyhtml, $str);
 	}
-	$str = str_replace("[gold][/gold]", "0 <img src='images/icons/money_copper.gif' alt='Copper' />", $str);
+	$str = str_replace("[gold][/gold]", "0 <img src='images/icons/money_copper.gif' alt='Copper' height='13' width='13' />", $str);
 	return $str;
 }
 
@@ -809,7 +809,8 @@ function RandomCharacters($length)
  */
 function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain', $attatch = null, $characterset = 'UTF-8')
 {
-	global $email;
+	global $email, $cms;
+	$fail = null;
 	
 	//Create Email Transporter
 	//Default to MAIL_PHPMAIL
@@ -834,7 +835,7 @@ function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain',
 	if($bodytype == 'plain') $bodytype = 'text/plain';
 	if($bodytype == 'html') $bodytype = 'text/html';
 	
-	if(empty($from)) $from = $email['from'];
+	if(empty($from)) $from = $cms->config['emailfrom'];
 	
 	$message = Swift_Message::newInstance()->setCharset($characterset);
 	$message->setSubject($subject);

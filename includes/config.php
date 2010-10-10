@@ -64,13 +64,6 @@ $REALM[1] = array(
 	"This realm is all about KILLING, no matter the opponent is a horde or alliance. Everyone is your enemy! You do not have to focus on leveling or anything like getting ready for PvP by raiding for items or trading for gold. You start as a full leveled player at a shopping mall, all you have to do it just your favorite items from the mall and start killing in our PvP Arenas! For every kill you are rewarded [Badge of Justice] which can be turned-in for PvP Gear! Login now to find out what more we have!",
 );
 
-$mailtext = array(
-	'votegoldsent' 		=> "",
-	'voteitemsent' 		=> "",
-	'donategoldsent'	=> "",
-	'donateitemsent'	=> "",
-);
-
 /**
  * *********************************************************
  * ***************** Email Configurations ******************
@@ -82,7 +75,6 @@ $email = array();
 $email['adminemail'][] = "saif@fistrive.com"; // Email address of administrator(To add another admin email address just copy/paste this line and change the email address)
 $email['adminemail'][] = "msoul@live.com";
 
-$email['from'] = array("saif@fistrive.com" => "Domination WoW"); //From which email to send emails
 $email['type'] = MAIL_PHPMAIL; //Use MAIL_SMTP or MAIL_PHPMAIL
 $email['copy'] = false; //Send copy mails to all admin's email
 

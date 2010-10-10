@@ -6,11 +6,13 @@
 <!-- Meta's -->
 <meta name="description" content="<?php print $META_DESCRIPTION; ?>" />
 <meta name="keywords" content="<?php print $META_KEYWORDS; ?>" />
-<?php print $META_EXTRA; ?>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css" href="templates/mmopro/style.css" />
 <link rel="stylesheet" type="text/css" href="templates/mmopro/reset.css" />
 <link rel="stylesheet" type="text/css" href="templates/mmopro/jquery.lightbox-0.5.css" media="screen" />
+<link rel="icon" href="favicon.ico" />
+<?php print $META_EXTRA; ?>
 <!-- JS -->
 <script type="text/javascript" src="javascripts/core.js"></script>
 <script type="text/javascript" src="javascripts/ajax.core.js"></script>

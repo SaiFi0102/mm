@@ -24,7 +24,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 	<!-- Logo -->
 	<div id="logo">
 		<a href="index.php">
-			<img src="images/mmopro/logo.png" alt="<?php print $TITLE; ?>" class="png" />
+			<img src="images/mmopro/logo.png" alt="<?php print $TITLE; ?>" class="png" height="88" width="300" />
 		</a>
 	</div>
 
@@ -77,7 +77,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 
 <!-- Slider Area -->
 <div id="slider_top">
-	<img src="images/mmopro/pixel.gif" alt="" />
+	<img src="images/mmopro/pixel.gif" height="1" width="1" alt="" />
 </div>
 <div id="slider_in">
 	<div id="slider_area">
@@ -98,7 +98,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 			<div class="sliding_text_right">
 				<!-- Image -->
 				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" class="png" />
+					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
 				</div>
 			</div>
 		</div>
@@ -120,7 +120,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 			<div class="sliding_text_right">
 				<!-- Image -->
 				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" class="png" />
+					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
 				</div>
 			</div>
 		</div>
@@ -142,7 +142,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 			<div class="sliding_text_right">
 				<!-- Image -->
 				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" class="png" />
+					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
 				</div>
 			</div>
 		</div>
@@ -164,7 +164,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 			<div class="sliding_text_right">
 				<!-- Image -->
 				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" class="png" />
+					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
 				</div>
 			</div>
 		</div>			
@@ -180,7 +180,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 <div class="errorbox" style="margin-bottom: 6px;"><h4>The website is currently under maintenace shutdown mode! Only Admins and Executives can view this website!</h4></div>
 <?php }?>
 
-<div class="footer_top"><img src="images/mmopro/pixel.gif" alt="" /></div>
+<div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">
 		<div id="footer_cont" align="center" style="padding-top:0; padding-bottom: 0;">
 			<h4><?php print $PAGETITLE; ?></h4>
