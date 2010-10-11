@@ -40,8 +40,8 @@ foreach($WORLDDB as $WDB)
 </div>
 		<div id="page_right">
 		<?php if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) {?>
-			<div><a href="vote.php" title="Vote Now!"><img src="images/mmopro/vote.png" alt="" class="png" height="107" width="309" /></a></div>
-			<div><a href="donate.php" title="Donate To Support Us!"><img src="images/mmopro/donate.png" alt="" class="png" height="107" width="309" /></a></div>
+			<div><a href="vote.php" title="Vote Now!"><img src="images/mmopro/vote.png" alt="" class="png" height="127" width="309" /></a></div>
+			<div><a href="donate.php" title="Donate To Support Us!"><img src="images/mmopro/donate.png" alt="" class="png" height="127" width="309" /></a></div>
 
 					<div class="box2">
 						<div class="box_top"></div>

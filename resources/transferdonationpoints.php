@@ -9,7 +9,7 @@ ini_set("log_errors", 0);
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(false);
-eval($cms->SetPageAccess(ACCESS_ALL));
+eval($cms->SetPageAccess(ACCESS_NONE));
 
 //################ Resources ################ 
 

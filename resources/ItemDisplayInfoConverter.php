@@ -1,5 +1,5 @@
 <?php
-
+exit();
 	//Resource File
 	$fd = fopen('CSV/ItemDisplayInfo.dbc.CSV','r');
 	if(!$fd) trigger_error('TSV data file "ItemDisplayInfo.dbc.CSV" is not available', E_USER_ERROR);
