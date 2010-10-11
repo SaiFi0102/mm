@@ -12,7 +12,7 @@ if(!defined("INCLUDED"))
  * ******************** MYSQL CONFIGS **********************
  * *********************************************************
  */
-//Databases
+//Databases(USE p:<host or ip> in 'host' if u have PHP 5.3 to open persistent connections... saves alot of ram and speed)
 $WEB_DATABASE = array(
 	'host'	=> '127.0.0.1', //Hostname or IP Address of MySQL server
 	'user'	=> 'root', //Username of MySQL server
