@@ -1,0 +1,15 @@
+UPDATE `configs` SET `name`='email_paypal' WHERE `name`='donationemail';
+UPDATE `configs` SET `name`='email_from' WHERE `name`='emailfrom';
+insert into `configs` (`name`, `content`, `type`) values('email_alertpay','email@domain.tld','string');
+insert into `configs` (`name`, `content`, `type`) values('email_moneybookers','email@domain.tld','string');
+insert into `configs` (`name`, `content`, `type`) values('pointsperdollar_paypal','100','integer');
+insert into `configs` (`name`, `content`, `type`) values('pointsperdollar_alertpay','115','integer');
+insert into `configs` (`name`, `content`, `type`) values('pointsperdollar_moneybookers','125','integer');
+insert into `configs` (`name`, `content`, `type`) values('enable_paypal','1','boolean');
+insert into `configs` (`name`, `content`, `type`) values('enable_alertpay','1','boolean');
+insert into `configs` (`name`, `content`, `type`) values('enable_moneybookers','1','boolean');
+insert into `configs` (`name`, `content`, `type`) values('show_paypal','1','boolean');
+insert into `configs` (`name`, `content`, `type`) values('show_alertpay','1','boolean');
+insert into `configs` (`name`, `content`, `type`) values('show_moneybookers','1','boolean');
+INSERT INTO `configs`(`name`,`content`,`type`) VALUES ( 'copyright','MMOPro WoW is in no way associated with Blizzard.','string');
+INSERT INTO `configs`(`name`,`content`,`type`) VALUES ( 'ad_footer','AD!','string');

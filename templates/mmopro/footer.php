@@ -11,7 +11,7 @@ foreach($WORLDDB as $WDB)
 	$_numqueries += $WDB->numQueries;
 }
 ?>
-<?php if($DEBUG) { ?>
+<?php if($DEBUG && $USER['access'] >= 4) { ?>
 	<div class="left_top"></div><div class="left_content">
 		<div class="main_title">SQL Queries</div>
 		<div class="content">
@@ -41,7 +41,7 @@ foreach($WORLDDB as $WDB)
 		<div id="page_right">
 		<?php if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) {?>
 			<div><a href="vote.php" title="Vote Now!"><img src="images/mmopro/vote.png" alt="" class="png" height="127" width="309" /></a></div>
-			<div><a href="donate.php" title="Donate To Support Us!"><img src="images/mmopro/donate.png" alt="" class="png" height="127" width="309" /></a></div>
+			<div><a href="points.php" title="Donate To Support Us!"><img src="images/mmopro/donate.png" alt="" class="png" height="127" width="309" /></a></div>
 
 					<div class="box2">
 						<div class="box_top"></div>
@@ -130,7 +130,7 @@ LoadStatus_<?php print $rid; ?>();
 		<div class="clear"></div>
 		<table class="center">
 		<tr>
-		<th><img src="https://www.google.com/adsense/static/en_GB/images/leaderboard.gif" /></th>
+		<th><?php print $cms->config['ad_footer']; ?></th>
 		</tr>
 		</table>
 </div>
@@ -165,13 +165,13 @@ LoadStatus_<?php print $rid; ?>();
 <div class="footer_content">
 		<div id="footer_cont">
 			<div class="float_left">
-				 Copyright &copy; 2010 MMOPro WoW. All Rights Reserved.
+				 <?php print $COPYRIGHT; ?>
 			</div>
 
 			<div class="float_right">
-				<a href="#" title="">Terms &amp; Condition</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-				<a href="#" title="">Privacy Policy</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-				<a href="#" title="">Sitemap</a>
+				<a href="tos.php">Terms &amp; Condition</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+				<a href="points.php?act=refundpolicy">Refund Policy</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+				<a href="about.php">About Us</a>
 				<br />
 			</div>
 			<div style="clear:both;"></div>

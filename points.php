@@ -6,7 +6,7 @@ require_once("init.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(true);
-if($_GET['act'] == 'validate' || $_GET['act'] == 'faq')
+if($_GET['act'] == 'validate' || $_GET['act'] == 'faq' || $_GET['act'] == 'refundpolicy')
 {
 	eval($cms->SetPageAccess(ACCESS_ALL));
 }
@@ -19,15 +19,29 @@ else
 WoW::getZonesArray();
 
 //################ General Variables ################
-$page_name[] = array("Donate"=>"donate.php");
+$page_name[] = array($cms->config['websitename']." Points"=>"points.php");
 
 //################ Constants ################
 
 //################ Page Functions ################
-function FetchTransactions($uid)
+function FetchTransactionsPayPal($uid)
 {
 	global $DB;
 	$return = $DB->Select("*", "log_payments_paypal", "WHERE account_id = '%s' ORDER BY transaction_id DESC, timestamp ASC", false, $uid);
+	
+	return $return;
+}
+function FetchTransactionsMoneyBookers($uid)
+{
+	global $DB;
+	$return = $DB->Select("*", "log_payments_moneybookers", "WHERE account_id = '%s' ORDER BY transaction_id DESC, timestamp ASC", false, $uid);
+	
+	return $return;
+}
+function FetchTransactionsAlertPay($uid)
+{
+	global $DB;
+	$return = $DB->Select("*", "log_payments_alertpay", "WHERE account_id = '%s' ORDER BY transaction_id DESC, timestamp ASC", false, $uid);
 	
 	return $return;
 }
@@ -51,7 +65,7 @@ switch($action)
 		}
 		else
 		{
-			$page_name[] = array("Buy Donation Rewards"=>"donate.php?act=spend");
+			$page_name[] = array("Buy ".$cms->config['websitename']." Points Rewards"=>"points.php?act=spend");
 			$page_name[] = array($REALM[$_GET['rid']]['NAME']=>$_SERVER['REQUEST_URI']);
 			$rclass = new Realm($_GET['rid']);
 			
@@ -82,7 +96,7 @@ switch($action)
 			//If there is an error
 			if($cms->ErrorExists())
 			{
-				$tplname = "donation_spend";
+				$tplname = "points_spend";
 			}
 			else //Or else we'll continue on sending the items
 			{
@@ -98,19 +112,26 @@ switch($action)
 						$cms->ErrorPopulate($result['message']);
 					}
 				}
-				$tplname = "donation_spend";
+				$tplname = "points_spend";
 			}
 		}
 	break;
 	
 	case "faq":
 		$page_name[] = array("FAQ"=>$_SERVER['REQUEST_URI']);
-		$tplname = "donation_faq";
+		$tplname = "points_faq";
+	break;
+	
+	case "refundpolicy":
+		$page_name[] = array("Refund Policy"=>$_SERVER['REQUEST_URI']);
+		$tplname = "points_refundpolicy";
 	break;
 	
 	default:
-		$transactions = FetchTransactions($USER['id']);
-		$tplname = "donation_info";
+		$transactions_paypal = FetchTransactionsPayPal($USER['id']);
+		$transactions_moneybookers = FetchTransactionsMoneyBookers($USER['id']);
+		$transactions_alertpay = FetchTransactionsAlertPay($USER['id']);
+		$tplname = "points_info";
 	break;
 }
 

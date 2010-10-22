@@ -426,7 +426,7 @@ $errorstring = "|----------------------------Connection Error-------------------
 	{
 		if($query == null)
 		{
-			$query = self::LastQry;
+			$query = $this->LastQry;
 		}
 		return mysqli_num_rows($query);
 	}

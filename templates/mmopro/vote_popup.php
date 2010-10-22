@@ -1,3 +1,8 @@
+<?php
+$ppgateways = array();
+$ppgateways = FetchVoteGateways();
+if(count($ppgateways)){
+?>
 <div id="votepopup_modal" style="width: 100%; height: 100%; position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; background: url(images/wow/gradients/trans.png) repeat transparent; z-index: 99998; display: block;"></div>
 <div id="votepopup_popup" style="color: #000000; width: 100%; height: 100%; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; background: repeat transparent; z-index: 99999; display: block;">
 	<div style="padding: 5px; margin-top: 100px; width: 470px; margin-left: auto; margin-right: auto; display: block; positon: absolute; background: url(images/mmopro/light.jpg) repeat; border: 1px #000000 solid;">
@@ -6,8 +11,6 @@
 		<br />
 		<?php
 		$previousvotes = array(); //If there voted on atleast one gateway. Popup wont show so no need to waste time
-		$ppgateways = array();
-		$ppgateways = FetchVoteGateways();
 		foreach($ppgateways as $vg_data)
 		{
 			eval($templates->Output("votegateway_bit", false, false, false, true));
@@ -26,3 +29,4 @@ $(".votepopup_close").click(function(){
 	$("#votepopup_popup").hide(500);
 });
 </script>
+<?php }?>

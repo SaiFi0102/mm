@@ -1,8 +1,8 @@
 <div class="left_top"></div><div class="left_content">
-	<div class="main_title">Buy Donation Items</div>
+	<div class="main_title">Buy <?php print $cms->config['websitename']; ?> Points Items</div>
 	<div class="content">
 		<div align="center">
-			<h3><a href="donate.php">[Form and Overview]</a> - <a href="donate.php?act=spend">[Donation Items]</a> - <a href="donate.php?act=faq">[Donation Faq]</a></h3>
+			<h4><a href="points.php">[Form and Overview]</a> - <a href="points.php?act=spend">[<?php print $cms->config['websitename']; ?> Points Items]</a> - <a href="points.php?act=faq">[<?php print $cms->config['websitename']; ?> Points Faq]</a></h4>
 		</div><br />
 		<?php 
 		print $cms->ErrorOutput();
@@ -43,7 +43,7 @@
 		<fieldset>
 			<legend>Step #3</legend>
 			<h4>Review and Buy!</h4>
-			<h5>Your Donation Points: <b><?php print $USER['donationpoints']; ?></b></h5>
+			<h5>Your <?php print $cms->config['websitename']; ?> Points: <b><?php print $USER['donationpoints']; ?></b></h5>
 			<div align="center">
 				<input type="submit" name="submit" value="Claim Reward!" />
 			</div>

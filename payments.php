@@ -3,14 +3,12 @@ define("INCLUDED", true); //This is for returning a die message if INCLUDED is n
 
 //################ Required Files ################
 require_once("init.php");
-require_once(DOC_ROOT."/includes/PayPal.gateway.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ Resources ################ 
-$PayPal = new PayPal();
 
 //################ General Variables ################
 $page_name[] = array("Payments");
@@ -33,10 +31,30 @@ function ModifyDonationPoints($accountid, $amount)
 
 if(empty($_POST) || count($_POST) == 0)
 {
-	header('Location: donate.php');
+	header('Location: points.php');
 	exit();
 }
-$validation = $PayPal->ValidateTransaction();
+
+switch($_GET['gateway'])
+{
+	case "PayPal":
+		require_once(DOC_ROOT."/includes/PayPal.gateway.php");
+		$gateway = new PayPal();
+	break;
+	case "AlertPay":
+		require_once(DOC_ROOT."/includes/AlertPay.gateway.php");
+		$gateway = new AlertPay();
+	break;
+	case "MoneyBookers":
+		require_once(DOC_ROOT."/includes/MoneyBookers.gateway.php");
+		$gateway = new MoneyBookers();
+	break;
+	default:
+		exit("noob");
+	break;
+}
+
+$validation = $gateway->ValidateTransaction();
 if($validation != false && is_array($validation))
 {
 	ModifyDonationPoints($validation['accountid'], $validation['amount']);

@@ -1,4 +1,10 @@
 <?php
+//################ Redirect if not included ################
+if(!defined("INCLUDED"))
+{
+	header('Location: index.php');
+	exit();
+}
 
 class PayPal
 {
@@ -26,7 +32,10 @@ class PayPal
 		}
 		if(!isset($_POST['mc_gross']) || !isset($_POST['payment_status']) || !isset($_POST['mc_currency']) || !isset($_POST['business']))
 		{
-			trigger_error("Main paypal POST data were not set", E_USER_ERROR);
+			return false;
+		}
+		if($_POST['txn_type'] != "web_accept")
+		{
 			return false;
 		}
 
@@ -95,7 +104,16 @@ class PayPal
 			"post_data"			=> "'%s'",
 			"extra_information"	=> "'INVALID TRANSACTION FROM PAYPAL'",
 		), "log_invalidpayments_paypal", false,
-		$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$_POST['mc_gross'],$_POST['mc_currency'],$_POST['custom'],$_POST['first_name'],$_POST['last_name'],$postdata);
+		$_POST['txn_id'],
+		$_POST['payer_email'],
+		$_POST['payment_status'],
+		$_POST['item_name'],
+		$_POST['mc_gross'],
+		$_POST['mc_currency'],
+		$_POST['custom'],
+		$_POST['first_name'],
+		$_POST['last_name'],
+		$postdata);
 	}
 	
 	/**
@@ -108,7 +126,7 @@ class PayPal
 		
 		//Check if some one is trying to HACK or SCAM us
 		//Wrong receiver_email
-		if($_POST['business'] != $cms->config['donationemail'])
+		if($_POST['business'] != $cms->config['email_paypal'])
 		{
 			$this->sql->Insert(
 			array(
@@ -117,7 +135,9 @@ class PayPal
 				"sender_email"		=> "'%s'",
 				"payment_status"	=> "'%s'",
 				"item_name"			=> "'%s'",
-				"amount"			=> "'%s'",
+				"amount_gross"		=> "'%s'",
+				"amount_fee"		=> "'%s'",
+				"amount_net"		=> "'%s'",
 				"currency"			=> "'%s'",
 				"account_id"		=> "'%s'",
 				"first_name"		=> "'%s'",
@@ -126,7 +146,20 @@ class PayPal
 				"extra_information"	=> "'WRONG RECEIVER_EMAIL(%s != %s)'",
 				"details"			=> "'The payment was sent to someone else, please contact an administrator if you think this is an error'",
 			), "log_payments_paypal", false,
-			$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$_POST['mc_gross'],$_POST['mc_currency'],$_POST['custom'],$_POST['first_name'],$_POST['last_name'],$postdata,$_POST['business'],$cms->config['donationemail']);
+			$_POST['txn_id'],
+			$_POST['payer_email'],
+			$_POST['payment_status'],
+			$_POST['item_name'],
+			$_POST['mc_gross'],
+			$_POST['mc_fee'],
+			($_POST['mc_gross']-$_POST['mc_fee']),
+			$_POST['mc_currency'],
+			$_POST['custom'],
+			$_POST['first_name'],
+			$_POST['last_name'],
+			$postdata,
+			$_POST['business'],
+			$cms->config['email_paypal']);
 			return false;
 		}
 		//Wrong currency
@@ -139,7 +172,9 @@ class PayPal
 				"sender_email"		=> "'%s'",
 				"payment_status"	=> "'Failed'",
 				"item_name"			=> "'%s'",
-				"amount"			=> "'%s'",
+				"amount_gross"		=> "'%s'",
+				"amount_fee"		=> "'%s'",
+				"amount_net"		=> "'%s'",
 				"currency"			=> "'%s'",
 				"account_id"		=> "'%s'",
 				"first_name"		=> "'%s'",
@@ -148,7 +183,18 @@ class PayPal
 				"extra_information"	=> "'WRONG CURRENCY: %s'",
 				"details"			=> "'The payment currency was not in $(USD), please contact an administrator to convert the currency to $(USD)'",
 			), "log_payments_paypal", false,
-			$_POST['txn_id'],$_POST['payer_email'],$_POST['item_name'],$_POST['mc_gross'],$_POST['mc_currency'],$_POST['custom'],$_POST['first_name'],$_POST['last_name'],$postdata,$_POST['mc_currency']);
+			$_POST['txn_id'],
+			$_POST['payer_email'],
+			$_POST['item_name'],
+			$_POST['mc_gross'],
+			$_POST['mc_fee'],
+			($_POST['mc_gross']-$_POST['mc_fee']),
+			$_POST['mc_currency'],
+			$_POST['custom'],
+			$_POST['first_name'],
+			$_POST['last_name'],
+			$postdata,
+			$_POST['mc_currency']);
 			return false;
 		}
 		
@@ -232,7 +278,17 @@ class PayPal
 					"post_data"				=> "'%s'",
 					"extra_information"		=> "'TRANSACTION RECYLCED WITH PAYMENTSTATUS COMPLETED'",
 				), "log_invalidpayments_paypal", false,
-				$txn_id,$real_txn_id,$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata);
+				$txn_id,
+				$real_txn_id,
+				$_POST['payer_email'],
+				$_POST['payment_status'],
+				$_POST['item_name'],
+				$amount,
+				$currency,
+				$accountid,
+				$_POST['first_name'],
+				$_POST['last_name'],
+				$postdata);
 				
 				return false;
 			}
@@ -251,16 +307,30 @@ class PayPal
 			"sender_email"			=> "'%s'",
 			"payment_status"		=> "'%s'",
 			"item_name"				=> "'%s'",
-			"amount"				=> "'%s'",
+			"amount_gross"			=> "'%s'",
+			"amount_fee"			=> "'%s'",
+			"amount_net"			=> "'%s'",
 			"currency"				=> "'%s'",
 			"account_id"			=> "'%s'",
 			"first_name"			=> "'%s'",
 			"last_name"				=> "'%s'",
 			"post_data"				=> "'%s'",
 			"extra_information"		=> "'SUCCESSFUL PAYMENT!'",
-			"details"				=> "'$details, %s Points were added to your account!'",
+			"details"				=> "'$details, Points were added to your account!'",
 		), "log_payments_paypal", false,
-		$txn_id,$real_txn_id,$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata, floor($_POST['mc_gross']));
+		$txn_id,
+		$real_txn_id,
+		$_POST['payer_email'],
+		$_POST['payment_status'],
+		$_POST['item_name'],
+		$amount,
+		$_POST['mc_fee'],
+		($_POST['mc_gross']-$_POST['mc_fee']),
+		$currency,
+		$accountid,
+		$_POST['first_name'],
+		$_POST['last_name'],
+		$postdata);
 		
 		return array("amount" => $amount, "accountid" => $accountid);
 	}
@@ -285,16 +355,30 @@ class PayPal
 			"sender_email"			=> "'%s'",
 			"payment_status"		=> "'%s'",
 			"item_name"				=> "'%s'",
-			"amount"				=> "'%s'",
+			"amount_gross"			=> "'%s'",
+			"amount_fee"			=> "'%s'",
+			"amount_net"			=> "'%s'",
 			"currency"				=> "'%s'",
 			"account_id"			=> "'%s'",
 			"first_name"			=> "'%s'",
 			"last_name"				=> "'%s'",
 			"post_data"				=> "'%s'",
 			"extra_information"		=> "'REVERSED PAYMENT!'",
-			"details"				=> "'Transaction was reversed or refunded, %s Points was deducted from your account!'",
+			"details"				=> "'Transaction was reversed or refunded, Points were deducted from your account!'",
 		), "log_payments_paypal", false,
-		$_POST['parent_txn_id'],$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata, floor($amount));
+		$_POST['parent_txn_id'],
+		$_POST['txn_id'],
+		$_POST['payer_email'],
+		$_POST['payment_status'],
+		$_POST['item_name'],
+		$amount,
+		$_POST['mc_fee'],
+		($_POST['mc_gross']-$_POST['mc_fee']),
+		$currency,
+		$accountid,
+		$_POST['first_name'],
+		$_POST['last_name'],
+		$postdata);
 
 		return array("amount" => -$amount, "accountid" => $accountid);
 	}
@@ -309,7 +393,7 @@ class PayPal
 		$accountid	= $_POST['custom'];
 		$currency	= $_POST['mc_currency'];
 		
-		//Insert log for pending trasaction
+		//Insert log for pending transaction
 		$this->sql->Insert(
 		array(
 			"status"			=> "'2'",
@@ -317,16 +401,29 @@ class PayPal
 			"sender_email"		=> "'%s'",
 			"payment_status"	=> "'%s'",
 			"item_name"			=> "'%s'",
-			"amount"			=> "'%s'",
+			"amount_gross"		=> "'%s'",
+			"amount_fee"		=> "'%s'",
+			"amount_net"		=> "'%s'",
 			"currency"			=> "'%s'",
 			"account_id"		=> "'%s'",
 			"first_name"		=> "'%s'",
 			"last_name"			=> "'%s'",
 			"post_data"			=> "'%s'",
 			"extra_information"	=> "'UNFINISHED PAYMENT!'",
-			"details"			=> "'Transaction is currently pending, %s Points will be added once the trasaction is completed'",
+			"details"			=> "'Transaction is currently pending, Points will be added once the transaction is completed'",
 		), "log_payments_paypal", false,
-		$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata,floor($_POST['mc_gross']));
+		$_POST['txn_id'],
+		$_POST['payer_email'],
+		$_POST['payment_status'],
+		$_POST['item_name'],
+		$amount,
+		$_POST['mc_fee'],
+		($_POST['mc_gross']-$_POST['mc_fee']),
+		$currency,
+		$accountid,
+		$_POST['first_name'],
+		$_POST['last_name'],
+		$postdata);
 		
 		return false;
 	}
@@ -338,7 +435,7 @@ class PayPal
 		$accountid	= $_POST['custom'];
 		$currency	= $_POST['mc_currency'];
 		
-		//Insert log for failed trasaction
+		//Insert log for failed transaction
 		$this->sql->Insert(
 		array(
 			"status"			=> "'1'",
@@ -346,7 +443,9 @@ class PayPal
 			"sender_email"		=> "'%s'",
 			"payment_status"	=> "'%s'",
 			"item_name"			=> "'%s'",
-			"amount"			=> "'%s'",
+			"amount_gross"		=> "'%s'",
+			"amount_fee"		=> "'%s'",
+			"amount_net"		=> "'%s'",
 			"currency"			=> "'%s'",
 			"account_id"		=> "'%s'",
 			"first_name"		=> "'%s'",
@@ -355,7 +454,18 @@ class PayPal
 			"extra_information"	=> "'FAILED PAYMENT!'",
 			"details"			=> "'Transaction Failed'",
 		), "log_payments_paypal", false,
-		$_POST['txn_id'],$_POST['payer_email'],$_POST['payment_status'],$_POST['item_name'],$amount,$currency,$accountid,$_POST['first_name'],$_POST['last_name'],$postdata);
+		$_POST['txn_id'],
+		$_POST['payer_email'],
+		$_POST['payment_status'],
+		$_POST['item_name'],
+		$amount,
+		$_POST['mc_fee'],
+		($_POST['mc_gross']-$_POST['mc_fee']),
+		$currency,
+		$accountid,
+		$_POST['first_name'],
+		$_POST['last_name'],
+		$postdata);
 		
 		return false;
 	}

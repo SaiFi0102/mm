@@ -6,6 +6,7 @@
 <!-- Meta's -->
 <meta name="description" content="<?php print $META_DESCRIPTION; ?>" />
 <meta name="keywords" content="<?php print $META_KEYWORDS; ?>" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css" href="templates/mmopro/style.css" />

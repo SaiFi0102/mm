@@ -1,19 +1,8 @@
 <body>
 <?php
-if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
+if($SHOWVOTEPOPUP)
 {
-	if($USER['loggedin'])
-	{
-		$alreadyvoted = $DB->Select("gateway", "log_votes", "WHERE ip='%s' OR accountid='%s'", true, $_SERVER['REMOTE_ADDR'], $USER['id']);
-	}
-	else
-	{
-		$alreadyvoted = $DB->Select("gateway", "log_votes", "WHERE ip='%s'", true, $_SERVER['REMOTE_ADDR']);
-	}
-	if($DB->AffectedRows == 0)
-	{
-		eval($templates->Output("vote_popup", false, false, false, true));
-	}
+	eval($templates->Output("vote_popup", false, false, false, true));
 }
 ?>
 <!-- ----------- PoPuP END ----------- -->
@@ -62,7 +51,8 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 			<div class="link"><a href="account.php">Account Manager</a></div><div class="separator"></div>
 			<div class="link"><a href="characters.php">Characters</a></div><div class="separator"></div>
 			<div class="link"><a href="vote.php">Vote</a></div><div class="separator"></div>
-			<div class="link"><a href="donate.php">Donate</a></div><div class="separator"></div>
+			<div class="link"><a href="points.php">Points</a></div><div class="separator"></div>
+			<div class="link"><a href="pvp.php">PvP</a></div><div class="separator"></div>
 			<div class="link"><a href="contact.php">Contact Us</a></div><div class="separator"></div>
 			<div class="link"><a href="realms.php">Realms</a></div><div class="separator"></div>
 			<div class="link"><a href="howtoconnect.php">Connection Guide</a></div><div class="separator"></div>
@@ -81,93 +71,16 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 </div>
 <div id="slider_in">
 	<div id="slider_area">
-		<!-- Slide  1-->
+		<?php foreach($MMOPRO_SLIDER as $sliding_data) { ?>
 		<div class="slide">
-			<!-- Sliding text line -->
 			<div class="sliding_text_left">
-				<div  class="sliding_text_text">
-					<!-- Title -->
-					<h1>Title</h1>
-					<!-- Title 2-->
-					<h2>Slider Sub Text 1</h2>
-					<!-- Text-->
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet libero in nunc lobortis accumsan. Sed vehicula ornare quam sit amet tristique. 
-					Nunc scelerisque, enim vitae cursus scelerisque, neque purus luctus sapien, <a href=""  title="">sit amet iaculis odio massa ac dui</a>. 
-				</div>			
+				<?php print $sliding_data['text_left']; ?>
 			</div>
 			<div class="sliding_text_right">
-				<!-- Image -->
-				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
-				</div>
+				<?php print $sliding_data['text_right']; ?>
 			</div>
 		</div>
-
-		<!-- Slide  2-->
-		<div class="slide">
-			<!-- Sliding text line -->
-			<div class="sliding_text_left">
-				<div  class="sliding_text_text">
-					<!-- Title -->
-					<h1>Title 2</h1>
-					<!-- Title 2-->
-					<h2>Slider Sub Text 2</h2>
-					<!-- Text-->
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet libero in nunc lobortis accumsan. Sed vehicula ornare quam sit amet tristique. 
-					Nunc scelerisque, enim vitae cursus scelerisque, neque purus luctus sapien, <a href=""  title="">sit amet iaculis odio massa ac dui</a>. 
-				</div>			
-			</div>
-			<div class="sliding_text_right">
-				<!-- Image -->
-				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
-				</div>
-			</div>
-		</div>
-
-		<!-- Slide  3-->
-		<div class="slide">
-			<!-- Sliding text line -->
-			<div class="sliding_text_left">
-				<div  class="sliding_text_text">
-					<!-- Title -->
-					<h1>Title 3</h1>
-					<!-- Title 2-->
-					<h2>Slider Sub Text 3</h2>
-					<!-- Text-->
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet libero in nunc lobortis accumsan. Sed vehicula ornare quam sit amet tristique. 
-					Nunc scelerisque, enim vitae cursus scelerisque, neque purus luctus sapien, <a href=""  title="">sit amet iaculis odio massa ac dui</a>. 
-				</div>			
-			</div>
-			<div class="sliding_text_right">
-				<!-- Image -->
-				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
-				</div>
-			</div>
-		</div>
-		
-		<!-- Slide  4-->
-		<div class="slide">
-			<!-- Sliding text line -->
-			<div class="sliding_text_left">
-				<div  class="sliding_text_text">
-					<!-- Title -->
-					<h1>Title 4</h1>
-					<!-- Title 2-->
-					<h2>Slider Sub Text 4</h2>
-					<!-- Text-->
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet libero in nunc lobortis accumsan. Sed vehicula ornare quam sit amet tristique. 
-					Nunc scelerisque, enim vitae cursus scelerisque, neque purus luctus sapien, <a href=""  title="">sit amet iaculis odio massa ac dui</a>. 
-				</div>			
-			</div>
-			<div class="sliding_text_right">
-				<!-- Image -->
-				<div class="featured_file">
-					<img src="images/mmopro/slide_1.png" alt="" height="194" width="464" class="png" />
-				</div>
-			</div>
-		</div>			
+		<?php } ?>
 	</div>
 	<div id="numbers"></div>
 </div>
@@ -179,6 +92,9 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 <?php if($OFFLINE_MAINTENANCE && $USER['access'] >= 4) {?>
 <div class="errorbox" style="margin-bottom: 6px;"><h4>The website is currently under maintenace shutdown mode! Only Admins and Executives can view this website!</h4></div>
 <?php }?>
+<noscript>
+<div class="errorbox" style="margin-bottom: 6px;"><h4>JavaScript support have been disabled or is not allowed in your browser. Please enable JavaScript for better output or use a newer browser.</h4></div>
+</noscript>
 
 <div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">

@@ -835,7 +835,7 @@ function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain',
 	if($bodytype == 'plain') $bodytype = 'text/plain';
 	if($bodytype == 'html') $bodytype = 'text/html';
 	
-	if(empty($from)) $from = $cms->config['emailfrom'];
+	if(empty($from)) $from = $cms->config['email_from'];
 	
 	$message = Swift_Message::newInstance()->setCharset($characterset);
 	$message->setSubject($subject);

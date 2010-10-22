@@ -5,7 +5,7 @@ define("INCLUDED", true); //This is for returning a die message if INCLUDED is n
 require_once("init.php");
 
 //################ PAGE ACCESS ################
-$cms->BannedAccess(true);
+$cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ Resources ################ 
@@ -19,5 +19,6 @@ $template = "pvp_stats"; //The template to use for the page. Dont include .tpl i
 //################ Page Functions ################
 
 //################ Template's Output ################
+$top_pvp = $CHARACTERDB[1]->Select("*, (SELECT name FROM characters WHERE guid=character_pvpstats.guid) AS charactername", "character_pvpstats", "ORDER BY totalkills LIMIT 100");
 eval($templates->Output($template));
 ?>

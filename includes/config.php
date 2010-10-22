@@ -104,6 +104,8 @@ $configfile['fullpath'] = "";
 $configfile['language'] = "english"; // Language must be lowercase, To see a list of languages check /languages directory
 $DEBUG = false; //Shows Debug messages on the footer
 $OFFLINE_MAINTENANCE = false;
+define("IPN_ALERTPAY_SECURITY_CODE", "oDOIxWomBxyxaEnQ");
+define("IPN_MONEYBOOKERS_PASSWORD", "password");
 
 
 ?>

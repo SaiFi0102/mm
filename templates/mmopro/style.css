@@ -121,8 +121,8 @@ a:active
 	margin: 0;
 	float: left;
 	padding-top: 15px;
-	min-width: 70px;
-	width: expression(this.width < 70 ? "70px" : this.width);
+	min-width: 60px;
+	width: expression(this.width < 60 ? "60px" : this.width);
 }
 #navbar .link:hover
 {
@@ -751,7 +751,6 @@ table th {
 table td {
 	font-size: 11px;
 	padding: 10px;
-	text-align: left;
 	border-left:1px solid #DDDDDD;
 	border-bottom:1px solid #DDDDDD;
 	background: #fcfcfc;

@@ -162,6 +162,7 @@ class Templates
 		{
 			$pagetitle .= "<a href='index.php'>".$cms->config['websitename']."</a> &#187; ";
 			$htmltitle = "";
+			$metakeywords = $cms->config['websitename'];
 			if(is_array($page_name))
 			{
 				foreach($page_name as $parray)
@@ -173,22 +174,25 @@ class Templates
 							//In case there is no url key($name) will be 0 and value($url) will be the name
 							$pagetitle .= $url . " &#187; ";
 							$htmltitle .= $url . " &#187; ";
+							$metakeywords .= ",".$url;
 						}
 						else
 						{
 							$pagetitle .= "<a href='{$url}'>" . $name . "</a> &#187; ";
 							$htmltitle .= $name . " &#187; ";
+							$metakeywords .= ",".$name;
 						}
 					}
 				}
 			}
 			$pagetitle = substr($pagetitle, 0, -8);
 			$htmltitle .= $cms->config['websitetitle'];
+			$metakeywords .= ",".$cms->config["metakeyw"];
 			
 			$return .= '$COPYRIGHT = $cms->config["copyright"];		
 			$TITLE = "'.$htmltitle.'";
 			$PAGETITLE = "'.$pagetitle.'";
-			$META_KEYWORDS = $cms->config["metakeyw"];
+			$META_KEYWORDS = "'.$metakeywords.'";
 			$META_DESCRIPTION = $cms->config["metadesc"];
 			$META_EXTRA = $cms->config["metaextra"];';
 			
