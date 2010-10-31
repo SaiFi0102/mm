@@ -12,8 +12,8 @@ if($SHOWVOTEPOPUP)
 <div id="header">
 	<!-- Logo -->
 	<div id="logo">
-		<a href="index.php">
-			<img src="images/mmopro/logo.png" alt="<?php print $TITLE; ?>" class="png" height="88" width="300" />
+		<a href="index.php" title="<?php print $TITLE; ?>">
+			<img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/logo.png" alt="" class="png" height="88" width="300" />
 		</a>
 	</div>
 
@@ -24,7 +24,7 @@ if($SHOWVOTEPOPUP)
 			if($USER['loggedin']){?>
 		<div id="loggedin_form_container">
 			<div class="right">
-				<a href="logout.php" title="Click to Logout and Delete All Cookies">[Logout]</a>
+				<a href="logout.php" rel="nofollow" title="Click to Logout and Delete All Cookies">[Logout]</a>
 			</div>
 			Welcome <?php print FirstCharUpperThenLower($USER['username']); ?>.
 			<?php if($USER['last_login'] != '0000-00-00 00:00:00') print "You last logged in WoW on " . ConvertMysqlTimestamp($USER['last_login']); else print "Your account has not yet been logged in at WoW"; ?>.
@@ -60,14 +60,14 @@ if($SHOWVOTEPOPUP)
 			<div class="link"><a href="login.php">Login</a></div><div class="separator"></div>
 			<div class="link"><a href="register.php">Register</a></div>
 			<?php }else{ ?>
-			<div class="link"><a href="logout.php">Logout</a></div>
+			<div class="link"><a href="logout.php" rel="nofollow">Logout</a></div>
 			<?php } ?>
 	</div>
 </div><div class="clear"></div>
 
 <!-- Slider Area -->
 <div id="slider_top">
-	<img src="images/mmopro/pixel.gif" height="1" width="1" alt="" />
+	<img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/pixel.gif" height="1" width="1" alt="" />
 </div>
 <div id="slider_in">
 	<div id="slider_area">
@@ -80,11 +80,11 @@ if($SHOWVOTEPOPUP)
 				<?php print $sliding_data['text_right']; ?>
 			</div>
 		</div>
-		<?php } ?>
+		<?php }?>
 	</div>
 	<div id="numbers"></div>
 </div>
-<script type="text/javascript">$('#slider_area').cycle({speed: 2000,fx:'scrollHorz',easing:'easeOutElastic',timeout:11100,pager:'#numbers',pagerAnchorBuilder:function(a){return'<li><a href="#" title="">'+(a+1)+'</a></li>'}});</script>
+<script type="text/javascript">$(".slide").show();$('#slider_area').cycle({speed: 2000,fx:'scrollHorz',easing:'easeOutElastic',timeout:11100,pager:'#numbers',pagerAnchorBuilder:function(a){return'<li><a href="#" title="">'+(a+1)+'</a></li>'}});</script>
 
 <!-- A simple separator, do not remove it or the slideshow and news will blend! -->
 <div class="box_in"></div>
@@ -96,7 +96,7 @@ if($SHOWVOTEPOPUP)
 <div class="errorbox" style="margin-bottom: 6px;"><h4>JavaScript support have been disabled or is not allowed in your browser. Please enable JavaScript for better output or use a newer browser.</h4></div>
 </noscript>
 
-<div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
+<div class="footer_top"><img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">
 		<div id="footer_cont" align="center" style="padding-top:0; padding-bottom: 0;">
 			<h4><?php print $PAGETITLE; ?></h4>

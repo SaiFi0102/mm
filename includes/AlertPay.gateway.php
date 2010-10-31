@@ -74,23 +74,19 @@ class AlertPay
 		//Check for problems in POSTed items
 		if(empty($_POST))
 		{
-			return false; //no data posted, skip.
-		}
-		if($totalAmountReceived == null || $transactionStatus == null || $currency == null || $receivedMerchantEmailAddress == null)
-		{
-			return false;
+			return "noob"; //no data posted, skip.
 		}
 		if($purchaseType != "item" || $transactionType != "purchase")
 		{
-			return false;
+			return "noob";
 		}
 		if($testModeStatus == "1")
 		{
-			return false;
+			return "noob";
 		}
 		if($myCustomField_2 != "_MM_PAYMENT")
 		{
-			return false;
+			return "noob";
 		}
 
 		//Check if payment is valid

@@ -30,6 +30,8 @@ $LOGON_DATABASE = array(
 );
 
 $LOGON_REALMLIST = "logon.dominationwow.com";
+$LOGON_CRAWLERUSERNAME = "SEARCHENGINECRAWLER"; //Username of any account used for crawlers' login
+$LOGON_CRAWLERUSERPASS = "SUPERSECRETCRAWLERONLY"; //and its password
 
 $REALM = array(); //$REALM[realmid] = array(CH_DATABASE=array,W_DATABASE=array,CAP,IP,PORT,SOAP=array)
 $REALM[1] = array(

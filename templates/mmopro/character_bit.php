@@ -25,7 +25,7 @@ $CDATA_ZONEID = $_cdata['zone'];
 				<div style="background: transparent url('images/avatars/wow/<?php print $CDATA_GENDER."-".$CDATA_RACE."-".$CDATA_CLASS; ?>.gif') repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 64px; height: 64px;"></div>
 				
 				<div class="frame">
-					<img src="images/pixel.gif" alt="" border="0" width="82" height="83">
+					<img src="<?php print $cms->config['websiteurl']; ?>/images/pixel.gif" alt="" border="0" width="82" height="83">
 				</div>
 				<div class="iconPosition">
 					<?php print $CDATA_LEVEL; ?>
@@ -34,9 +34,9 @@ $CDATA_ZONEID = $_cdata['zone'];
 		</div>
 		
 		<div style="text-align: center;">
-			<img alt="" height="18" width="18" src="<?php print WoW::$raceIcons[$CDATA_GENDER][$CDATA_RACE]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrRace[$CDATA_RACE]); ?>');" />
-			<?php if($CDATA_ONLINE) print '<img src="images/icons/uparrow.gif" onmouseover="toolTip(this, \'Online\');" height="19" width="18" />' ?>
-			<img alt="" height="18" width="18" src="<?php print WoW::$classIcons[$CDATA_CLASS]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrClass[$CDATA_CLASS] . " - " . WoW::$arrGender[$CDATA_GENDER]); ?>');" />
+			<img alt="" height="18" width="18" src="<?php print $cms->config['websiteurl']; ?>/<?php print WoW::$raceIcons[$CDATA_GENDER][$CDATA_RACE]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrRace[$CDATA_RACE]); ?>');" />
+			<?php if($CDATA_ONLINE) print '<img src="'.$cms->config['websiteurl'].'/images/icons/uparrow.gif" onmouseover="toolTip(this, \'Online\');" height="19" width="18" />' ?>
+			<img alt="" height="18" width="18" src="<?php print $cms->config['websiteurl']; ?>/<?php print WoW::$classIcons[$CDATA_CLASS]; ?>" onmouseover="toolTip(this, '<?php print EscapeHtml(WoW::$arrClass[$CDATA_CLASS] . " - " . WoW::$arrGender[$CDATA_GENDER]); ?>');" />
 		</div>
 		
 	</div>
@@ -47,7 +47,7 @@ $CDATA_ZONEID = $_cdata['zone'];
 		<div class="cright">
 			<table border="0" cellpadding="0" cellspacing="0" align="center">
 			<tr valign="middle" align="center">
-				<td><a href="character.php?act=unstuck&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>"><img src="images/icons/unstuck.png" height="40" width="40" alt="" onmouseover="toolTip(this, 'If your character is stuck or is lost, use this unstuck tool to teleport your self to your hearthstone location');" /></a></td>
+				<td><a href="character.php?act=unstuck&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>"><img src="<?php print $cms->config['websiteurl']; ?>/images/icons/unstuck.png" height="40" width="40" alt="" onmouseover="toolTip(this, 'If your character is stuck or is lost, use this unstuck tool to teleport your self to your hearthstone location');" /></a></td>
 			</tr>
 			<tr valign="middle" align="center">
 				<td><u>Unstuck Character</u></td>

@@ -19,6 +19,6 @@ $template = "pvp_stats"; //The template to use for the page. Dont include .tpl i
 //################ Page Functions ################
 
 //################ Template's Output ################
-$top_pvp = $CHARACTERDB[1]->Select("*, (SELECT name FROM characters WHERE guid=character_pvpstats.guid) AS charactername", "character_pvpstats", "ORDER BY totalkills LIMIT 100");
+$top_pvp = $CHARACTERDB[1]->Select("*, (SELECT name FROM characters WHERE guid=character_pvp.guid) AS charactername", "character_pvp", "ORDER BY totalkills DESC LIMIT 100");
 eval($templates->Output($template));
 ?>

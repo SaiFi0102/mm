@@ -95,25 +95,4 @@ if($OFFLINE_MAINTENANCE && $USER['access'] < 4 && strpos($_SERVER['PHP_SELF'], '
 	eval($templates->Output("maintenance"));
 	exit();
 }
-
-//################ Template Variables ################
-$SHOWVOTEPOPUP = false;
-if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
-{
-	if($USER['loggedin'])
-	{
-		$alreadyvoted = $DB->Select("gateway", "log_votes", "WHERE ip='%s' OR accountid='%s'", true, $_SERVER['REMOTE_ADDR'], $USER['id']);
-	}
-	else
-	{
-		$alreadyvoted = $DB->Select("gateway", "log_votes", "WHERE ip='%s'", true, $_SERVER['REMOTE_ADDR']);
-	}
-	if($DB->AffectedRows == 0)
-	{
-		$SHOWVOTEPOPUP = true;
-	}
-}
-
-$MMOPRO_SLIDER = array();
-$MMOPRO_SLIDER = $DB->Select("*", "mmopro_slidingarea", "ORDER BY `order` ASC");
 ?>

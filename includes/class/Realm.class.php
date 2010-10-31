@@ -259,10 +259,10 @@ class Realm
 				$logsent = false;
 				$return = array('message'=>"There was a problem with the server, please try again in a few minutes. If this problem persists, please contact an administrator!", 'bool'=>false);
 			}
+			
+			//Log Gold Delivery
+			$this->_LogRewardDelivery($session, $command, $result['message'], $characterid, $rewardid, $logsent, $votedonate);
 		}
-		
-		//Log Gold Delivery
-		$this->_LogRewardDelivery($session, $command, $result['message'], $characterid, $rewardid, $logsent, $votedonate);
 		
 		//Deduct points if success = true
 		if($success)

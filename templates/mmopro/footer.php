@@ -40,8 +40,8 @@ foreach($WORLDDB as $WDB)
 </div>
 		<div id="page_right">
 		<?php if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) {?>
-			<div><a href="vote.php" title="Vote Now!"><img src="images/mmopro/vote.png" alt="" class="png" height="127" width="309" /></a></div>
-			<div><a href="points.php" title="Donate To Support Us!"><img src="images/mmopro/donate.png" alt="" class="png" height="127" width="309" /></a></div>
+			<div><a href="vote.php" title="Vote Now!"><img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/vote.png" alt="" class="png" height="127" width="309" /></a></div>
+			<div><a href="points.php" title="Donate To Support Us!"><img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/donate.png" alt="" class="png" height="127" width="309" /></a></div>
 
 					<div class="box2">
 						<div class="box_top"></div>
@@ -58,15 +58,15 @@ foreach($WORLDDB as $WDB)
 										</tr>
 										<tr>
 											<td>State:</td>
-											<td><div id="server_status_state_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
+											<td><div id="server_status_state_<?php print $rid; ?>"><img src='<?php print $cms->config['websiteurl']; ?>/images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
 										</tr>
 										<tr>
 											<td>Online Players:</td>
-											<td><div id="server_status_online_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
+											<td><div id="server_status_online_<?php print $rid; ?>"><img src='<?php print $cms->config['websiteurl']; ?>/images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
 										</tr>
 										<tr>
 											<td>Uptime:</td>
-											<td><div id="server_status_uptime_<?php print $rid; ?>"><img src='images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
+											<td><div id="server_status_uptime_<?php print $rid; ?>"><img src='<?php print $cms->config['websiteurl']; ?>/images/loading-small.gif' alt='Loading' height='16' width='16' /></div></td>
 										</tr>
 <script type="text/javascript">
 function LoadStatus_<?php print $rid; ?>()
@@ -77,10 +77,10 @@ function LoadStatus_<?php print $rid; ?>()
 		success: function(msg){
 			$("#server_status_state_<?php print $rid; ?>").hide();$("#server_status_online_<?php print $rid; ?>").hide();$("#server_status_uptime_<?php print $rid; ?>").hide();
 			if(msg['status']){
-				$("#server_status_state_<?php print $rid; ?>").html("<img src='images/icons/uparrow.gif' alt='Online' height='19' width='18' />");
+				$("#server_status_state_<?php print $rid; ?>").html("<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/uparrow.gif' alt='Online' height='19' width='18' />");
 			}
 			else{
-				$("#server_status_state_<?php print $rid; ?>").html("<img src='images/icons/downarrow.gif' alt='Offline' height='19' width='18' />");
+				$("#server_status_state_<?php print $rid; ?>").html("<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/downarrow.gif' alt='Offline' height='19' width='18' />");
 			}
 			$("#server_status_state_<?php print $rid; ?>").fadeIn(750);$("#server_status_online_<?php print $rid; ?>").html("<a href='online.php?rid=<?php print $rid; ?>'>" + msg['online']+" (Maximum Online "+msg['maxplayers']+")</a>").fadeIn(750);$("#server_status_uptime_<?php print $rid; ?>").html(msg['uptime']).fadeIn(750);
 		},
@@ -136,19 +136,42 @@ LoadStatus_<?php print $rid; ?>();
 </div>
 <div class="box_in"></div>
 <!-- Footer -->
-<div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
+<div class="footer_top"><img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">
 		<div id="footer_cont" align="left">
+			<h5>Visitors Online On Website</h5>
+			<?php
+			$print_rand_online = null;
+			$unregisteredonline = 0;
+			foreach($website_onlines as $odata)
+			{
+				if($odata['uid'] == 0)
+				{
+					$unregisteredonline++;
+					continue;
+				}
+				$print_rand_online .= $odata['username']. ", ";
+			}
+			
+			print "Total: ".count($website_onlines). ". Players: ".(count($website_onlines) - $unregisteredonline). ". Guests: ". $unregisteredonline. "<br />";
+			
+			$print_rand_online = substr($print_rand_online, 0, -2);
+			print $print_rand_online;
+			if($print_rand_online == null)
+			{
+				print "No Visitors Online.";
+			}
+			?><br />
+		
 			<?php foreach($REALM as $rid => $rdata) { ?>
 				<h5><?php print $rdata['NAME']; ?> Random 50 Online Players:</h5>
 				<?php
-				$rand_online = RandomOnlinePlayers($rid);
-				if(!count($rand_online))
+				if(!count($rand_online[$rid]))
 				{
 					print "No online players in this realm.";
 				}
 				$print_rand_online = null;
-				foreach($rand_online as $odata)
+				foreach($rand_online[$rid] as $odata)
 				{
 					$print_rand_online .= "<a href='character.php?rid={$rid}&cid={$odata['guid']}'>" . $odata['name'] . "</a>, ";
 				}
@@ -161,7 +184,7 @@ LoadStatus_<?php print $rid; ?>();
  <div class="footer_bottom"> </div>
 
 
-<div class="footer_top"><img src="images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
+<div class="footer_top"><img src="<?php print $cms->config['websiteurl']; ?>/images/mmopro/pixel.gif" height="1" width="1" alt="" /></div>
 <div class="footer_content">
 		<div id="footer_cont">
 			<div class="float_left">

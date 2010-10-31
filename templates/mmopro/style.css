@@ -212,6 +212,10 @@ a:active
 .slide{
 	width:940px;
 	height:210px;
+	display:none;
+}
+.slide:first{
+	display:block;
 }
 
 .sliding_text_text{

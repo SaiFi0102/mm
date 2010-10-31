@@ -29,12 +29,28 @@ class Authorization
 	 */
 	public function UserGlobals()
 	{
-		if(!isset($_COOKIE['username']) || !isset($_COOKIE['password']))
+		global $LOGON_CRAWLERUSERNAME, $LOGON_CRAWLERUSERPASS;
+		$iscrawler = false;
+		
+		if(preg_match("/".CRAWLERS_LIST."/i", $_SERVER['HTTP_USER_AGENT'])) //If visitor is a crawler
+		{
+			$iscrawler = true;
+		}
+		if((!isset($_COOKIE['username']) || !isset($_COOKIE['password'])) && $iscrawler == false)
 		{
 			return false;
 		}
-		$user = $this->FetchUserData($_COOKIE['username'], $_COOKIE['password']);
-		if ($user == false)
+		
+		//Check if visitor is a crawler
+		if($iscrawler) //If visitor is a crawler then login with crawler's user
+		{
+			$user = $this->FetchUserData($LOGON_CRAWLERUSERNAME, Sha1Pass($LOGON_CRAWLERUSERNAME, $LOGON_CRAWLERUSERPASS));
+		}
+		else
+		{
+			$user = $this->FetchUserData($_COOKIE['username'], $_COOKIE['password']);
+		}
+		if($user == false)
 		{
 			$this->Logout();
 			return false;
@@ -184,6 +200,7 @@ class Authorization
 		{
 			$this->logdb->Insert(array("accountid"=>"'%s'"), "account_mm_extend", false, $data['id']);
 		}
+		
 		return $data;
 	}
 	

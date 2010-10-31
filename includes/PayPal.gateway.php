@@ -28,15 +28,11 @@ class PayPal
 		//Check for problems in POSTed items
 		if(empty($_POST))
 		{
-			return false; //no data posted, skip.
-		}
-		if(!isset($_POST['mc_gross']) || !isset($_POST['payment_status']) || !isset($_POST['mc_currency']) || !isset($_POST['business']))
-		{
-			return false;
+			return "noob"; //no data posted, skip.
 		}
 		if($_POST['txn_type'] != "web_accept")
 		{
-			return false;
+			return "noob";
 		}
 
 		//Check if payment is valid
@@ -126,7 +122,7 @@ class PayPal
 		
 		//Check if some one is trying to HACK or SCAM us
 		//Wrong receiver_email
-		if($_POST['business'] != $cms->config['email_paypal'])
+		if($_POST['receiver_email'] != $cms->config['email_paypal'])
 		{
 			$this->sql->Insert(
 			array(
@@ -158,7 +154,7 @@ class PayPal
 			$_POST['first_name'],
 			$_POST['last_name'],
 			$postdata,
-			$_POST['business'],
+			$_POST['receiver_email'],
 			$cms->config['email_paypal']);
 			return false;
 		}

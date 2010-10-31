@@ -40,6 +40,8 @@ define('EMAIL_EXISTS', 3);
 define('REWARD_VOTE', 0);
 define('REWARD_DONATE', 1);
 
+define('CRAWLERS_LIST', 'Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona');
+
 /**
  * ###### SOME DOCUMENTS AND VARIABLES TO REMEMBER	######
  * ###### 			FOR DEVELOPERS ONLY				######

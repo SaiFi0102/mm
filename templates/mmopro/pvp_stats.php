@@ -26,7 +26,14 @@
 					continue;
 				}
 				$i++;
-				$kdr = round(($pvp_data['totalkills'] / $pvp_data['totaldeaths']), 2);
+				if($pvp_data['totaldeaths'] == 0)
+				{
+					$kdr = 100;
+				}
+				else
+				{
+					$kdr = round(($pvp_data['totalkills'] / $pvp_data['totaldeaths']), 2);
+				}
 				if($pvp_data['killstreak'] == 0)
 				{
 					$ks = "-";

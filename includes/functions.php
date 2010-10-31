@@ -382,19 +382,19 @@ function ParseGold(&$str)
 		$moneyhtml = null;
 		if($money['gold'])
 		{
-			$moneyhtml .= $money['gold']." <img src='images/icons/money_gold.gif' alt='Gold' height='13' width='13' /> ";
+			$moneyhtml .= $money['gold']." <img src='{$cms->config['websiteurl']}/images/icons/money_gold.gif' alt='Gold' height='13' width='13' /> ";
 		}
 		if($money['silver'])
 		{
-			$moneyhtml .= $money['silver']." <img src='images/icons/money_silver.gif' alt='Silver' height='13' width='13' /> ";
+			$moneyhtml .= $money['silver']." <img src='{$cms->config['websiteurl']}/images/icons/money_silver.gif' alt='Silver' height='13' width='13' /> ";
 		}
 		if($money['copper'])
 		{
-			$moneyhtml .= $money['copper']." <img src='images/icons/money_copper.gif' alt='Copper' height='13' width='13' />";
+			$moneyhtml .= $money['copper']." <img src='{$cms->config['websiteurl']}/images/icons/money_copper.gif' alt='Copper' height='13' width='13' />";
 		}
 		$str = str_replace($moneyy, $moneyhtml, $str);
 	}
-	$str = str_replace("[gold][/gold]", "0 <img src='images/icons/money_copper.gif' alt='Copper' height='13' width='13' />", $str);
+	$str = str_replace("[gold][/gold]", "0 <img src='{$cms->config['websiteurl']}/images/icons/money_copper.gif' alt='Copper' height='13' width='13' />", $str);
 	return $str;
 }
 

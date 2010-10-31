@@ -9,20 +9,20 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 <!-- Stylesheets -->
-<link rel="stylesheet" type="text/css" href="templates/mmopro/style.css" />
-<link rel="stylesheet" type="text/css" href="templates/mmopro/reset.css" />
-<link rel="stylesheet" type="text/css" href="templates/mmopro/jquery.lightbox-0.5.css" media="screen" />
-<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?php print $cms->config['websiteurl']; ?>/templates/mmopro/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php print $cms->config['websiteurl']; ?>/templates/mmopro/reset.css" />
+<link rel="stylesheet" type="text/css" href="<?php print $cms->config['websiteurl']; ?>/templates/mmopro/jquery.lightbox-0.5.css" media="screen" />
+<link rel="icon" href="<?php print $cms->config['websiteurl']; ?>/favicon.ico" />
 <?php print $META_EXTRA; ?>
 <!-- JS -->
-<script type="text/javascript" src="javascripts/core.js"></script>
-<script type="text/javascript" src="javascripts/ajax.core.js"></script>
-<script type="text/javascript" src="javascripts/jquery.cycle.all.min.js"></script>
-<script type="text/javascript" src="javascripts/jquery.easing.1.1.1.js"></script>
-<script type="text/javascript" src="javascripts/jquery.lightbox-0.5.js"></script>
-<script type="text/javascript" src="javascripts/tooltip.core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/ajax.core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.cycle.all.min.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.easing.1.1.1.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.lightbox-0.5.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/tooltip.core.js"></script>
 <!--[if IE 6]>
-<link rel="stylesheet" href="templates/mmopro/ie6.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php print $cms->config['websiteurl']; ?>/templates/mmopro/ie6.css" type="text/css" media="screen" />
 <![endif]-->
 <script type="text/javascript">$(function(){$('a.l_box').lightBox();});</script>
 </head>
