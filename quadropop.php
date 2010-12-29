@@ -7,17 +7,26 @@ require_once("init.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(false);
-eval($cms->SetPageAccess(ACCESS_NONE));
+eval($cms->SetPageAccess(ACCESS_REGISTERED));
 
 //################ Resources ################ 
 
 //################ General Variables ################
-$page_name[] = array("SOAP Remote Console"=>"soapconsole.php");
+$page_name[] = array("QuadroPop"=>$_SERVER['REQUEST_URI']);
+$template = "quadropop"; //The template to use for the page. Dont include .tpl inside quotes.
 
 //################ Constants ################
 
 //################ Page Functions ################
+if(!empty($_GET['gameid']))
+{
+	
+}
+else
+{
+	$template = "quadropop_wgi";
+}
 
 //################ Template's Output ################
-eval($templates->Output("soapconsole"));
+eval($templates->Output($template));
 ?>

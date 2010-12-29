@@ -13,42 +13,27 @@ if(!defined("INCLUDED"))
  * *********************************************************
  */
 //Databases(USE p:<host or ip> in 'host' if u have PHP 5.3 to open persistent connections... saves alot of ram and speed)
-$WEB_DATABASE = array(
-	'host'	=> '127.0.0.1', //Hostname or IP Address of MySQL server
+$DATABASE_CONNECTION = array(
+	'host'	=> 'p:127.0.0.1', //Hostname or IP Address of MySQL server
 	'user'	=> 'root', //Username of MySQL server
 	'pass'	=> 'root', //Password of the username above
 	'port'	=> '3306', //Listening Port of the MySQL server(Default: 3306)
-	'db'	=> 'website', //Database with the stored tables
 );
 
-$LOGON_DATABASE = array(
-	'host'	=> '127.0.0.1', //Hostname or IP Address of MySQL server
-	'user'	=> 'root', //Username of MySQL server
-	'pass'	=> 'root', //Password of the username above
-	'port'	=> '3306', //Listening Port of the MySQL server(Default: 3306)
-	'db'	=> 'realmd', //Database with the stored tables
-);
-
-$LOGON_REALMLIST = "logon.dominationwow.com";
+define("DBNAME", "realmd"); //Database with the website and realm tables
+$LOGON_REALMLIST = "logon.dominationwow.com"; //Realmlist to tell people to set
 $LOGON_CRAWLERUSERNAME = "SEARCHENGINECRAWLER"; //Username of any account used for crawlers' login
 $LOGON_CRAWLERUSERPASS = "SUPERSECRETCRAWLERONLY"; //and its password
 
-$REALM = array(); //$REALM[realmid] = array(CH_DATABASE=array,W_DATABASE=array,CAP,IP,PORT,SOAP=array)
+$CONTACTDETAILS = array(
+	'ADDRESS'	=> "75/5/3, Lalukhet, 4th Charpai, 6th Khadda Lane,<br />Karachi, Pakistan, 75500",
+	'PHONE'		=> "+92(21) 31234567",
+);
+
+$REALM = array(); //$REALM[realmid] = array(CH_DATABASE=array,W_DATABASE=array,CAP,IP,PORT,SOAP=array,UNSTUCK=array,DESC_LONG)
 $REALM[1] = array(
-	'CH_DATABASE'	=> array(
-		'host'	=> '127.0.0.1', //Hostname or IP Address of MySQL server
-		'user'	=> 'root', //Username of MySQL server
-		'pass'	=> 'root', //Password of the username above
-		'port'	=> '3306', //Listening Port of the MySQL server(Default: 3306)
-		'db'	=> 'character1', //Database with the stored tables
-	),
-	'W_DATABASE'	=> array(
-		'host'	=> '127.0.0.1', //Hostname or IP Address of MySQL server
-		'user'	=> 'root', //Username of MySQL server
-		'pass'	=> 'root', //Password of the username above
-		'port'	=> '3306', //Listening Port of the MySQL server(Default: 3306)
-		'db'	=> 'world1', //Database with the stored tables
-	),
+	'CH_DB'	=> 'character1', //Database with the stored tables
+	'W_DB'	=> 'world1', //Database with the stored tables
 	'NAME'	=> "Funserver",
 	'CAP'	=> 200,
 	'IP'	=> '66.219.29.67',
@@ -74,8 +59,7 @@ $REALM[1] = array(
  */
 //First admin email address is primary email address!
 $email = array();
-$email['adminemail'][] = "saif@fistrive.com"; // Email address of administrator(To add another admin email address just copy/paste this line and change the email address)
-$email['adminemail'][] = "msoul@live.com";
+$email['adminemail'][] = "saifi0102@gmail.com"; // Email address of administrator(To add another admin email address just copy/paste this line and change the email address)
 
 $email['type'] = MAIL_PHPMAIL; //Use MAIL_SMTP or MAIL_PHPMAIL
 $email['copy'] = false; //Send copy mails to all admin's email
@@ -104,7 +88,7 @@ $USERTIMEOUT = 5;
  */
 $configfile['fullpath'] = "";
 $configfile['language'] = "english"; // Language must be lowercase, To see a list of languages check /languages directory
-$DEBUG = false; //Shows Debug messages on the footer
+$DEBUG = true; //Shows Debug messages on the footer
 $OFFLINE_MAINTENANCE = false;
 define("IPN_ALERTPAY_SECURITY_CODE", "oDOIxWomBxyxaEnQ");
 define("IPN_MONEYBOOKERS_PASSWORD", "password");

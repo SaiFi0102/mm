@@ -71,10 +71,12 @@ class Users
 	 * for 5 minutes
 	 *
 	 */
-	public function ClearOfflineUsers()
+	public function ClearOfflineUsers($offset = 0)
 	{
-		$timeout = UserTimeout();
-		$this->db->Update(array("online" => "'0'"), "online", "WHERE lastvisit < '$timeout' AND online='1'");
+		$timeout = UserTimeout($offset);
+		$query = new MMQueryBuilder();
+		$query->Update("`online`")->Columns(array("`online`" => "'0'"))->Where("`lastvisit` < '%s' AND `online` = '1'", $timeout)->Build();
+		$this->db->query($query, DBNAME);
 	}
 	
 	/**
@@ -84,7 +86,9 @@ class Users
 	function ClearExpiredVotes()
 	{
 		$time = (time()-12*60*60);
-		$this->db->Delete("log_votes", "WHERE time < %s", $time);
+		$query = new MMQueryBuilder();
+		$query->Delete("`log_votes`")->Where("`time` < '%s'", $time)->Build();
+		$this->db->query($query, DBNAME);
 	}
 	
 	/**
@@ -96,7 +100,12 @@ class Users
 	{
 		$time = time();
 		$uid = $this->user['loggedin'] ? $this->user['id'] : 0;
-		$this->db->Insert(array('uid'=>"'%d'", 'ip'=>"'%s'", 'lastvisit'=>"'%s'", 'online'=>"'1'"), "online", true, $uid, $_SERVER['REMOTE_ADDR'], $time);
+		
+		//Build Query
+		$query = new MMQueryBuilder();
+		$query->Replace("`online`")
+		->Columns(array('`uid`'=>"'%s'", '`ip`'=>"'%s'", '`lastvisit`'=>"'%s'", '`online`'=>"'1'"), $uid, $_SERVER['REMOTE_ADDR'], time())->Build();
+		$result = $this->db->query($query, DBNAME);
 	}
 	
 	public function BanStatus()

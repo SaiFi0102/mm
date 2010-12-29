@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
@@ -28,7 +29,7 @@ define("RPPV", $cms->config['rppv']);
 //VOTE SPEND PAGE
 function ModifyVotePoints($accountid, $amount)
 {
-	global $LOGONDB;
+	global $DB;
 	if($amount < 1)
 	{
 		$times = 0;
@@ -37,13 +38,22 @@ function ModifyVotePoints($accountid, $amount)
 	{
 		$times = 1;
 	}
-	$LOGONDB->Update(array("votepoints"=>"votepoints + '%s'", "voted"=>"voted + '{$times}'"), "account_mm_extend", "WHERE accountid = '%s'", $amount, $accountid);
-	return $LOGONDB->AffectedRows;
+	
+	$query = new MMQueryBuilder();
+	$query->Update("`account_mm_extend`")->Where("`accountid` = '%s'", $accountid)
+	->Columns(array("`votepoints`" => "`votepoints` + '%s'", "`voted`" => "`voted` + '{$times}'"), $amount)->Build();
+	$DB->query($query, DBNAME);
+	
+	return $DB->affected_rows;
 }
 function FetchVoteRewards($rid)
 {
 	global $DB;
-	$return = $DB->Select("*", "rewards_voting", "WHERE realm = '%s'", false, $rid);
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`rewards_voting`")->Columns("*")->Where("`realm` = '%s'", $rid)->Build();
+	
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
@@ -53,15 +63,18 @@ function FetchVoteLogs()
 	global $DB, $USER;
 	
 	//Logged in or not
+	$query = new MMQueryBuilder();
+	$query->Select("`log_votes`")->Columns("*");
 	if($USER['loggedin'])
 	{
-		$votes = $DB->Select("*", "log_votes", "WHERE accountid = '%s' OR ip = '%s'", false, $USER['id'], $_SERVER['REMOTE_ADDR']);
+		$query->Where("`ip` = '%s' OR `accountid` = '%s'", $_SERVER['REMOTE_ADDR'], $USER['id']);
 	}
 	else
 	{
-		$votes = $DB->Select("*", "log_votes", "WHERE ip = '%s'", false, $_SERVER['REMOTE_ADDR']);
+		$query->Where("`ip` = '%s'", $_SERVER['REMOTE_ADDR']);
 	}
-	
+	$query->Build();
+	$votes = MMMySQLiFetch($DB->query($query, DBNAME));
 	//Gateway ID to array key
 	$return = array();
 	foreach($votes as $vote)
@@ -76,26 +89,36 @@ function TallyVote()
 	global $DB, $USER;
 	
 	//Check if gateway exists
-	$gateway = $DB->Select("*", "vote_gateways", "WHERE id='%s'", true, $_POST['gateway']);
-	if($DB->AffectedRows == 0)
+	$query = new MMQueryBuilder();
+	$query->Select("`vote_gateways`")->Columns("*")->Where("`id` = '%s'", $_POST['gateway'])->Build();
+	$result = $DB->query($query, DBNAME);
+	if($result->num_rows == 0)
 	{
 		return false;
 	}
+	$gateway = MMMySQLiFetch($result, "onerow: 1");
 	
 	//If already voted in last 12 hour
+	$query = new MMQueryBuilder();
+	$query->Select("`log_votes`")->Columns("`gateway`");
 	if($USER['loggedin'])
 	{
-		$prevvote = $DB->Select("gateway", "log_votes", "WHERE (accountid = '%s' OR ip = '%s') AND gateway = '%s'", false, $USER['id'], $_SERVER['REMOTE_ADDR'], $_POST['gateway']);
+		$query->Where("(`accountid` = '%s' OR `ip` = '%s') AND `gateway` = '%s'", $USER['id'], $_SERVER['REMOTE_ADDR'], $_POST['gateway']);
 	}
 	else
 	{
-		$prevvote = $DB->Select("gateway", "log_votes", "WHERE ip = '%s' AND gateway = '%s'", false, $_SERVER['REMOTE_ADDR'], $_POST['gateway']);
+		$query->Where("`ip` = '%s' AND `gateway` = '%s'", $_SERVER['REMOTE_ADDR'], $_POST['gateway']);
 	}
-	if($DB->AffectedRows == 0)
+	$query->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	if($result->num_rows == 0)
 	{
 		//Add vote to logs
 		$accountid = $USER['loggedin'] ? $USER['id'] : '0';
-		$DB->Insert(array("gateway"=>"'%s'", "ip"=>"'%s'", "accountid"=>"'%s'", "time"=>"'%s'"), "log_votes", false, $_POST['gateway'], $_SERVER['REMOTE_ADDR'], $accountid, time());
+		$query = new MMQueryBuilder();
+		$query->Insert("`log_votes`")->Columns(array("`gateway`"=>"'%s'", "`ip`"=>"'%s'", "`accountid`"=>"'%s'", "`time`"=>"'%s'"), $_POST['gateway'], $_SERVER['REMOTE_ADDR'], $accountid, time())->Build();
+		$DB->query($query, DBNAME);
 		
 		//Modify Vote Points
 		if($USER['loggedin'])
@@ -103,6 +126,8 @@ function TallyVote()
 			ModifyVotePoints($USER['id'], RPPV);
 		}
 	}
+	$result->close();
+	unset($result);
 	
 	return $gateway['url'];
 }
@@ -137,7 +162,6 @@ switch($action)
 			}
 			
 			//Prepare page variables
-			InitWorldDb($WORLDDB, $_GET['rid']);
 			$CHARACTERLIST_RID = $_GET['rid'];
 			$CHARACTERLIST_SHOW_TOOLS = false;
 			$CHARACTERLIST_MUSTBEONLINE = false;

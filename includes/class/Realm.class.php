@@ -10,10 +10,10 @@ if(!defined("INCLUDED"))
 class Realm
 {
 	public $rid;
+	public $soapconn;
 	
 	private $realmconf;
-	private $chdb;
-	private $wdb;
+	private $db;
 	
 	/**
 	 * Constructor
@@ -21,7 +21,7 @@ class Realm
 	 */
 	function __construct($rid)
 	{
-		global $REALM, $CHARACTERDB, $DB;
+		global $REALM, $DB;
 		if(!isset($REALM[$rid]))
 		{
 			trigger_error("Wrong realm ID", E_USER_ERROR);
@@ -29,7 +29,6 @@ class Realm
 		
 		$this->rid = $rid;
 		$this->realmconf = $REALM[$rid];
-		$this->chdb = $CHARACTERDB[$rid];
 		$this->db = $DB;
 	}
 	
@@ -43,13 +42,16 @@ class Realm
 	 */
 	public function FetchCharactersByAccountID($extra = "", $uid)
 	{
-		$args = func_get_args();
-		array_shift($args);
+		$args = func_get_args(); array_shift($args);
 		
-		$last  = "WHERE `account` = '%s' ";
-		$last .= $extra;
+		$Where = "`account` = '%s' ";
+		$Where .= $extra;
 		
-		return $this->_FetchCharacters($last, false, "*", $args);
+		$query = new MMQueryBuilder();
+		$query->Select("`characters`")->Columns("*")->Where($Where, $args)->Build();
+		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		
+		return $data;
 	}
 	
 	/**
@@ -60,13 +62,16 @@ class Realm
 	 */
 	public function FetchCharacterByCharacterID($extra = "", $cid)
 	{
-		$args = func_get_args();
-		array_shift($args);
+		$args = func_get_args(); array_shift($args);
 		
-		$last  = "WHERE `guid` = '%s' ";
-		$last .= $extra;
+		$Where  = "`guid` = '%s' ";
+		$Where .= $extra;
 		
-		return $this->_FetchCharacters($last, true, "*", $args);
+		$query = new MMQueryBuilder();
+		$query->Select("`characters`")->Columns("*")->Where($Where, $args)->Build();
+		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		
+		return $data;
 	}
 	
 	/**
@@ -76,32 +81,60 @@ class Realm
 	 */
 	public function FetchCharacterBindDataByCharacterID($extra = "", $cid)
 	{
-		$args = func_get_args();
-		array_shift($args);
+		$args = func_get_args(); array_shift($args);
 		
-		$last  = "WHERE `guid` = '%s' ";
-		$last .= $extra;
+		$Where  = "`guid` = '%s' ";
+		$Where .= $extra;
 		
-		return $this->chdb->Select("*", "character_homebind", $last, true, $args);
+		$query = new MMQueryBuilder();
+		$query->Select("`character_homebind`")->Columns("*")->Where($Where, $args)->Build();
+		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		
+		return $data;
 	}
 	
-	function CheckRealmStatusAndOnlinePlayers($rid)
+	function CheckRealmStatusAndOnlinePlayers()
 	{
-		global $LOGONDB;
 		$status = pfsockopen($this->realmconf['IP'], $this->realmconf['PORT'], $errno, $errstr, 5);
 		
-		$uptime = $LOGONDB->Select(array("starttime"), "uptime", "WHERE realmid='%s' ORDER BY starttime DESC LIMIT 1", true, $this->rid);
-		$maxonline = $LOGONDB->Select("maxplayers", "uptime", "WHERE realmid='%s' ORDER BY maxplayers DESC LIMIT 1", true, $this->rid);
-		$struptime = $uptime['starttime'];
-		$struptime = StrDateDiff(time(), $struptime);
+		//Uptime Query
+		$query = new MMQueryBuilder();
+		$query->Select("`uptime`")->Columns(array("`starttime`", "MAX(`maxplayers`)"=>"maxplayers"))
+		->Where("`realmid` = '%s'", $this->rid)->Order("`starttime` DESC")->Limit("1")->Build();
+		$uptime = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
+		if($uptime['starttime'] == null)
+		{
+			$uptime['starttime'] = time();
+		}
+		if($uptime['maxplayers'] == null)
+		{
+			$uptime['maxplayers'] = 0;
+		}
+		
+		//Uptime String
+		$struptime = StrDateDiff(time(), $uptime['starttime']);
+		
+		//If server is offline no need to go furthur
 		if($status == false)
 		{
 			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$maxonline['maxplayers']);
 		}
 		
-		$online = $this->chdb->Select("guid", "characters", "WHERE online <> '0'", true);
-		return array("status"=>true, "online"=>$this->chdb->AffectedRows, "uptime"=>$struptime, "maxplayers"=>$maxonline['maxplayers']);
+		//Online Players Query
+		$query = new MMQueryBuilder();
+		$query->Select("`characters`")->Columns("`guid`")->Where("`online` <> 0")->Build();
+		$result = $this->db->query($query, $this->realmconf['CH_DB']);
+		$online = $result->num_rows;
+		$result->close();
+		unset($result);
+		
+		return array(
+			"status" => true,
+			"online" => $online,
+			"uptime" => $struptime,
+			"maxplayers" => $uptime['maxplayers'],
+		);
 	}
 	
 	/**
@@ -113,19 +146,22 @@ class Realm
 	public function ExecuteSoapCommand($command)
 	{
 		//Setup SOAP Client
-		$client = new SoapClient(NULL,
-		array(
-			"location" => "http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
-			"uri" => "urn:MaNGOS",
-			"style" => SOAP_RPC,
-			"login" => $this->realmconf['SOAP']['user'],
-			"password" => $this->realmconf['SOAP']['pass'],
-		));
+		if(!$this->soapconn)
+		{
+			$this->soapconn = new SoapClient(NULL,
+			array(
+				"location" => "http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
+				"uri" => "urn:MaNGOS",
+				"style" => SOAP_RPC,
+				"login" => $this->realmconf['SOAP']['user'],
+				"password" => $this->realmconf['SOAP']['pass'],
+			));
+		}
 		
 		
 		try //Try to execute function
 		{
-			$result = $client->executeCommand(new SoapParam($command, "command"));
+			$result = $this->soapconn->executeCommand(new SoapParam($command, "command"));
 		}
 		catch(Exception $e) //Don't give fatal error if there is a problem
 		{
@@ -145,7 +181,7 @@ class Realm
 	 */
 	public function SendReward($rewardid, $characterid, $votedonate)
 	{
-		global $USER, $LOGONDB;
+		global $USER;
 		
 		//If $votedonate is incorrect
 		if($votedonate != REWARD_VOTE && $votedonate != REWARD_DONATE)
@@ -155,8 +191,11 @@ class Realm
 		
 		//Setting a log session
 		$reward_delivery_table = $votedonate ? "log_donatereward_delivery" : "log_votereward_delivery"; //$votedonate
-		$session = $this->db->Select("max(session) as maxsession", $reward_delivery_table, null, true);
+		$query = new MMQueryBuilder();
+		$query->Select("`".$reward_delivery_table."`")->Columns(array("MAX(`session`)"=>"maxsession"))->Build();
+		$session = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		$session = $session['maxsession'];
+		
 		if(empty($session))
 		{
 			$session = 1;
@@ -168,7 +207,10 @@ class Realm
 		
 		//Fetch Reward and Check for errors
 		$rewards_table = $votedonate ? "rewards_donation" : "rewards_voting"; //$votedonate
-		$reward = $this->db->Select("*", $rewards_table, "WHERE id = '%s' AND realm = '%s'", true, $rewardid, $this->rid);
+		$query = new MMQueryBuilder();
+		$query->Select("`".$rewards_table."`")->Columns("*")->Where("`id` = '%s' AND `realm` = '%s'", $rewardid, $this->rid)->Build();
+		$reward = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		
 		if(!count($reward)) //If reward does not exists
 		{
 			return array('message'=>"The reward you selected does not exists on the selected realm.", 'bool'=>false);
@@ -182,13 +224,16 @@ class Realm
 		}
 		
 		//Fetch Character and check if it exists
-		$character = $this->chdb->Select("name", "characters", "WHERE guid = '%s' AND account='%s'", true, $characterid, $USER['id']);
+		$query = new MMQueryBuilder();
+		$query->Select("`characters`")->Columns("`name`")->Where("`guid` = '%s' AND `account` = '%s'", $characterid, $USER['id'])->Build();
+		$character = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		
 		if(!count($character))
 		{
 			return array('message'=>"The character you selected does not exists on the selected realm.", 'bool'=>false);
 		}
 		
-		//Success(If sending mail succeeds then $success=true)
+		//Success(If sending mail succeeds then we'll $success=true)
 		$success = false;
 		
 		//Build Items Array
@@ -268,7 +313,9 @@ class Realm
 		if($success)
 		{
 			$pointcolumn = $votedonate ? "donationpoints" : "votepoints"; //$votedonate
-			$LOGONDB->Update(array("$pointcolumn"=>"$pointcolumn - '%s'"), "account_mm_extend", "WHERE accountid = '%s'", $reward['points'], $USER['id']);
+			$query = new MMQueryBuilder();
+			$query->Update("`account_mm_extend`")->Columns(array("`".$pointcolumn."`"=>"`".$pointcolumn."` - '%s'"), $reward['points'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+			$this->db->query($query, DBNAME);
 			
 			//Update $USER variables so that it doesnt confuse player that no points were deducted cuz it takes one extra reload to reload USER vars because of positionning!
 			if($votedonate == REWARD_DONATE)
@@ -298,20 +345,6 @@ class Realm
 	/**
 	 * PRIVATE FUNCTIONS
 	 */
-	
-	/**
-	 * Handler to fetch characters according to sub functions
-	 * @param string $last
-	 * @param boolean $oneRow
-	 * @param mixed $columns
-	 * 
-	 * @return array
-	 */
-	private function _FetchCharacters($last, $oneRow = false, $columns = "*", $args = array())
-	{
-		$CharacterDataArr = $this->chdb->Select($columns, "characters", $last, $oneRow, $args);
-		return $CharacterDataArr;
-	}
 	
 	/**
 	 * Logs soap error with variable $e class Exception into file soaperror.log in adminstration/logs
@@ -345,15 +378,17 @@ $errorstring = "\r\n
 		switch($votedonate)
 		{
 			case REWARD_DONATE:
-				$table = "log_donatereward_delivery";
+				$table = "`log_donatereward_delivery`";
 				//Log donated for character in characters table
 				if($sent)
 				{
-					$this->chdb->Insert(array("guid"=>"'%s'", "donated"=>"'1'"), "character_mm_extend", true, $cid);
+					$query = new MMQueryBuilder();
+					$query->Replace("`character_mm_extend`")->Columns(array("`guid`"=>"'%s'", "`donated`"=>"'1'"), $cid)->Build();
+					$this->db->query($query, $this->realmconf['CH_DB']);
 				}
 			break;
 			case REWARD_VOTE:
-				$table = "log_votereward_delivery";
+				$table = "`log_votereward_delivery`";
 			break;
 			default:
 				return;
@@ -362,16 +397,18 @@ $errorstring = "\r\n
 		$sent = $sent ? 1 : 0;
 		
 		//Insert into DB
-		$this->db->Insert(array(
-			'session'		=> "'%s'",
-			'command'		=> "'%s'",
-			'message'		=> "'%s'",
-			'characterid'	=> "'%s'",
-			'realmid'		=> "'%s'",
-			'rewardid'		=> "'%s'",
-			'sent'			=> "'%s'",),
-		$table, false,
-		$session, $command, $message, $cid, $this->rid, $rewardid, $sent);
+		$query = new MMQueryBuilder();
+		$query->Insert($table)->Columns(array(
+			'`session`'		=> "'%s'",
+			'`command`'		=> "'%s'",
+			'`message`'		=> "'%s'",
+			'`characterid`'	=> "'%s'",
+			'`realmid`'		=> "'%s'",
+			'`rewardid`'	=> "'%s'",
+			'`sent`'		=> "'%s'",),
+		$session, $command, $message, $cid, $this->rid, $rewardid, $sent)->Build();
+		
+		return $this->db->query($query, DBNAME);
 	}
 	
 }

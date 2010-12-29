@@ -205,7 +205,7 @@ function BanTimeOut($timestamp, $format = "j F Y, g:i a")
  */
 function CheckUsername($username)
 {
-	global $cms, $LOGONDB;
+	global $cms, $DB;
 	if(empty($username) || $username == null)
 	{
 		return USERNAME_EMPTY;
@@ -227,11 +227,17 @@ function CheckUsername($username)
 		return USERNAME_LENTH_ABOVE;
 	}
 	
-	$q = $LOGONDB->Query("SELECT username FROM account WHERE username = '%s'", $username);
-	if($LOGONDB->numRows($q) > 0)
+	$query = new MMQueryBuilder();
+	$query->Select("`account`")->Columns("`username`")->Where("`username` = '%s'", $username)->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	if($result->num_rows > 0)
 	{
 		return USERNAME_EXISTS;
 	}
+	$result->close();
+	unset($result);
+	
 	return 0;
 }
 
@@ -242,7 +248,7 @@ function CheckUsername($username)
  */
 function CheckEmail($email, $confirmemail=null)
 {
-	global $LOGONDB;
+	global $DB;
 	if(empty($email) || $email == null)
 	{
 		return EMAIL_EMPTY;
@@ -259,11 +265,17 @@ function CheckEmail($email, $confirmemail=null)
 		}
 	}
 	
-	$q = $LOGONDB->Query("SELECT email FROM account WHERE email='%s'", $email);
-	if($LOGONDB->numRows($q) > 0)
+	$query = new MMQueryBuilder();
+	$query->Select("`account`")->Columns("`email`")->Where("`email` = '%s'", $email)->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	if($result->num_rows > 0)
 	{
-		return USERNAME_EXISTS;
+		return EMAIL_EXISTS;
 	}
+	$result->close();
+	unset($result);
+	
 	return 0;
 }
 
@@ -404,8 +416,6 @@ function ParseGold(&$str)
  */
 function RewardsItemsColumnToArray($items)
 {
-	global $DB;
-	
 	//Separate Items
 	$itemarray = explode(",", $items);
 	
@@ -481,7 +491,7 @@ function ItemQualityToColorClass($quality=1)
  */
 function FetchItemsData($rewards, $rid)
 {
-	global $WORLDDB, $DB;
+	global $DB, $REALM;
 	$items = array();
 	foreach($rewards as $reward)
 	{
@@ -504,24 +514,30 @@ function FetchItemsData($rewards, $rid)
 	}
 	else
 	{
-		$last = "WHERE entry IN(";
+		$Where = "`entry` IN(";
 		foreach($items as $itemid => $useless)
 		{
-			$last .= "$itemid, ";
+			$Where .= "$itemid, ";
 		}
-		$last = substr($last, 0, -2);
-		$last .= ")";
+		$Where = substr($Where, 0, -2);
+		$Where .= ")";
 	}
 	
 	//Fetch
-	$ir = $WORLDDB[$rid]->Select(array("entry","name","quality"), "item_template", $last, false);
+	$query = new MMQueryBuilder();
+	$query->Select("`item_template`")->Columns(array("`entry`","`name`","`quality`"))->Where($Where)->Build();
+	$ir = MMMySQLiFetch($DB->query($query, $REALM[$rid]['W_DB']));
+	
+	
 	$itemarray = array();
 	foreach($ir as $iir)
 	{
 		$itemarray[$iir['entry']] = array($iir['name'],$iir['quality']);
 	}
+	
 	return $itemarray;
 }
+
 /**
  * ItemID to ItemName
  * @param $itemarray
@@ -553,7 +569,10 @@ function VoteTimeLeft($votedtime)
 function FetchVoteGateways()
 {
 	global $DB;
-	$return = $DB->Select("*", "vote_gateways");
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`vote_gateways`")->Columns("*")->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
@@ -561,7 +580,6 @@ function FetchVoteGateways()
  * Returns an array with hours minutes and seconds left!
  * @param $timestamp
  */
-//FUNCTION FOR TIME LEFT 
 function StrTimeLeft($integer) 
 {
 	$integer -= time();
@@ -720,8 +738,13 @@ function StrDateDiff($date, $date2=0)
  */
 function RandomOnlinePlayers($rid)
 {
-	global $CHARACTERDB;
-	$return = $CHARACTERDB[$rid]->Select(array("guid", "name"), "characters", "WHERE online <> '0' ORDER BY RAND() LIMIT 50");
+	global $DB, $REALM;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`characters`")->Columns(array("`guid`", "`name`"))
+	->Where("`online` <> 0")->Order("RAND()")->Limit("50")->Build();
+	$return = MMMySQLiFetch($DB->query($query, $REALM[$rid]['CH_DB']));
+	
 	return $return;
 }
 
@@ -792,6 +815,15 @@ function RandomCharacters($length)
 	}
 	
 	return $return;
+}
+
+function IsAssocArray($array)
+{
+    if(is_array($array) && !is_numeric(array_shift(array_keys($array))))
+    {
+        return true;
+    }
+    return false;
 }
 
 /**

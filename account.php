@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
@@ -15,27 +16,37 @@ $page_name[] = array("Account Management"=>"account.php");
 
 //################ Constants ################
 //################ Page Functions ################
-function UpdatePassword()
+function UpdateAccount($changeflags, $changepassword)
 {
-	global $LOGONDB, $USER, $cookies;
+	global $DB, $USER, $cookies;
 	
-	$newpass = Sha1Pass($USER['username'], $_POST['newpassword']);
-	$q = $LOGONDB->Query("UPDATE account SET sha_pass_hash = '%s' WHERE id = '%s'", $newpass, $USER['id']);
-	if($q)
+	//Set new data variables
+	$currentpasshash = Sha1Pass($USER['username'], $_POST['currentpassword']);
+	if($changeflags)	$newclient = FixExpansionFlags($_POST['newflags']);
+	if($changepassword)	$newpass = Sha1Pass($USER['username'], $_POST['newpassword']);
+	
+	$query = new MMQueryBuilder();
+	$query->Update("`account`")->Where("`id` = '%s' AND `sha_pass_hash` = '%s'", $USER['id'], $currentpasshash);
+	
+	if($changeflags)
+	{
+		$query->AddColumns(array("`expansion`"=>"'%s'"), $newclient);
+	}
+	if($changepassword)
+	{
+		$query->AddColumns(array("`sha_pass_hash`"=>"'%s'"), $newpass);
+	}
+	$query->Build();
+	
+	$result = $DB->query($query, DBNAME);
+	//If password was successfully updated. set new cookies
+	if($result && $DB->affected_rows && $changepassword)
 	{
 		$cookies->SetCookie("username", $USER['username'], false);
 		$cookies->SetCookie("password", $newpass, false);
 	}
-	return $q;
-}
-
-function UpdateClient()
-{
-	global $LOGONDB, $USER;
 	
-	$newclient = FixExpansionFlags($_POST['newflags']);
-	$q = $LOGONDB->Query("UPDATE account SET expansion = '%s' WHERE id = '%s'", $newclient, $USER['id']);
-	return $LOGONDB->AffectedRows;
+	return $DB->affected_rows;
 }
 
 if(isset($_POST['submit']))
@@ -56,6 +67,13 @@ if(isset($_POST['submit']))
 		{
 			$cms->ErrorPopulate("You must enter your current password to change your account information.");
 		}
+		else
+		{
+			if(Sha1Pass($USER['username'], $_POST['currentpassword']) != $USER['sha_pass_hash'])
+			{
+				$cms->ErrorPopulate("The current password you entered was incorrect.");
+			}
+		}
 		
 		//If password changed
 		if(!empty($_POST['newpassword']))
@@ -64,7 +82,7 @@ if(isset($_POST['submit']))
 			//Password Check
 			if($_POST['newpassword'] == $USER['username'])
 			{
-				$cms->ErrorPopulate("Your new password cannot be as same as your username.");
+				$cms->ErrorPopulate("Your new password cannot be same as your username.");
 			}
 			if(strlen($_POST['newpassword']) < 5)
 			{
@@ -81,16 +99,12 @@ if(isset($_POST['submit']))
 		//Update from DB
 		if(!$cms->ErrorExists())
 		{
-			if($flagschange) $cof = UpdateClient();
-			if($passchange) $cop = UpdatePassword();
-			$page_name[] = array("Success");
-			eval($templates->Output('account_success'));
-			exit();
+			$update_result = UpdateAccount($flagschange, $passchange);
 		}
 	}
 }
 
 //################ Template's Output ################
-eval($templates->Output('account_form'));
+eval(($templates->Output('account_form')));
 
 ?>

@@ -154,7 +154,7 @@ exit();';
 		//Page Name Title Array
 		if(!$intemplate)
 		{
-			$pagetitle .= "<a href='index.php'>".$cms->config['websitename']."</a> &#187; ";
+			$pagetitle = "<a href='index.php'>".$cms->config['websitename']."</a> &#187; ";
 			$htmltitle = "";
 			$metakeywords = $cms->config['websitename'];
 			if(is_array($page_name))
@@ -190,10 +190,8 @@ $META_KEYWORDS = "'.$metakeywords.'";
 $META_DESCRIPTION = $cms->config["metadesc"];
 $META_EXTRA = $cms->config["metaextra"];';
 			
-			$pageendtime = microtime();
-			$starttime = explode(' ', START_TIME);
-			$endtime = explode(' ', $pageendtime);
-			$totaltime = $endtime[0] - $starttime[0] + $endtime[1] - $starttime[1];
+			$pageendtime = microtime(true);
+			$totaltime = $pageendtime - START_TIME;
 			$totaltime = round($totaltime, 4);
 			$return .= '$executiontime = '.$totaltime.' . " Seconds";';
 		}

@@ -1,38 +1,10 @@
-<?php 
-$_numqueries = 0;
-$_numqueries += $DB->numQueries;
-$_numqueries += $LOGONDB->numQueries;
-foreach($CHARACTERDB as $CHDB)
-{
-	$_numqueries += $CHDB->numQueries;
-}
-foreach($WORLDDB as $WDB)
-{
-	$_numqueries += $WDB->numQueries;
-}
-?>
 <?php if($DEBUG && $USER['access'] >= 4) { ?>
 	<div class="left_top"></div><div class="left_content">
 		<div class="main_title">SQL Queries</div>
 		<div class="content">
 			<?php
 			print '<h3>$DB</h3>';
-			_print_r($DB->ArrQry);
-			print '<h3>$LOGONDB</h3>';
-			_print_r($LOGONDB->ArrQry);
-			print '<h3>$CHARACTERDB array</h3>';
-			foreach($CHARACTERDB as $CHDB)
-			{
-				_print_r($CHDB->ArrQry);
-			}
-			if(count($WORLDDB))
-			{
-				print '<h3>$WORLDDB array</h3>';
-				foreach($WORLDDB as $WDB)
-				{
-					_print_r($WDB->ArrQry);
-				}
-			}
+			_print_r($DB->ArrQuery);
 			?>
 		</div>
 	</div><div class='left_bottom'></div>
@@ -194,11 +166,12 @@ LoadStatus_<?php print $rid; ?>();
 			<div class="float_right">
 				<a href="tos.php">Terms &amp; Condition</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 				<a href="points.php?act=refundpolicy">Refund Policy</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-				<a href="about.php">About Us</a>
+				<a href="about.php">About Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+				<a href="privacy.php">Privacy Policy</a>
 				<br />
 			</div>
 			<div style="clear:both;"></div>
-			<br /><b>Queries:</b> <?php print $_numqueries; ?>, <b>Execution Time:</b> <?php print $executiontime; ?>
+			<br /><b>Queries:</b> <?php print $DB->NumQueries; ?>, <b>Execution Time:</b> <?php print $executiontime; ?>, <b>Memory Usage:</b> <?php print round((memory_get_usage() - START_MEMORY)/1024); ?>K
 		</div>
 </div>
  <div class="footer_bottom"> </div>

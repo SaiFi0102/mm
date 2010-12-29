@@ -6,18 +6,19 @@ $AJAX_PAGE = false;
 require_once("init.php");
 
 //################ PAGE ACCESS ################
-$cms->BannedAccess(false);
-eval($cms->SetPageAccess(ACCESS_NONE));
+$cms->BannedAccess(true);
+eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ Resources ################ 
 
 //################ General Variables ################
-$page_name[] = array("SOAP Remote Console"=>"soapconsole.php");
+$page_name[] = array("Privacy Policy"=>"privacy.php");
+$template = "privacy"; //The template to use for the page. Dont include .tpl inside quotes.
 
 //################ Constants ################
 
 //################ Page Functions ################
 
 //################ Template's Output ################
-eval($templates->Output("soapconsole"));
+eval($templates->Output($template));
 ?>

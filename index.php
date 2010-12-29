@@ -1,9 +1,10 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
-require_once("includes/class/Pager.class.php");
+//require_once("includes/class/Pager.class.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(true);
@@ -20,27 +21,41 @@ $page_name[] = array("News"=>"index.php");
 function FetchNews($limit = "0,5")
 {
 	global $DB;
-	$q = $DB->Select(array('*', '(SELECT COUNT(*) FROM news_comments WHERE newsid = news.id) AS commentcount'),
-	"news", "ORDER BY sticky DESC,date ASC LIMIT {$limit}", false);
-	return $q;
+	
+	//Build Query
+	$query = new MMQueryBuilder();
+	$query->Select("`news`")->Columns(array('*', '(SELECT COUNT(*) FROM `news_comments` WHERE `newsid` = `news`.`id`)'=>'commentcount'))
+	->Order("`sticky` DESC, `date` DESC")->Limit("%s", null, $limit)->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	$return = MMMySQLiFetch($result);
+	return $return;
 }
 function FetchNewsById($nid)
 {
 	global $DB;
-	$q = $DB->Select("*", "news", "WHERE id='%s'", true, $nid);
-	return $q;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`news`")->Columns("*")->Where("`id` = '%s'", $nid)->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	
+	return $return;
 }
 function FetchComments($limit)
 {
 	global $DB;
-	$q = $DB->Select("*", "news_comments", "WHERE newsid = '%s' ORDER BY date ASC LIMIT {$limit}", false, $_GET['id']);
-	return $q;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`news_comments`")->Columns("*")->Where("`newsid` = '%s'", $_GET['id'])->Order("`date` ASC")->Limit($limit)->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	
+	return $return;
 }
 //################ Template's Output ################
 if(isset($_GET['id']))
 {
 	$news = FetchNewsById($_GET['id']);
-	$comments = FetchComments("0,5");
+	$comments = FetchComments("5");
 	if($news)
 	{
 		$page_name[] = array($news['title']=>$_SERVER['REQUEST_URI']);

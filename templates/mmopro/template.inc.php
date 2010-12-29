@@ -8,28 +8,40 @@ if(!defined("INCLUDED"))
 
 //Sliding area data
 $MMOPRO_SLIDER = array();
-$MMOPRO_SLIDER = $DB->Select("*", "mmopro_slidingarea", "ORDER BY `order` ASC");
+$query = new MMQueryBuilder();
+$query->Select("`mmopro_slidingarea`")->Columns("*")->Order("`order` ASC")->Build();
+$MMOPRO_SLIDER = MMMySQLiFetch($DB->query($query, DBNAME));
 
 //Vote popup data
 $SHOWVOTEPOPUP = false;
 if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
 {
+	$query = new MMQueryBuilder();
+	$query->Select("`log_votes`")->Columns("`gateway`");
 	if($USER['loggedin'])
 	{
-		$alreadyvoted = $DB->Select("gateway", "log_votes", "WHERE ip='%s' OR accountid='%s'", true, $_SERVER['REMOTE_ADDR'], $USER['id']);
+		$query->Where("`ip` = '%s' OR `accountid` = '%s'", $_SERVER['REMOTE_ADDR'], $USER['id']);
 	}
 	else
 	{
-		$alreadyvoted = $DB->Select("gateway", "log_votes", "WHERE ip='%s'", true, $_SERVER['REMOTE_ADDR']);
+		$query->Where("`ip` = '%s'", $_SERVER['REMOTE_ADDR']);
 	}
-	if($DB->AffectedRows == 0)
+	$query->Build();
+	$result = $DB->query($query, DBNAME);
+	if($result->num_rows == 0)
 	{
 		$SHOWVOTEPOPUP = true;
 	}
+	$result->close();
+	unset($result);
 }
 
 //Website online users' data
-$website_onlines = $DB->Select("*, (SELECT username FROM {$LOGON_DATABASE['db']}.account WHERE account.id=online.uid) AS username", "online", "WHERE online <> 0");
+$website_onlines = array();
+$query = new MMQueryBuilder();
+$query->Select("`online`", "DISTINCT")->Columns(array("uid", "(SELECT `username` FROM `account` WHERE `account`.`id`=`online`.`uid`)"=>"username"))
+->Where("`online` <> 0")->Build();
+$website_onlines = MMMySQLiFetch($DB->query($query, DBNAME));
 
 //Random online's data
 $rand_online = array();

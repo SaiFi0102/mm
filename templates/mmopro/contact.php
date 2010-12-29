@@ -37,5 +37,10 @@
 		<input type="submit" name="submit" value="Send" />
 		
 		</form>
+		
+		<br /><br />
+		<h4>Contact Details</h4>
+		Address: <?php print $CONTACTDETAILS['ADDRESS']; ?><br /><br />
+		Phone: <?php print $CONTACTDETAILS['PHONE']; ?>
 	</div>
 </div><div class='left_bottom'></div>

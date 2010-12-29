@@ -11,7 +11,7 @@ class Core
 {
 	//Config and Page specific
 	public $config = array();
-	public $page_access = ALL_ACCESS;
+	public $page_access;
 	public $banned_allowed = false;
 	
 	//Error Handler Variables
@@ -31,6 +31,7 @@ class Core
 	public function __construct()
 	{
 		global $DB;
+		$this->page_access = ACCESS_ALL;
 		$this->db = $DB;
 		$this->parseIncoming();
 		$this->LoadConfigs();
@@ -44,7 +45,11 @@ class Core
 	public function LoadConfigs()
 	{		
 		//Fetch Tables
-		$configs = $this->db->Select("*", "configs");
+		$query = new MMQueryBuilder();
+		$query->Select("`configs`")->Columns("*")->Build();
+		$result = $this->db->query($query, DBNAME);
+		$configs = MMMySQLiFetch($result);
+		
 		//Config Varialbes are array with string only
 		//Now to set the variable with its value
 		foreach($configs as $config)
