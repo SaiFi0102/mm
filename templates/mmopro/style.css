@@ -920,3 +920,29 @@ table.center {width:70%; margin-left:10%; margin-right:0%;}
 	padding: 8px;
 	color: #dddddd;
 }
+
+.timestamp
+{
+	text-align: right;
+	font-size: 10px;
+}
+
+/* Pages Table */
+.pagestablecontainer
+{ }
+.pagestablebox
+{
+	padding: 10px;
+}
+.pagestable td, .pagestable th
+{
+	font-size: 15px;
+	font-weight: bold;
+}
+.pagestablelr, .pagestablelr a
+{
+	font-size: 20px;
+	font-wight: bold;
+	padding-top: 15px;
+	color: #000077;
+}

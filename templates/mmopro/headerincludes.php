@@ -21,6 +21,8 @@
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.easing.1.1.1.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.lightbox-0.5.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/tooltip.core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/PageSort.core.js"></script>
+
 <!--[if IE 6]>
 <link rel="stylesheet" href="<?php print $cms->config['websiteurl']; ?>/templates/mmopro/ie6.css" type="text/css" media="screen" />
 <![endif]-->
