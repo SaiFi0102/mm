@@ -1,1 +1,21 @@
- 
+|----------------------------Query Error-----------------------------------
+|Time: Wed 22/12/2010, 11:47 am, From: 127.0.0.1
+|Where: /register.php
+|Query: SELECT `email` FROM `account` WHERE `email = 'saifi0102@gmail.com'
+|Error: Unknown column 'email = 'saifi0102@gmail.com'' in 'where clause'
+|----------------------------Query Error-----------------------------------
+
+|----------------------------Query Error-----------------------------------
+|Time: Sat 25/12/2010, 10:45 am, From: 127.0.0.1
+|Where: /pvp.php
+|Query: SELECT *, (SELECT `name` FROM `characters` WHERE `guid`=`character_pvp`.`guid`) AS `charactername` FROM `character_pvp` ORDER BY `totalkills` DESC LIMIT 100
+|Error: Table 'character1.character_pvp' doesn't exist
+|----------------------------Query Error-----------------------------------
+
+|----------------------------Query Error-----------------------------------
+|Time: Sat 25/12/2010, 10:56 am, From: 127.0.0.1
+|Where: /online.php?rid=1
+|Query: SELECT * FROM `characters` WHERE `online` <> '0'
+|Error: Table 'realmd.characters' doesn't exist
+|----------------------------Query Error-----------------------------------
+
