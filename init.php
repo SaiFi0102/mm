@@ -9,7 +9,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 //error_reporting(E_ALL);
 ini_set("log_errors", 1);
 ini_set("display_errors", 0);
-if(!isset($AJAX_PAGE))
+if(!$AJAX_PAGE)
 {
 	ini_set("error_log", dirname(__FILE__)."/administration/logs/php_errors.log");
 }
@@ -37,7 +37,7 @@ $USER = array();
 require_once(DOC_ROOT."/includes/common.php");
 require_once(DOC_ROOT."/includes/config.php");
 
-if($DEBUG)
+if($DEBUG && !$AJAX_PAGE)
 {
 	ini_set("display_errors", 1);
 }
@@ -61,7 +61,7 @@ require_once(DOC_ROOT."/includes/class/Authorization.class.php");
 $auth = new Authorization();
 require_once(DOC_ROOT."/includes/class/Users.class.php");
 $uclass = new Users($auth->UserGlobals(), $USER);
-if((int)$USER['access'] >= 4) //If user is an administrator
+if((int)$USER['access'] >= 4 && !$AJAX_PAGE) //If user is an administrator
 {
 	ini_set("display_errors", 1);
 }
