@@ -1,4 +1,4 @@
-ALTER TABLE `website`.`log_payments_paypal`
+ALTER TABLE `log_payments_paypal`
 ADD COLUMN `amount_net` DOUBLE NULL AFTER `amount_gross`,
 ADD COLUMN `amount_fee` DOUBLE NULL AFTER `amount_net`,
 CHANGE `amount` `amount_gross` DOUBLE NULL;

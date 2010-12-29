@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
@@ -16,7 +17,9 @@ $page_name[] = array("Payments");
 //################ Page Functions ################
 function ModifyDonationPoints($accountid, $amount)
 {
-	global $LOGONDB, $ppd;
+	global $DB, $ppd;
+	
+	//If amount is less than 1 it means that the transaction is a reversal or a refund
 	if($amount < 1)
 	{
 		$times = 0;
@@ -25,9 +28,14 @@ function ModifyDonationPoints($accountid, $amount)
 	{
 		$times = 1;
 	}
-	$amount = $amount * $ppd;
-	$LOGONDB->Update(array("donationpoints"=>"donationpoints + '%s'", "donated"=>"donated + '{$times}'"), "account_mm_extend", "WHERE accountid = '%s'", $amount, $accountid);
-	return $LOGONDB->AffectedRows;
+	$amount = $amount * $ppd; //Amount of Dollars * Points per dollar specified by gateway
+	
+	$query = new MMQueryBuilder();
+	$query->Update("`account_mm_extend`")->Where("`accountid` = '%s'", $accountid)
+	->Columns(array("`donationpoints`"=>"`donationpoints` + '%s'", "`donated`"=>"`donated` + '%s'"), $amount, $times)->Build();
+	
+	$DB->query($query, DBNAME);
+	return $DB->affected_rows;
 }
 
 if(empty($_POST) || count($_POST) == 0)

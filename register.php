@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
@@ -18,28 +19,36 @@ eval($cms->SetPageAccess(ACCESS_UNREGISTERED));
 //################ Page Functions ################
 function FinalRegister($username, $password, $email, $flags)
 {
-	global $LOGONDB, $cookies;
+	global $cookies, $DB;
 	
 	$sha_pass = Sha1Pass($username, $password);
 	
-	$insertarray = array(
-	"username"		=> "'%s'",
-	"sha_pass_hash"	=> "'%s'",
-	"email"			=> "'%s'",
-	"expansion"		=> "'%s'",
-	"gmlevel"		=> "'0'",
-	"last_ip"		=> "'{$_SERVER['REMOTE_ADDR']}'",
-	);
+	$query = new MMQueryBuilder();
+	$query->Insert("`account`")
+	->Columns(array(
+	"`username`"	=> "'%s'",
+	"`sha_pass_hash`"=> "'%s'",
+	"`email`"		=> "'%s'",
+	"`expansion`"	=> "'%s'",
+	"`gmlevel`"		=> "'0'",
+	"`last_ip`"		=> "'{$_SERVER['REMOTE_ADDR']}'",
+	), $username, $sha_pass, $email, FixExpansionFlags($flags))
+	->Build();
 	
 	//Insert into account table
-	$LOGONDB->Insert($insertarray, "account", false, $username, $sha_pass, $email, FixExpansionFlags($flags));
-	$return = $LOGONDB->AffectedRows;
+	$DB->query($query, DBNAME);
+	$return = $DB->affected_rows;
 	
 	if($return)
 	{
 		//Insert into account_mm_extend table
-		$accountid = $LOGONDB->Select("id", "account", "WHERE username='%s' AND sha_pass_hash='%s'", true, $username, $sha_pass);
-		$LOGONDB->Insert(array("accountid"=>"'%s'"), "account_mm_extend", false, $accountid['id']);
+		$query = new MMQueryBuilder();
+		$query->Select("`account`")->Columns("`id`")->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $username, $sha_pass)->Build();
+		$accountid = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+		
+		$query = new MMQueryBuilder();
+		$query->Insert("`account_mm_extend`")->Columns(array("`accountid`"=>"'%s'"), $accountid['id'])->Build();
+		$DB->query($query, DBNAME);
 	
 		//Login
 		$cookies->SetCookie("username", $username, false);
@@ -50,38 +59,54 @@ function FinalRegister($username, $password, $email, $flags)
 }
 function GenerateAndSendPasswordReset()
 {
-	global $LOGONDB, $cms;
+	global $DB, $cms;
 	$resetcode = RandomCharacters(20);
 	
-	$emailcheck = $LOGONDB->Select("id, username", "account", "WHERE email='%s'", true, $_POST['email']);
-	if(!$LOGONDB->AffectedRows)
+	//Query
+	$query = new MMQueryBuilder();
+	$query->Select("`account`")->Columns(array("`id`", "`username`"))->Where("`email` = '%s'", $_POST['email'])->Build();
+	$result = $DB->query($query, DBNAME);
+	if($result->num_rows < 1)
 	{
 		return false;
 	}
+	//Userdata
+	$emailcheck = MMMySQLiFetch($result, "onerow: 1");
 	
 $emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",
 
-We've received a request to reset your password, please follow the link below to complete this process
+We've received a request to reset your password, please follow the link below to complete this process.
 ".$GLOBALS['cms']->config['websiteurl']."/register.php?act=reset&resetcode={$resetcode}&uid={$emailcheck['id']}
 
-If you haven't made this request please follow the link below to cancel the request
+If you haven't made this request please follow the link below to cancel the request.
 ".$GLOBALS['cms']->config['websiteurl']."/register.php?act=cancelreset&resetcode={$resetcode}&uid={$emailcheck['id']}
 
 Regards,
-{$cms->config['websitename']} Staff";
+{$cms->config['websitename']} Staff.";
 	
-	$LOGONDB->Update(array("resetcode"=>"'%s'"), "account_mm_extend", "WHERE accountid='%s'", $resetcode, $emailcheck['id']);
+	$query = new MMQueryBuilder();
+	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"'%s'"), $resetcode)->Where("`accountid` = '%s'", $emailcheck['id'])->Build();
+	$DB->query($query, DBNAME);
+	
+	//Send email for reset intructions
 	SendEmail($_POST['email'], "Instructions to reset your password", $emailbody);
 	return true;
 }
 function ResetPassword()
 {
-	global $LOGONDB, $cms;
-	$data = $LOGONDB->Select("*", "account","LEFT JOIN account_mm_extend ON account.id = account_mm_extend.accountid WHERE id='%s'", true, $_GET['uid']);
-	if(!$LOGONDB->AffectedRows)
+	global $DB, $cms;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`account`")->Columns("*")->Join("`account_mm_extend`", "LEFT")->JoinOn("`account`.`id`", "`account_mm_extend`.`accountid`")
+	->Where("`id` = '%s'", $_GET['uid'])->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	if($result->num_rows < 1)
 	{
 		return false;
 	}
+	$data = MMMySQLiFetch($result, "onerow: 1");
+	
 	if(empty($data['resetcode']))
 	{
 		return false;
@@ -103,21 +128,30 @@ Please login as soon as possible and change the password to your own choice from
 
 Regards,
 {$cms->config['websitename']} Staff";
+	$query = new MMQueryBuilder();
+	$query->Update("`account`")->Columns(array("`sha_pass_hash`"=>"'%s'", "`sessionkey`"=>"''", "`v`"=>"''", "`s`"=>"''"), Sha1Pass($data['username'], $newpass))->Where("`id` = '%s'", $_GET['uid'])->Build();
+	$DB->query($query, DBNAME);
 	
-	$LOGONDB->Update(array("sha_pass_hash"=>"'%s'"), "account", "WHERE id='%s'", Sha1Pass($data['username'], $newpass), $_GET['uid']);
-	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid = '%s'", $_GET['uid']);
+	$query = new MMQueryBuilder();
+	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"''"))->Where("`accountid` = '%s'", $_GET['uid'])->Build();
+	$DB->query($query, DBNAME);
+	
 	SendEmail($data['email'], "Your new password", $emailbody);
 	return $newpass;
 }
 function RemoveResetCode()
 {
-	global $LOGONDB;
+	global $DB;
 	if(empty($_GET['resetcode']))
 	{
 		return false;
 	}
-	$LOGONDB->Update(array("resetcode"=>"''"), "account_mm_extend", "WHERE accountid='%s' AND resetcode='%s'", $_GET['uid'], $_GET['resetcode']);
-	return $LOGONDB->AffectedRows;
+	
+	$query = new MMQueryBuilder();
+	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"''"))->Where("`accountid` = '%s' AND `resetcode` = '%s'", $_GET['uid'], $_GET['resetcode'])->Build();
+	$DB->query($query, DBNAME);
+	
+	return $DB->affected_rows;
 }
 
 //################ Template's Output ################
@@ -149,7 +183,7 @@ switch($_GET['act'])
 		{
 			$cms->ErrorPopulate("No userid was provided, please follow the link from the email you received.");
 		}
-		if(!$cms->ErrorExists())
+		if(!$cms->ErrorExists() && isset($_GET['resetcode']))
 		{
 			$message = ResetPassword();
 			if($message == false)
@@ -272,7 +306,7 @@ switch($_GET['act'])
 				}
 				if($emailcheck == EMAIL_EXISTS)
 				{
-					$cms->ErrorPopulate("The email you entered is already in use with another account, if you forgot your password please <a href='register.php?action=forgot'>click here</a>");
+					$cms->ErrorPopulate("The email you entered is already in use with another account, if you forgot your password please <a href='register.php?act=retrieve'>click here</a>.");
 				}
 			}
 			

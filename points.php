@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
@@ -27,28 +28,40 @@ $page_name[] = array($cms->config['websitename']." Points"=>"points.php");
 function FetchTransactionsPayPal($uid)
 {
 	global $DB;
-	$return = $DB->Select("*", "log_payments_paypal", "WHERE account_id = '%s' ORDER BY transaction_id DESC, timestamp ASC", false, $uid);
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`log_payments_paypal`")->Columns("*")->Where("`account_id` = '%s'", $uid)->Order("`transaction_id` DESC, `timestamp` ASC")->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
 function FetchTransactionsMoneyBookers($uid)
 {
 	global $DB;
-	$return = $DB->Select("*", "log_payments_moneybookers", "WHERE account_id = '%s' ORDER BY transaction_id DESC, timestamp ASC", false, $uid);
 	
+	$query = new MMQueryBuilder();
+	$query->Select("`log_payments_moneybookers`")->Columns("*")->Where("`account_id` = '%s'", $uid)->Order("`transaction_id` DESC, `timestamp` ASC")->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+		
 	return $return;
 }
 function FetchTransactionsAlertPay($uid)
 {
 	global $DB;
-	$return = $DB->Select("*", "log_payments_alertpay", "WHERE account_id = '%s' ORDER BY transaction_id DESC, timestamp ASC", false, $uid);
 	
+	$query = new MMQueryBuilder();
+	$query->Select("`log_payments_alertpay`")->Columns("*")->Where("`account_id` = '%s'", $uid)->Order("`transaction_id` DESC, `timestamp` ASC")->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+		
 	return $return;
 }
 function FetchDonationRewards($rid)
 {
 	global $DB;
-	$return = $DB->Select("*", "rewards_donation", "WHERE realm = '%s'", false, $rid);
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`rewards_donation`")->Columns("*")->Where("`realm` = '%s'", $rid)->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
@@ -83,7 +96,6 @@ switch($action)
 			}
 			
 			//Prepare page variables
-			InitWorldDb($WORLDDB, $_GET['rid']);
 			$CHARACTERLIST_RID = $_GET['rid'];
 			$CHARACTERLIST_SHOW_TOOLS = false;
 			$CHARACTERLIST_MUSTBEONLINE = false;

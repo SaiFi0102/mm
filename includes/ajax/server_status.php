@@ -18,7 +18,7 @@ eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ Page Functions ################
 $rclass = new Realm($_POST['rid']);
-$status = $rclass->CheckRealmStatusAndOnlinePlayers($_POST['rid']);
+$status = $rclass->CheckRealmStatusAndOnlinePlayers();
 
 //################ Template's Output ################
 $print = json_encode($status);

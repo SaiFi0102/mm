@@ -1,6 +1,26 @@
 <div class="left_top"></div><div class="left_content">
 	<div class="main_title">Account Management</div>
 	<div class="content">
+		<?php
+		if(isset($update_result))
+		{
+			if($update_result)
+			{?>
+	<div class="successbox">
+		Account details successfully changed!			
+	</div>
+			<?php
+			}
+			else
+			{?>
+	<div class="errorbox">
+		Account details could not be changed.
+	</div>
+			<?php
+			}
+		}
+		?>
+	
 		<fieldset>
 		<legend>Account Overview</legend>
 			<table>
@@ -20,7 +40,7 @@
 				</tr>
 				<tr>
 					<th>Account Group</th>
-					<td><?php print AccessLevelToGroup($USER['gmlevel'], true); ?></td>
+					<td><?php print AccessLevelToGroup($USER['access'], true); ?></td>
 					
 					<th>Last logged in IP</th>
 					<td><?php if($USER['last_ip'] != '0.0.0.0') print $USER['last_ip']; else print "Never logged in"; ?></td>

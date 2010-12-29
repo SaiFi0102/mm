@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
@@ -19,9 +20,12 @@ $page_name[] = array("Online Players"=>"online.php");
 //################ Page Functions ################
 function FetchOnlinePlayers()
 {
-	global $CHARACTERDB;
-	$return = $CHARACTERDB[$_GET['rid']]->Select("*", "characters", "WHERE online <> '0'");
+	global $DB, $REALM;
 	
+	$query = new MMQueryBuilder();
+	$query->Select("`characters`")->Columns("*")->Where("`online` <> '0'")->Build();
+	$return = MMMySQLiFetch($DB->query($query, $REALM[$_GET['rid']]['CH_DB']));
+		
 	return $return;
 }
 

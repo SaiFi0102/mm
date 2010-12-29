@@ -25,20 +25,26 @@ define('BAN_ACCOUNT', 500);
 define('BAN_IP', 501);
 define('BAN_BOTH', 502);
 
-define('USERNAME_EMPTY', 0);
-define('USERNAME_ILLEGAL_CHARACTER', 1);
-define('USERNAME_ILLEGAL_SPACE', 2);
-define('USERNAME_LENTH_ABOVE', 3);
-define('USERNAME_LENTH_BELOW', 4);
-define('USERNAME_EXISTS', 5);
+define('USERNAME_EMPTY', 1);
+define('USERNAME_ILLEGAL_CHARACTER', 2);
+define('USERNAME_ILLEGAL_SPACE', 3);
+define('USERNAME_LENTH_ABOVE', 4);
+define('USERNAME_LENTH_BELOW', 5);
+define('USERNAME_EXISTS', 6);
 
-define('EMAIL_EMPTY', 0);
-define('EMAIL_FORMAT', 1);
-define('EMAIL_CONFIRM', 2);
-define('EMAIL_EXISTS', 3);
+define('EMAIL_EMPTY', 1);
+define('EMAIL_FORMAT', 2);
+define('EMAIL_CONFIRM', 3);
+define('EMAIL_EXISTS', 4);
 
 define('REWARD_VOTE', 0);
 define('REWARD_DONATE', 1);
+
+define('MMQryType_Unset', 0); //Not set yet
+define('MMQryType_Select', 1); //Queries like SELECT
+define('MMQryType_Insert', 2); //Queries like INSERT and REPLACE
+define('MMQryType_Update', 3); //Queries like UPDATE
+define('MMQryType_Delete', 4); //Queries like DELETE
 
 define('CRAWLERS_LIST', 'Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona');
 
