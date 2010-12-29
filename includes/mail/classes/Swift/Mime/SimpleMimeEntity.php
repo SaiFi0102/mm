@@ -254,7 +254,6 @@ class Swift_Mime_SimpleMimeEntity implements Swift_Mime_MimeEntity
   public function setChildren(array $children, $compoundLevel = null)
   {
     
-    
     $compoundLevel = isset($compoundLevel)
       ? $compoundLevel
       : $this->_getCompoundLevel($children)

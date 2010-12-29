@@ -1,3 +1,4 @@
+var ReloadPageSortTimeOut;
 var TotalElements = 0;
 var TotalPages = 1;
 
@@ -94,7 +95,7 @@ $.fn.PageSort = function(o)
 			{
 				url: o.JSONFile,
 				dataType: "json",
-				data: {data: "JSONData", ordercolumn: o.OrderColumn, ordermethod: o.OrderMethod, limit: GetLimit()},
+				data: {data: "JSONData", ordercolumn: o.OrderColumn, ordermethod: o.OrderMethod, limitstart: GetLimitStart(), limitrows: o.ElementsPerPage},
 				type: "POST",
 				
 				success: function(JSONData)
@@ -112,14 +113,10 @@ $.fn.PageSort = function(o)
 			});
 		}
 		
-		function GetLimit()
+		function GetLimitStart()
 		{
 			start = (o.ElementsPerPage * (CurrentPage - 1));
-			limit = start;
-			limit += ",";
-			limit += o.ElementsPerPage;
-			
-			return limit;
+			return start;
 		}
 		
 		function WritePagesTable(callback)
@@ -144,19 +141,19 @@ $.fn.PageSort = function(o)
 				pagetablehtml = '';
 				if(CurrentPage > 1)
 				{
-					pagetablehtml += '<div class="left" style="font-size: 20px"><a class="switchpage" href="#Page:'+(CurrentPage-1)+'">Previous</a></div>';
+					pagetablehtml += '<div class="left"><div class="pagestablelr"><a class="switchpage" href="#Page:'+(CurrentPage-1)+'">Previous</a></div></div>';
 				}
 				if(CurrentPage < TotalPages)
 				{
-					pagetablehtml += '<div class="right" style="font-size: 20px"><a class="switchpage" href="#Page:'+(CurrentPage+1)+'">Next</a></div>';
+					pagetablehtml += '<div class="right"><div class="pagestablelr"><a class="switchpage" href="#Page:'+(CurrentPage+1)+'">Next</a></div></div>';
 				}
 				
-				pagetablehtml += '<div align="center" style="font-size: 15px"><table cellpadding="2px" cellspacing="0" border="1px"><tr>';
+				pagetablehtml += '<div align="center"><table cellpadding="2px" cellspacing="0" border="1px" class="pagestable"><tr>';
 				
 				//First Page
 				if(CurrentPage > (o.PagesTableNum+1))
 				{
-					pagetablehtml += '<td><a class="switchpage" href="#Page:1">1</a></td><td>...</td>'
+					pagetablehtml += '<td><a class="switchpage" href="#Page:1">1</a></td><td>...</td>';
 				}
 				
 				//Looping
@@ -176,7 +173,7 @@ $.fn.PageSort = function(o)
 					pi--;
 				}
 				
-				pagetablehtml += '<td>'+CurrentPage+'</td>';
+				pagetablehtml += '<th>'+CurrentPage+'</th>';
 				
 				fi = 1;
 				while(fi <= o.PagesTableNum)

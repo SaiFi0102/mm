@@ -99,30 +99,24 @@ class Templates
 	{
 		global $cms, $page_name;
 		$error = "<table width=100% height=100%><tr><td valign=middle align=center><h1 style='color: #ababab;'>The theme '$this->theme' does not exist.</h1><a href='javascript:history.go(-1)'>Click here to go back.</a></td></tr></table>"; //Error Message when template file is not found
+		$return = null;
+		
 		//Check if theme exists
 		if(file_exists("templates/{$this->theme}/template.inc.php"))
 		{
-			require_once("templates/$this->theme/template.inc.php");
+			if(!$GLOBALS['AJAX_PAGE'])
+			{
+				$return .= 'include_once("templates/'.$this->theme.'/template.inc.php");';
+			}
 		}
 		else
 		{
-			if($GLOBALS['AJAX_PAGE'] == true)
-			{
-				if(!file_exists("../../templates/{$this->theme}/template.inc.php"))
-				{
-					exit($error);
-				}
-			}
-			else
-			{
-				exit($error);
-			}
+			exit($error);
 		}
 		
 		//Varaibles
 		$config = $cms->config;
 		$access = $cms->CheckAccess();
-		$return = null;
 		$dontfetch = false;
 		
 		if(!$access && !$intemplate)
@@ -133,13 +127,13 @@ class Templates
 				if($problem == "login")
 				{
 					$return = '$page_name[] = array("No Access");
-					$page_name[] = array("Login"=>"login.php?ref=".urlencode($_SERVER[\'REQUEST_URI\']));
-					$REDIRECT_MESSAGE = "You have to be logged in to visit this page. You are being redirected to the login page.";
-					$REDIRECT_LOCATION = "login.php";
-					$REDIRECT_INTERVAL = 2000;
-					$REDIRECT_TYPE = "notice";
-					eval($templates->Redirect());
-					exit();';
+$page_name[] = array("Login"=>"login.php?ref=".urlencode($_SERVER[\'REQUEST_URI\']));
+$REDIRECT_MESSAGE = "You have to be logged in to visit this page. You are being redirected to the login page.";
+$REDIRECT_LOCATION = "login.php";
+$REDIRECT_INTERVAL = 2000;
+$REDIRECT_TYPE = "notice";
+eval($templates->Redirect());
+exit();';
 					$dontfetch = true;
 				}
 				else
@@ -160,8 +154,9 @@ class Templates
 		//Page Name Title Array
 		if(!$intemplate)
 		{
-			$pagetitle = "";
+			$pagetitle = "<a href='index.php'>".$cms->config['websitename']."</a> &#187; ";
 			$htmltitle = "";
+			$metakeywords = $cms->config['websitename'];
 			if(is_array($page_name))
 			{
 				foreach($page_name as $parray)
@@ -171,31 +166,32 @@ class Templates
 						if(!$name)
 						{
 							//In case there is no url key($name) will be 0 and value($url) will be the name
-							$pagetitle .= $url . " - ";
-							$htmltitle .= $url . " - ";
+							$pagetitle .= $url . " &#187; ";
+							$htmltitle .= $url . " &#187; ";
+							$metakeywords .= ",".$url;
 						}
 						else
 						{
-							$pagetitle .= "<a href='{$url}'>" . $name . "</a> - ";
-							$htmltitle .= $name . " - ";
+							$pagetitle .= "<a href='{$url}'>" . $name . "</a> &#187; ";
+							$htmltitle .= $name . " &#187; ";
+							$metakeywords .= ",".$name;
 						}
 					}
 				}
 			}
-			$pagetitle .= "<a href='index.php'>".$cms->config['websitename']."</a>";
-			$htmltitle .= $cms->config['websitename'];
+			$pagetitle = substr($pagetitle, 0, -8);
+			$htmltitle .= $cms->config['websitetitle'];
+			$metakeywords .= ",".$cms->config["metakeyw"];
 			
 			$return .= '$COPYRIGHT = $cms->config["copyright"];		
-			$TITLE = "'.$htmltitle.'";
-			$PAGETITLE = "'.$pagetitle.'";
-			$META_KEYWORDS = $cms->config["metakeyw"];
-			$META_DESCRIPTION = $cms->config["metadesc"];
-			$META_EXTRA = $cms->config["metaextra"];';
+$TITLE = "'.$htmltitle.'";
+$PAGETITLE = "'.$pagetitle.'";
+$META_KEYWORDS = "'.$metakeywords.'";
+$META_DESCRIPTION = $cms->config["metadesc"];
+$META_EXTRA = $cms->config["metaextra"];';
 			
-			$pageendtime = microtime();
-			$starttime = explode(' ', START_TIME);
-			$endtime = explode(' ', $pageendtime);
-			$totaltime = $endtime[0] - $starttime[0] + $endtime[1] - $starttime[1];
+			$pageendtime = microtime(true);
+			$totaltime = $pageendtime - START_TIME;
 			$totaltime = round($totaltime, 4);
 			$return .= '$executiontime = '.$totaltime.' . " Seconds";';
 		}

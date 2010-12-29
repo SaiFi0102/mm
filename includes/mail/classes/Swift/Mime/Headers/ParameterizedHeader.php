@@ -130,7 +130,7 @@ class Swift_Mime_Headers_ParameterizedHeader
    * Get the value of this header prepared for rendering.
    * @return string
    */
-  public function getFieldBody() 
+  public function getFieldBody()
   {
     $body = parent::getFieldBody();
     foreach ($this->_params as $name => $value)

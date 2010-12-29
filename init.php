@@ -1,19 +1,21 @@
 <?php
 //################ Page Start Time ################
-define("START_TIME", microtime());
+define("START_MEMORY", memory_get_usage());
+define("START_TIME", microtime(true));
+ob_start("ob_gzhandler");
 
 //############### ERRORS/PHP INI #################
+error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL);
 ini_set("log_errors", 1);
+ini_set("display_errors", 0);
 if(!isset($AJAX_PAGE))
 {
 	ini_set("error_log", dirname(__FILE__)."/administration/logs/php_errors.log");
-	ini_set("display_errors", 0);
 }
 else
 {
 	ini_set("error_log", dirname(__FILE__)."/administration/logs/ajax_errors.log");
-	ini_set("display_errors", 0);
-	error_reporting(E_ERROR);
 }
 
 //################ Redirect if not included ################
@@ -35,6 +37,10 @@ $USER = array();
 require_once(DOC_ROOT."/includes/common.php");
 require_once(DOC_ROOT."/includes/config.php");
 
+if($DEBUG)
+{
+	ini_set("display_errors", 1);
+}
 if(!count($REALM))
 {
 	exit("No Realms Exists");
@@ -45,16 +51,9 @@ require_once(DOC_ROOT."/includes/functions.php");
 require_once(DOC_ROOT."/includes/class/Cookies.class.php");
 $cookies = new Cookies();
 
-//Initialize MySQL Connections
-require_once(DOC_ROOT."/includes/class/MySQL.class.php");
-$DB = new MySQL($WEB_DATABASE['host'], $WEB_DATABASE['user'], $WEB_DATABASE['pass'], $WEB_DATABASE['db'], $WEB_DATABASE['port']);
-$LOGONDB = new MySQL($LOGON_DATABASE['host'], $LOGON_DATABASE['user'], $LOGON_DATABASE['pass'], $LOGON_DATABASE['db'], $LOGON_DATABASE['port']);
-$CHARACTERDB = array();
-foreach($REALM as $rid => $arr)
-{
-	$CHARACTERDB[$rid] = new MySQL($arr['CH_DATABASE']['host'], $arr['CH_DATABASE']['user'], $arr['CH_DATABASE']['pass'], $arr['CH_DATABASE']['db'], $arr['CH_DATABASE']['port']);
-}
-$WORLDDB = array(); //We wont initialize WORLDDB for realms now... If it is needed it should be initialized then by InitWorldDb(&$WORLDDB, $rid);
+//Initialize MySQL Connection
+require_once(DOC_ROOT."/includes/class/MySQLi.class.php");
+$DB = new MMMySQLi($DATABASE_CONNECTION['host'], $DATABASE_CONNECTION['user'], $DATABASE_CONNECTION['pass'], DBNAME, $DATABASE_CONNECTION['port']);
 
 require_once(DOC_ROOT."/includes/class/Core.class.php");
 $cms = new Core();
@@ -62,21 +61,26 @@ require_once(DOC_ROOT."/includes/class/Authorization.class.php");
 $auth = new Authorization();
 require_once(DOC_ROOT."/includes/class/Users.class.php");
 $uclass = new Users($auth->UserGlobals(), $USER);
+if((int)$USER['access'] >= 4) //If user is an administrator
+{
+	ini_set("display_errors", 1);
+}
+date_default_timezone_set('America/New_York'); //TODO User System
 require_once(DOC_ROOT."/includes/class/Templates.class.php");
 $templates = new Templates($usetemplate);
 require_once(DOC_ROOT."/includes/class/WoW.class.php");
 require_once(DOC_ROOT."/includes/class/Realm.class.php");
 
 //################ Functions ################
-function InitWorldDb(&$WORLDDB, $rid)
+
+
+//################ Maintenance ################
+if($OFFLINE_MAINTENANCE && $USER['access'] < 4 && strpos($_SERVER['PHP_SELF'], 'login.php') === false && strpos($_SERVER['PHP_SELF'], 'payments.php') === false)
 {
-	global $REALM;
-	//ALWAYS CHECK IF REALM EXISTS BEFORE INITIALIZING A WORLDDB CONNECTION!
-	if(!isset($REALM[$rid]))
-	{
-		trigger_error("Wrong realm ID", E_USER_ERROR);
-	}
-	$WORLDDB[$rid] = new MySQL($REALM[$rid]['W_DATABASE']['host'], $REALM[$rid]['W_DATABASE']['user'], $REALM[$rid]['W_DATABASE']['pass'], $REALM[$rid]['W_DATABASE']['db'], $REALM[$rid]['W_DATABASE']['port']);
-	return $WORLDDB;
+	$cms->BannedAccess(true);
+	eval($cms->SetPageAccess(ACCESS_ALL));
+	$page_name[] = array("Under Maintenance");
+	eval($templates->Output("maintenance"));
+	exit();
 }
 ?>

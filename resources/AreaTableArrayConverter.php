@@ -1,5 +1,5 @@
 <?php
-
+exit();
 	//Resource File
 	$fd = fopen('CSV/AreaTable.dbc.CSV','r');
 	if(!$fd) trigger_error('CSV data file "AreaTable.dbc.CSV" is not available', E_USER_ERROR);

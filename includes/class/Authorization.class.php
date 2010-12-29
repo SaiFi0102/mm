@@ -9,7 +9,6 @@ if(!defined("INCLUDED"))
 
 class Authorization
 {
-	private $logdb;
 	private $db;
 	
 	/**
@@ -18,8 +17,7 @@ class Authorization
 	 */
 	public function __construct()
 	{
-		global $LOGONDB, $DB;
-		$this->logdb = $LOGONDB;
+		global $DB;
 		$this->db = $DB;
 	}
 	
@@ -29,12 +27,28 @@ class Authorization
 	 */
 	public function UserGlobals()
 	{
-		if(!isset($_COOKIE['username']) || !isset($_COOKIE['password']))
+		global $LOGON_CRAWLERUSERNAME, $LOGON_CRAWLERUSERPASS;
+		$iscrawler = false;
+		
+		if(preg_match("/".CRAWLERS_LIST."/i", $_SERVER['HTTP_USER_AGENT'])) //If visitor is a crawler
+		{
+			$iscrawler = true;
+		}
+		if((!isset($_COOKIE['username']) || !isset($_COOKIE['password'])) && $iscrawler == false)
 		{
 			return false;
 		}
-		$user = $this->FetchUserData($_COOKIE['username'], $_COOKIE['password']);
-		if ($user == false)
+		
+		//Check if visitor is a crawler
+		if($iscrawler) //If visitor is a crawler then login with crawler's user
+		{
+			$user = $this->FetchUserData($LOGON_CRAWLERUSERNAME, Sha1Pass($LOGON_CRAWLERUSERNAME, $LOGON_CRAWLERUSERPASS));
+		}
+		else
+		{
+			$user = $this->FetchUserData($_COOKIE['username'], $_COOKIE['password']);
+		}
+		if($user == false)
 		{
 			$this->Logout();
 			return false;
@@ -84,13 +98,15 @@ class Authorization
 		global $cookies;
 		if($cookies->DeleteCookie("username") && $cookies->DeleteCookie("password"))
 		{
-			if($uid) $this->db->Update(array("online" => '"0"'), "online", "WHERE uid='$uid'");
+			if($uid)
+			{
+				$query = new MMQueryBuilder();
+				$query->Update("`online`")->Columns(array("`online`" => "'0'"))->Where("`uid` = '%s'", $uid)->Build();
+				$this->db->query($query, DBNAME);
+			}
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 	
 	public function FetchOnlineUsers()
@@ -112,13 +128,37 @@ class Authorization
 		$userbanned = false;
 		if($uid)
 		{
-			$userban = $this->logdb->Select("*", "account_banned", "WHERE id = '%d' AND active = '1' AND unbandate > '%s'", true, $uid, time());
-			if($userban) $userbanned = true;
+			//Build up query
+			$query = new MMQueryBuilder();
+			$query->Select("`account_banned`")->Columns("*")
+			->Where("`id` = '%s' AND `active` = '1' AND `unbandate` > '%s'", $uid, time())->Build();
+			$result = $this->db->query($query, DBNAME);
+			$userban = MMMySQLiFetch($result, "onerow: 1", "freeresult: 0");
+			
+			//If user banned
+			if($result->num_rows)
+			{
+				$userbanned = true;
+			}
+			$result->close(); //Free up memory
+			unset($result);
 		}
 		if($uip)
 		{
-			$ipban = $this->logdb->Select("*", "ip_banned", "WHERE ip = '%s'  AND unbandate > '%s'", true, $uip, time());
-			if($ipban) $ipbanned = true;
+			//Build up query
+			$query = new MMQueryBuilder();
+			$query->Select("`ip_banned`")->Columns("*")
+			->Where("`ip` = '%s' AND `unbandate` > '%s'", $uip, time())->Build();
+			$result = $this->db->query($query, DBNAME);
+			$ipban = MMMySQLiFetch($result, "onerow: 1", "freeresult: 0");
+						
+			//If ip banned
+			if($result->num_rows)
+			{
+				$ipbanned = true;
+			}
+			$result->close(); //Free up memory
+			unset($result);
 		}
 		
 		//IP Ban first so that if user is banned reason will be taken by userban
@@ -171,19 +211,28 @@ class Authorization
 	private function FetchUserData($login, $password)
 	{
 		//SQL Query
-		$data = $this->logdb->Select("*", "account",
-		"LEFT JOIN account_mm_extend ON account.id = account_mm_extend.accountid WHERE username='%s' AND sha_pass_hash='%s'"
-		, true, $login, $password);
+		$query = new MMQueryBuilder();
+		$query->Select("`account`")->Columns("*")
+		->Join("`account_mm_extend`", "LEFT")->JoinOn("`account`.`id`", "`account_mm_extend`.`accountid`")
+		->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $login, $password)->Build();
+		$result = $this->db->query($query, DBNAME);
+		$data = MMMySQLiFetch($result, "freeresult: 0", "onerow: 1");
 		
-		if(!$data)
+		//If user not found
+		if(!$result->num_rows)
 		{
 			return false;
 		}
+		$result->close(); //Free results
+		unset($result);
 		
 		if($data['accountid'] == null || empty($data['accountid']))
 		{
-			$this->logdb->Insert(array("accountid"=>"'%s'"), "account_mm_extend", false, $data['id']);
+			$query = new MMQueryBuilder();
+			$query->Insert("`account_mm_extend`")->Columns(array("`accountid`"=>"'%s'"), $data['id'])->Build();
+			$this->db->query($query, DBNAME);
 		}
+		
 		return $data;
 	}
 	

@@ -1,1 +1,0 @@
-<b>You have no characters in this realm, please log in from the game to create a character.</b>

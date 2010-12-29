@@ -1,5 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
+$AJAX_PAGE = false;
 exit("UNDERCONSTRUCTION"); //TODO
 
 //################ Required Files ################

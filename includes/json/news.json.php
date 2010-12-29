@@ -19,10 +19,14 @@ eval($cms->SetPageAccess(ACCESS_ALL));
 function GetTotalNews()
 {
 	global $DB;
-	$DB->Select("id", "news", "", true);
-	return $DB->AffectedRows;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`news`")->Columns(array("COUNT(*)"=>"newscount"))->Build();
+	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	
+	return $result['newscount'];
 }
-function FetchNews($ordercolumn, $ordermethod, $limit="0,5")
+function FetchNews($ordercolumn, $ordermethod, $limitstart="0", $limitrows="5")
 {
 	global $DB;
 	
@@ -49,15 +53,22 @@ function FetchNews($ordercolumn, $ordermethod, $limit="0,5")
 			$ordercolumn = "date";
 		break;
 	}
-	
-	$q = $DB->Select("*", "news", "ORDER BY sticky DESC, %s {$ordermethod} LIMIT {$limit}", false, $ordercolumn);
-	for($i = 0; $i < count($q); $i++)
+	if($limitrows > 10)
 	{
-		$q[$i]['body'] = str_replace("\r\n", "<br />", $q[$i]['body']);
-		$q[$i]['body'] = str_replace("\n", "<br />", $q[$i]['body']);
-		$q[$i]['date'] = ConvertMysqlTimestamp($q[$i]['date']);
+		$limitrows = 10; //Do not allow more than 10 rows in a query
 	}
-	return $q;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`news`")->Columns("*")->Order("`sticky` DESC, `%s` %s", $ordercolumn, $ordermethod)->Limit("%s", "%s", $limitstart, $limitrows)->Build();
+	$news = MMMySQLiFetch($DB->query($query, DBNAME));	
+	
+	for($i = 0; $i < count($news); $i++)
+	{
+		$news[$i]['body'] = str_replace("\r\n", "<br />", $news[$i]['body']);
+		$news[$i]['body'] = str_replace("\n", "<br />", $news[$i]['body']);
+		$news[$i]['date'] = ConvertMysqlTimestamp($news[$i]['date']);
+	}
+	return $news;
 }
 switch($_POST['data'])
 {
@@ -66,11 +77,11 @@ switch($_POST['data'])
 	break;
 	
 	case "JSONData":
-		if(!isset($_POST['ordercolumn']) || !isset($_POST['ordermethod']) || !isset($_POST['limit']))
+		if(!isset($_POST['ordercolumn']) || !isset($_POST['ordermethod']) || !isset($_POST['limitstart']) || !isset($_POST['limitrows']))
 		{
 			exit;
 		}
-		$fetchnews = FetchNews($_POST['ordercolumn'], $_POST['ordermethod'], $_POST['limit']);
+		$fetchnews = FetchNews($_POST['ordercolumn'], $_POST['ordermethod'], $_POST['limitstart'], $_POST['limitrows']);
 		print json_encode($fetchnews);
 	break;
 }

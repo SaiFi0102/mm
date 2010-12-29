@@ -205,7 +205,7 @@ function BanTimeOut($timestamp, $format = "j F Y, g:i a")
  */
 function CheckUsername($username)
 {
-	global $cms, $LOGONDB;
+	global $cms, $DB;
 	if(empty($username) || $username == null)
 	{
 		return USERNAME_EMPTY;
@@ -227,11 +227,17 @@ function CheckUsername($username)
 		return USERNAME_LENTH_ABOVE;
 	}
 	
-	$q = $LOGONDB->Query("SELECT username FROM account WHERE username = '%s'", $username);
-	if($LOGONDB->numRows($q) > 0)
+	$query = new MMQueryBuilder();
+	$query->Select("`account`")->Columns("`username`")->Where("`username` = '%s'", $username)->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	if($result->num_rows > 0)
 	{
 		return USERNAME_EXISTS;
 	}
+	$result->close();
+	unset($result);
+	
 	return 0;
 }
 
@@ -242,7 +248,7 @@ function CheckUsername($username)
  */
 function CheckEmail($email, $confirmemail=null)
 {
-	global $LOGONDB;
+	global $DB;
 	if(empty($email) || $email == null)
 	{
 		return EMAIL_EMPTY;
@@ -259,11 +265,17 @@ function CheckEmail($email, $confirmemail=null)
 		}
 	}
 	
-	$q = $LOGONDB->Query("SELECT email FROM account WHERE email='%s'", $email);
-	if($LOGONDB->numRows($q) > 0)
+	$query = new MMQueryBuilder();
+	$query->Select("`account`")->Columns("`email`")->Where("`email` = '%s'", $email)->Build();
+	$result = $DB->query($query, DBNAME);
+	
+	if($result->num_rows > 0)
 	{
-		return USERNAME_EXISTS;
+		return EMAIL_EXISTS;
 	}
+	$result->close();
+	unset($result);
+	
 	return 0;
 }
 
@@ -382,19 +394,19 @@ function ParseGold(&$str)
 		$moneyhtml = null;
 		if($money['gold'])
 		{
-			$moneyhtml .= $money['gold']." <img src='images/icons/money_gold.gif' alt='Gold' /> ";
+			$moneyhtml .= $money['gold']." <img src='{$cms->config['websiteurl']}/images/icons/money_gold.gif' alt='Gold' height='13' width='13' /> ";
 		}
 		if($money['silver'])
 		{
-			$moneyhtml .= $money['silver']." <img src='images/icons/money_silver.gif' alt='Silver' /> ";
+			$moneyhtml .= $money['silver']." <img src='{$cms->config['websiteurl']}/images/icons/money_silver.gif' alt='Silver' height='13' width='13' /> ";
 		}
 		if($money['copper'])
 		{
-			$moneyhtml .= $money['copper']." <img src='images/icons/money_copper.gif' alt='Copper' />";
+			$moneyhtml .= $money['copper']." <img src='{$cms->config['websiteurl']}/images/icons/money_copper.gif' alt='Copper' height='13' width='13' />";
 		}
 		$str = str_replace($moneyy, $moneyhtml, $str);
 	}
-	$str = str_replace("[gold][/gold]", "0 <img src='images/icons/money_copper.gif' alt='Copper' />", $str);
+	$str = str_replace("[gold][/gold]", "0 <img src='{$cms->config['websiteurl']}/images/icons/money_copper.gif' alt='Copper' height='13' width='13' />", $str);
 	return $str;
 }
 
@@ -404,8 +416,6 @@ function ParseGold(&$str)
  */
 function RewardsItemsColumnToArray($items)
 {
-	global $DB;
-	
 	//Separate Items
 	$itemarray = explode(",", $items);
 	
@@ -481,7 +491,7 @@ function ItemQualityToColorClass($quality=1)
  */
 function FetchItemsData($rewards, $rid)
 {
-	global $WORLDDB, $DB;
+	global $DB, $REALM;
 	$items = array();
 	foreach($rewards as $reward)
 	{
@@ -504,24 +514,30 @@ function FetchItemsData($rewards, $rid)
 	}
 	else
 	{
-		$last = "WHERE entry IN(";
+		$Where = "`entry` IN(";
 		foreach($items as $itemid => $useless)
 		{
-			$last .= "$itemid, ";
+			$Where .= "$itemid, ";
 		}
-		$last = substr($last, 0, -2);
-		$last .= ")";
+		$Where = substr($Where, 0, -2);
+		$Where .= ")";
 	}
 	
 	//Fetch
-	$ir = $WORLDDB[$rid]->Select(array("entry","name","quality"), "item_template", $last, false);
+	$query = new MMQueryBuilder();
+	$query->Select("`item_template`")->Columns(array("`entry`","`name`","`quality`"))->Where($Where)->Build();
+	$ir = MMMySQLiFetch($DB->query($query, $REALM[$rid]['W_DB']));
+	
+	
 	$itemarray = array();
 	foreach($ir as $iir)
 	{
 		$itemarray[$iir['entry']] = array($iir['name'],$iir['quality']);
 	}
+	
 	return $itemarray;
 }
+
 /**
  * ItemID to ItemName
  * @param $itemarray
@@ -553,7 +569,10 @@ function VoteTimeLeft($votedtime)
 function FetchVoteGateways()
 {
 	global $DB;
-	$return = $DB->Select("*", "vote_gateways");
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`vote_gateways`")->Columns("*")->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
@@ -561,7 +580,6 @@ function FetchVoteGateways()
  * Returns an array with hours minutes and seconds left!
  * @param $timestamp
  */
-//FUNCTION FOR TIME LEFT 
 function StrTimeLeft($integer) 
 {
 	$integer -= time();
@@ -631,14 +649,102 @@ function StrTimeLeft($integer)
 	return $return;
 }
 
+function DateDiff($date, $date2 = 0)
+{
+    if(!$date2)
+        $date2 = mktime();
+
+    $date_diff = array('seconds'  => '',
+                       'minutes'  => '',
+                       'hours'    => '',
+                       'days'     => '',
+                       'weeks'    => '',
+                       
+                       'tseconds' => '',
+                       'tminutes' => '',
+                       'thours'   => '',
+                       'tdays'    => '',
+                       'tdays'    => '');
+
+    ////////////////////
+    
+    if($date2 > $date)
+        $tmp = $date2 - $date;
+    else
+        $tmp = $date - $date2;
+
+    $seconds = $tmp;
+
+    // Relative ////////
+    $date_diff['weeks'] = floor($tmp/604800);
+    $tmp -= $date_diff['weeks'] * 604800;
+
+    $date_diff['days'] = floor($tmp/86400);
+    $tmp -= $date_diff['days'] * 86400;
+
+    $date_diff['hours'] = floor($tmp/3600);
+    $tmp -= $date_diff['hours'] * 3600;
+
+    $date_diff['minutes'] = floor($tmp/60);
+    $tmp -= $date_diff['minutes'] * 60;
+
+    $date_diff['seconds'] = $tmp;
+    
+    // Total ///////////
+    $date_diff['tweeks'] = floor($seconds/604800);
+    $date_diff['tdays'] = floor($seconds/86400);
+    $date_diff['thours'] = floor($seconds/3600);
+    $date_diff['tminutes'] = floor($seconds/60);
+    $date_diff['tseconds'] = $seconds;
+
+    return $date_diff;
+}
+
+function StrDateDiff($date, $date2=0)
+{
+	$DateDiff = DateDiff($date, $date2);
+	
+	$return = null;
+	if($DateDiff['tweeks'] > 0)
+	{
+		$return .= $DateDiff['weeks']." Weeks, ";
+	}
+	if($DateDiff['tdays'] > 0)
+	{
+		$return .= $DateDiff['days']." Days, ";
+	}
+	if($DateDiff['thours'] > 0)
+	{
+		$return .= $DateDiff['hours']." Hours, ";
+	}
+	if($DateDiff['tminutes'] > 0)
+	{
+		$return .= $DateDiff['minutes']." Minutes, ";
+	}
+	
+	if($return != null)
+	{
+		$return .= "and ";
+	}
+	$return .= $DateDiff['seconds']." Seconds";
+	
+	return $return;
+}
+	
+	
 /**
  * Returns random 50 player names with thier guid
  * @param $rid
  */
 function RandomOnlinePlayers($rid)
 {
-	global $CHARACTERDB;
-	$return = $CHARACTERDB[$rid]->Select(array("guid", "name"), "characters", "WHERE online <> '0' ORDER BY RAND() LIMIT 50");
+	global $DB, $REALM;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`characters`")->Columns(array("`guid`", "`name`"))
+	->Where("`online` <> 0")->Order("RAND()")->Limit("50")->Build();
+	$return = MMMySQLiFetch($DB->query($query, $REALM[$rid]['CH_DB']));
+	
 	return $return;
 }
 
@@ -711,6 +817,15 @@ function RandomCharacters($length)
 	return $return;
 }
 
+function IsAssocArray($array)
+{
+    if(is_array($array) && !is_numeric(array_shift(array_keys($array))))
+    {
+        return true;
+    }
+    return false;
+}
+
 /**
  * Sends an email using SWIFTMAILER package
  *
@@ -726,7 +841,8 @@ function RandomCharacters($length)
  */
 function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain', $attatch = null, $characterset = 'UTF-8')
 {
-	global $email;
+	global $email, $cms;
+	$fail = null;
 	
 	//Create Email Transporter
 	//Default to MAIL_PHPMAIL
@@ -751,7 +867,7 @@ function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain',
 	if($bodytype == 'plain') $bodytype = 'text/plain';
 	if($bodytype == 'html') $bodytype = 'text/html';
 	
-	if(empty($from)) $from = $email['from'];
+	if(empty($from)) $from = $cms->config['email_from'];
 	
 	$message = Swift_Message::newInstance()->setCharset($characterset);
 	$message->setSubject($subject);

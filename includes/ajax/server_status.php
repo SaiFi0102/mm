@@ -18,16 +18,9 @@ eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ Page Functions ################
 $rclass = new Realm($_POST['rid']);
-$status = $rclass->CheckRealmStatusAndOnlinePlayers($_POST['rid']);
+$status = $rclass->CheckRealmStatusAndOnlinePlayers();
 
 //################ Template's Output ################
-$print = "{";
-foreach($status as $key => $val)
-{
-	$print .= "\"{$key}\": \"{$val}\", ";
-}
-$print = substr($print, 0, -2);
-$print .= "}";
-
+$print = json_encode($status);
 print $print;
 ?>

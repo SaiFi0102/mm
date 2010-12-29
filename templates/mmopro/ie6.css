@@ -1,0 +1,35 @@
+#logo{
+	margin-top:15px;
+}
+
+#header_area{
+	width:662px;
+	height:43px;
+	float:left;
+}
+
+#numbers{
+	position:absolute;
+	top:340px;
+	margin-left:15px;
+	z-index:10;
+}
+
+#slider_top{
+	height:9px; 
+	width:962px;
+	text-align:center;
+	background: transparent url("../images/slider_top.png") top left no-repeat;	
+}
+
+#nav { 
+
+}
+
+#page_right{
+	width:309px;
+	float:right;
+	margin-left:3px;
+	padding:0px;
+	position:absolute;
+}
