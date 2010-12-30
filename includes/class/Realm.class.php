@@ -69,7 +69,7 @@ class Realm
 		
 		$query = new MMQueryBuilder();
 		$query->Select("`characters`")->Columns("*")->Where($Where, $args)->Build();
-		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
 		
 		return $data;
 	}
@@ -150,11 +150,12 @@ class Realm
 		{
 			$this->soapconn = new SoapClient(NULL,
 			array(
-				"location" => "http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
-				"uri" => "urn:MaNGOS",
-				"style" => SOAP_RPC,
-				"login" => $this->realmconf['SOAP']['user'],
-				"password" => $this->realmconf['SOAP']['pass'],
+				"location" =>		"http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
+				"uri"				=> "urn:MaNGOS",
+				"style"				=> SOAP_RPC,
+				"login"				=> $this->realmconf['SOAP']['user'],
+				"password"			=> $this->realmconf['SOAP']['pass'],
+				"connection_timeout"=> 15,
 			));
 		}
 		

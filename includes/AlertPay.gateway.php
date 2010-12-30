@@ -111,21 +111,21 @@ class AlertPay
 		//Insert information in invalid payments table
 		$postdata = $this->GetPostData();
 		
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"			=> "'1'",
-			"transaction_id"	=> "'%s'",
-			"sender_email"		=> "'%s'",
-			"payment_status"	=> "'%s'",
-			"item_name"			=> "'%s'",
-			"amount"			=> "'%s'",
-			"currency"			=> "'%s'",
-			"account_id"		=> "'%s'",
-			"first_name"		=> "'%s'",
-			"last_name"			=> "'%s'",
-			"post_data"			=> "'%s'",
-			"extra_information"	=> "'INVALID TRANSACTION FROM ALERTPAY'",
-		), "log_invalidpayments_alertpay", false,
+			"`status`"			=> "'1'",
+			"`transaction_id`"	=> "'%s'",
+			"`sender_email`"	=> "'%s'",
+			"`payment_status`"	=> "'%s'",
+			"`item_name`"		=> "'%s'",
+			"`amount`"			=> "'%s'",
+			"`currency`"		=> "'%s'",
+			"`account_id`"		=> "'%s'",
+			"`first_name`"		=> "'%s'",
+			"`last_name`"		=> "'%s'",
+			"`post_data`"		=> "'%s'",
+			"`extra_information`"=> "'INVALID TRANSACTION FROM ALERTPAY'",
+		), PAYMENTTYPE_INVALID,
 		$transactionReferenceNumber,
 		$customerEmailAddress,
 		$transactionStatus,
@@ -152,24 +152,24 @@ class AlertPay
 		//Wrong receiver_email
 		if($receivedMerchantEmailAddress != $cms->config['email_alertpay'])
 		{
-			$this->sql->Insert(
+			$this->LogPayment(
 			array(
-				"status"			=> "'1'",
-				"transaction_id"	=> "'%s'",
-				"sender_email"		=> "'%s'",
-				"payment_status"	=> "'%s'",
-				"item_name"			=> "'%s'",
-				"amount_gross"		=> "'%s'",
-				"amount_fee"		=> "'%s'",
-				"amount_net"		=> "'%s'",
-				"currency"			=> "'%s'",
-				"account_id"		=> "'%s'",
-				"first_name"		=> "'%s'",
-				"last_name"			=> "'%s'",
-				"post_data"			=> "'%s'",
-				"extra_information"	=> "'WRONG RECEIVER_EMAIL(%s != %s)'",
-				"details"			=> "'The payment was sent to someone else, please contact an administrator if you think this is an error'",
-			), "log_payments_alertpay", false,
+				"`status`"			=> "'1'",
+				"`transaction_id`"	=> "'%s'",
+				"`sender_email`"	=> "'%s'",
+				"`payment_status`"	=> "'%s'",
+				"`item_name`"		=> "'%s'",
+				"`amount_gross`"	=> "'%s'",
+				"`amount_fee`"		=> "'%s'",
+				"`amount_net`"		=> "'%s'",
+				"`currency`"		=> "'%s'",
+				"`account_id`"		=> "'%s'",
+				"`first_name`"		=> "'%s'",
+				"`last_name`"		=> "'%s'",
+				"`post_data`"		=> "'%s'",
+				"`extra_information`"=> "'WRONG RECEIVER_EMAIL(%s != %s)'",
+				"`details`"			=> "'The payment was sent to someone else, please contact an administrator if you think this is an error'",
+			), PAYMENTTYPE_INVALID,
 			$transactionReferenceNumber,
 			$customerEmailAddress,
 			$transactionStatus,
@@ -189,24 +189,24 @@ class AlertPay
 		//Wrong currency
 		if($currency != "USD")
 		{
-			$this->sql->Insert(
+			$this->LogPayment(
 			array(
-				"status"			=> "'1'",
-				"transaction_id"	=> "'%s'",
-				"sender_email"		=> "'%s'",
-				"payment_status"	=> "'Failed'",
-				"item_name"			=> "'%s'",
-				"amount_gross"		=> "'%s'",
-				"amount_fee"		=> "'%s'",
-				"amount_net"		=> "'%s'",
-				"currency"			=> "'%s'",
-				"account_id"		=> "'%s'",
-				"first_name"		=> "'%s'",
-				"last_name"			=> "'%s'",
-				"post_data"			=> "'%s'",
-				"extra_information"	=> "'WRONG CURRENCY: %s'",
-				"details"			=> "'The payment currency was not in $(USD), please contact an administrator to convert the currency to $(USD)'",
-			), "log_payments_alertpay", false,
+				"`status`"			=> "'1'",
+				"`transaction_id`"	=> "'%s'",
+				"`sender_email`"	=> "'%s'",
+				"`payment_status`"	=> "'Failed'",
+				"`item_name`"		=> "'%s'",
+				"`amount_gross`"	=> "'%s'",
+				"`amount_fee`"		=> "'%s'",
+				"`amount_net`"		=> "'%s'",
+				"`currency`"		=> "'%s'",
+				"`account_id`"		=> "'%s'",
+				"`first_name`"		=> "'%s'",
+				"`last_name`"		=> "'%s'",
+				"`post_data`"		=> "'%s'",
+				"`extra_information`"=> "'WRONG CURRENCY: %s'",
+				"`details`"			=> "'The payment currency was not in $(USD), please contact an administrator to convert the currency to $(USD)'",
+			), PAYMENTTYPE_INVALID,
 			$transactionReferenceNumber,
 			$customerEmailAddress,
 			$myItemName,
@@ -253,29 +253,31 @@ class AlertPay
 		$postdata		= $this->GetPostData();
 		$accountid 		= $myCustomField_1;
 		$amount			= floatval($totalAmountReceived);
-		$currency		= $currency;
 		
 		//Check if transaction has been processed before and if it is "Completed"
-		$checkrecycle = $this->sql->Query("SELECT status FROM log_payments_alertpay WHERE transaction_id = '%s' AND status = '0'", $transactionReferenceNumber);
-		$numrecycle = $this->sql->numRows($checkrecycle);
-		if($numrecycle > 0)
+		$query = new MMQueryBuilder();
+		$query->Select("`log_payments_alertpay`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`transaction_id` = '%s' AND `status` = '0'", $transactionReferenceNumber)->Build();
+		$checkrecycle = MMMySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
+		$numrecycle = $checkrecycle['numrows'];
+		
+		if((int)$numrecycle > 0)
 		{
 			//Insert log in INVALID payments
-			$this->sql->Insert(
+			$this->LogPayment(
 			array(
-				"status"				=> "'0'",
-				"transaction_id"		=> "'%s'",
-				"sender_email"			=> "'%s'",
-				"payment_status"		=> "'%s'",
-				"item_name"				=> "'%s'",
-				"amount"				=> "'%s'",
-				"currency"				=> "'%s'",
-				"account_id"			=> "'%s'",
-				"first_name"			=> "'%s'",
-				"last_name"				=> "'%s'",
-				"post_data"				=> "'%s'",
-				"extra_information"		=> "'TRANSACTION RECYLCED WITH PAYMENTSTATUS COMPLETED'",
-			), "log_invalidpayments_alertpay", false,
+				"`status`"			=> "'0'",
+				"`transaction_id`"	=> "'%s'",
+				"`sender_email`"	=> "'%s'",
+				"`payment_status`"	=> "'%s'",
+				"`item_name`"		=> "'%s'",
+				"`amount`"			=> "'%s'",
+				"`currency`"		=> "'%s'",
+				"`account_id`"		=> "'%s'",
+				"`first_name`"		=> "'%s'",
+				"`last_name`"		=> "'%s'",
+				"`post_data`"		=> "'%s'",
+				"`extra_information`"=> "'TRANSACTION RECYLCED WITH PAYMENTSTATUS COMPLETED'",
+			), PAYMENTTYPE_INVALID,
 			$transactionReferenceNumber,
 			$customerEmailAddress,
 			$transactionStatus,
@@ -291,28 +293,30 @@ class AlertPay
 		}
 		
 		//Delete pending payments with same transaction id
-		$this->sql->Delete("log_payments_alertpay", "WHERE transaction_id = '%s' AND status = '2'", $transactionReferenceNumber);
-		
+		$query = new MMQueryBuilder();
+		$query->Delete("`log_payments_alertpay`")->Where("`transaction_id` = '%s' AND `status` = '2'", $transactionReferenceNumber)->Build();
+		$this->sql->query($query, DBNAME);
+				
 		//Everything is OK, Insert LOG for successful payment
 		$details = "Transaction was successful";
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"				=> "'0'",
-			"transaction_id"		=> "'%s'",
-			"sender_email"			=> "'%s'",
-			"payment_status"		=> "'%s'",
-			"item_name"				=> "'%s'",
-			"amount_gross"			=> "'%s'",
-			"amount_fee"			=> "'%s'",
-			"amount_net"			=> "'%s'",
-			"currency"				=> "'%s'",
-			"account_id"			=> "'%s'",
-			"first_name"			=> "'%s'",
-			"last_name"				=> "'%s'",
-			"post_data"				=> "'%s'",
-			"extra_information"		=> "'SUCCESSFUL PAYMENT!'",
-			"details"				=> "'$details, Points were added to your account!'",
-		), "log_payments_alertpay", false,
+			"`status`"			=> "'0'",
+			"`transaction_id`"	=> "'%s'",
+			"`sender_email`"	=> "'%s'",
+			"`payment_status`"	=> "'%s'",
+			"`item_name`"		=> "'%s'",
+			"`amount_gross`"	=> "'%s'",
+			"`amount_fee`"		=> "'%s'",
+			"`amount_net`"		=> "'%s'",
+			"`currency`"		=> "'%s'",
+			"`account_id`"		=> "'%s'",
+			"`first_name`"		=> "'%s'",
+			"`last_name`"		=> "'%s'",
+			"`post_data`"		=> "'%s'",
+			"`extra_information`"=> "'SUCCESSFUL PAYMENT!'",
+			"`details`"			=> "'$details, Points were added to your account!'",
+		), PAYMENTTYPE_INVALID,
 		$transactionReferenceNumber,
 		$customerEmailAddress,
 		$transactionStatus,
@@ -336,27 +340,26 @@ class AlertPay
 		$postdata	= $this->GetPostData();
 		$amount		= floatval($totalAmountReceived);
 		$accountid	= $myCustomField_1;
-		$currency	= $currency;
 		
 		//Insert log for failed transaction
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"			=> "'1'",
-			"transaction_id"	=> "'%s'",
-			"sender_email"		=> "'%s'",
-			"payment_status"	=> "'%s'",
-			"item_name"			=> "'%s'",
-			"amount_gross"		=> "'%s'",
-			"amount_fee"		=> "'%s'",
-			"amount_net"		=> "'%s'",
-			"currency"			=> "'%s'",
-			"account_id"		=> "'%s'",
-			"first_name"		=> "'%s'",
-			"last_name"			=> "'%s'",
-			"post_data"			=> "'%s'",
-			"extra_information"	=> "'FAILED PAYMENT!'",
-			"details"			=> "'Transaction Failed'",
-		), "log_payments_alertpay", false,
+			"`status`"			=> "'1'",
+			"`transaction_id`"	=> "'%s'",
+			"`sender_email`"	=> "'%s'",
+			"`payment_status`"	=> "'%s'",
+			"`item_name`"		=> "'%s'",
+			"`amount_gross`"	=> "'%s'",
+			"`amount_fee`"		=> "'%s'",
+			"`amount_net`"		=> "'%s'",
+			"`currency`"		=> "'%s'",
+			"`account_id`"		=> "'%s'",
+			"`first_name`"		=> "'%s'",
+			"`last_name`"		=> "'%s'",
+			"`post_data`"		=> "'%s'",
+			"`extra_information`"=> "'FAILED PAYMENT!'",
+			"`details`"			=> "'Transaction Failed'",
+		), PAYMENTTYPE_INVALID,
 		$transactionReferenceNumber,
 		$customerEmailAddress,
 		$transactionStatus,
@@ -386,5 +389,25 @@ class AlertPay
 		return $postdata;
 	}
 	
+	private function LogPayment($columns, $paymenttype)
+	{
+		$args = func_get_args();
+		array_shift($args); array_shift($args);
+		
+		if($paymenttype == PAYMENTTYPE_VALID)
+		{
+			$table = "log_payments_alertpay";
+		}
+		else
+		{
+			$table = "log_invalidpayments_alertpay";
+		}
+		
+		$query = new MMQueryBuilder();
+		$query->Insert("`$table`")->Columns($columns, $args)->Build();
+		$result = $this->sql->query($query, DBNAME);
+		
+		return $result;
+	}
 }
 ?>

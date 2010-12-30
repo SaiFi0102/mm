@@ -81,7 +81,6 @@ if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $US
 			}
 		}
 	}
-	$binddata = $rclass->FetchCharacterBindDataByCharacterID("", $_GET['cid']);
 }
 
 eval($templates->Output('character'));

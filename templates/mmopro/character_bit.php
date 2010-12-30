@@ -12,7 +12,6 @@ $CDATA_MONEY = $_cdata['money'];
 $CDATA_MAPID = $_cdata['map'];
 $CDATA_ONLINE = $_cdata['online'];
 $CDATA_ZONEID = $_cdata['zone'];
-
 ?>
 
 <div class="characters" id="CHAR_<?php print $CHARACTERLIST_RID; ?>_<?php print $CDATA_GUID ?>"
@@ -87,6 +86,7 @@ $CDATA_ZONEID = $_cdata['zone'];
 	<br />
 	
 	<b>Money:</b> <?php $goldstr = "[gold]{$CDATA_MONEY}[/gold]"; ParseGold($goldstr); print $goldstr; ?>
+	<div class="clear"></div>
 </div>
 <!-- Character Selection JAVASCRIPT -->
 <?php

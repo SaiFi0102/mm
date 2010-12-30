@@ -22,8 +22,7 @@ if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $US
 		<?php print $cms->ErrorOutput(); ?>
 		<div class="noticebox">
 			Are you sure you want to use unstuck tool on this character?<br />
-			You will be revived and teleported to
-			<?php if(!count($binddata)) print "your starting location"; else print "The Mall"; ?>
+			You will be revived and teleported.
 		</div><br />
 		<div align="center">
 			<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">

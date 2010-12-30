@@ -85,21 +85,21 @@ class PayPal
 		//Insert information in invalid payments table
 		$postdata = $this->GetPostData();
 		
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"			=> "'1'",
-			"transaction_id"	=> "'%s'",
-			"sender_email"		=> "'%s'",
-			"payment_status"	=> "'%s'",
-			"item_name"			=> "'%s'",
-			"amount"			=> "'%s'",
-			"currency"			=> "'%s'",
-			"account_id"		=> "'%s'",
-			"first_name"		=> "'%s'",
-			"last_name"			=> "'%s'",
-			"post_data"			=> "'%s'",
-			"extra_information"	=> "'INVALID TRANSACTION FROM PAYPAL'",
-		), "log_invalidpayments_paypal", false,
+			"`status`"			=> "'1'",
+			"`transaction_id`"	=> "'%s'",
+			"`sender_email`"	=> "'%s'",
+			"`payment_status`"	=> "'%s'",
+			"`item_name`"		=> "'%s'",
+			"`amount`"			=> "'%s'",
+			"`currency`"		=> "'%s'",
+			"`account_id`"		=> "'%s'",
+			"`first_name`"		=> "'%s'",
+			"`last_name`"		=> "'%s'",
+			"`post_data`"		=> "'%s'",
+			"`extra_information`"=> "'INVALID TRANSACTION FROM PAYPAL'",
+		), PAYMENTTYPE_INVALID,
 		$_POST['txn_id'],
 		$_POST['payer_email'],
 		$_POST['payment_status'],
@@ -124,24 +124,24 @@ class PayPal
 		//Wrong receiver_email
 		if($_POST['receiver_email'] != $cms->config['email_paypal'])
 		{
-			$this->sql->Insert(
+			$this->LogPayment(
 			array(
-				"status"			=> "'1'",
-				"transaction_id"	=> "'%s'",
-				"sender_email"		=> "'%s'",
-				"payment_status"	=> "'%s'",
-				"item_name"			=> "'%s'",
-				"amount_gross"		=> "'%s'",
-				"amount_fee"		=> "'%s'",
-				"amount_net"		=> "'%s'",
-				"currency"			=> "'%s'",
-				"account_id"		=> "'%s'",
-				"first_name"		=> "'%s'",
-				"last_name"			=> "'%s'",
-				"post_data"			=> "'%s'",
-				"extra_information"	=> "'WRONG RECEIVER_EMAIL(%s != %s)'",
-				"details"			=> "'The payment was sent to someone else, please contact an administrator if you think this is an error'",
-			), "log_payments_paypal", false,
+				"`status`"			=> "'1'",
+				"`transaction_id`"	=> "'%s'",
+				"`sender_email`"	=> "'%s'",
+				"`payment_status`"	=> "'%s'",
+				"`item_name`"		=> "'%s'",
+				"`amount_gross`"	=> "'%s'",
+				"`amount_fee`"		=> "'%s'",
+				"`amount_net`"		=> "'%s'",
+				"`currency`"		=> "'%s'",
+				"`account_id`"		=> "'%s'",
+				"`first_name`"		=> "'%s'",
+				"`last_name`"		=> "'%s'",
+				"`post_data`"		=> "'%s'",
+				"`extra_information`"=> "'WRONG RECEIVER_EMAIL(%s != %s)'",
+				"`details`"			=> "'The payment was sent to someone else, please contact an administrator if you think this is an error'",
+			), PAYMENTTYPE_VALID,
 			$_POST['txn_id'],
 			$_POST['payer_email'],
 			$_POST['payment_status'],
@@ -161,24 +161,24 @@ class PayPal
 		//Wrong currency
 		if($_POST['mc_currency'] != "USD")
 		{
-			$this->sql->Insert(
+			$this->LogPayment(
 			array(
-				"status"			=> "'1'",
-				"transaction_id"	=> "'%s'",
-				"sender_email"		=> "'%s'",
-				"payment_status"	=> "'Failed'",
-				"item_name"			=> "'%s'",
-				"amount_gross"		=> "'%s'",
-				"amount_fee"		=> "'%s'",
-				"amount_net"		=> "'%s'",
-				"currency"			=> "'%s'",
-				"account_id"		=> "'%s'",
-				"first_name"		=> "'%s'",
-				"last_name"			=> "'%s'",
-				"post_data"			=> "'%s'",
-				"extra_information"	=> "'WRONG CURRENCY: %s'",
-				"details"			=> "'The payment currency was not in $(USD), please contact an administrator to convert the currency to $(USD)'",
-			), "log_payments_paypal", false,
+				"`status`"			=> "'1'",
+				"`transaction_id`"	=> "'%s'",
+				"`sender_email`"	=> "'%s'",
+				"`payment_status`"	=> "'Failed'",
+				"`item_name`"		=> "'%s'",
+				"`amount_gross`"	=> "'%s'",
+				"`amount_fee`"		=> "'%s'",
+				"`amount_net`"		=> "'%s'",
+				"`currency`"		=> "'%s'",
+				"`account_id`"		=> "'%s'",
+				"`first_name`"		=> "'%s'",
+				"`last_name`"		=> "'%s'",
+				"`post_data`"		=> "'%s'",
+				"`extra_information`"=> "'WRONG CURRENCY: %s'",
+				"`details`"			=> "'The payment currency was not in $(USD), please contact an administrator to convert the currency to $(USD)'",
+			), PAYMENTTYPE_VALID,
 			$_POST['txn_id'],
 			$_POST['payer_email'],
 			$_POST['item_name'],
@@ -253,12 +253,15 @@ class PayPal
 		//If it is a cancelled reversal
 		if(!$cancelled_reversal)
 		{
-			$checkrecycle = $this->sql->Query("SELECT status FROM log_payments_paypal WHERE transaction_id = '%s' AND status = '0'", $_POST['txn_id']);
-			$numrecycle = $this->sql->numRows($checkrecycle);
-			if($numrecycle > 0)
+			$query = new MMQueryBuilder();
+			$query->Select("`log_payments_paypal`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`transaction_id` = '%s' AND `status` = '0'", $_POST['txn_id'])->Build();
+			$checkrecycle = MMMySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
+			$numrecycle = $checkrecycle['numrows'];
+			
+			if((int)$numrecycle > 0)
 			{
 				//Insert log in INVALID payments
-				$this->sql->Insert(
+				$this->LogPayment(
 				array(
 					"status"				=> "'0'",
 					"transaction_id"		=> "'%s'",
@@ -273,7 +276,7 @@ class PayPal
 					"last_name"				=> "'%s'",
 					"post_data"				=> "'%s'",
 					"extra_information"		=> "'TRANSACTION RECYLCED WITH PAYMENTSTATUS COMPLETED'",
-				), "log_invalidpayments_paypal", false,
+				), PAYMENTTYPE_INVALID,
 				$txn_id,
 				$real_txn_id,
 				$_POST['payer_email'],
@@ -291,29 +294,31 @@ class PayPal
 		}
 		
 		//Delete pending payments with same transaction id
-		$this->sql->Delete("log_payments_paypal", "WHERE transaction_id = '%s' AND status = '2'", $_POST['txn_id']);
+		$query = new MMQueryBuilder();
+		$query->Delete("`log_payments_paypal`")->Where("`transaction_id` = '%s' AND `status` = '2'", $_POST['txn_id'])->Build();
+		$this->sql->query($query, DBNAME);
 		
 		//Everything is OK, Insert LOG for successful payment
 		$details = $cancelled_reversal ? "Reversal was cancelled" : "Transaction was successful";
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"				=> "'0'",
-			"transaction_id"		=> "'%s'",
-			"real_transaction_id"	=> "'%s'",
-			"sender_email"			=> "'%s'",
-			"payment_status"		=> "'%s'",
-			"item_name"				=> "'%s'",
-			"amount_gross"			=> "'%s'",
-			"amount_fee"			=> "'%s'",
-			"amount_net"			=> "'%s'",
-			"currency"				=> "'%s'",
-			"account_id"			=> "'%s'",
-			"first_name"			=> "'%s'",
-			"last_name"				=> "'%s'",
-			"post_data"				=> "'%s'",
-			"extra_information"		=> "'SUCCESSFUL PAYMENT!'",
-			"details"				=> "'$details, Points were added to your account!'",
-		), "log_payments_paypal", false,
+			"`status`"				=> "'0'",
+			"`transaction_id`"		=> "'%s'",
+			"`real_transaction_id`"	=> "'%s'",
+			"`sender_email`"		=> "'%s'",
+			"`payment_status`"		=> "'%s'",
+			"`item_name`"			=> "'%s'",
+			"`amount_gross`"		=> "'%s'",
+			"`amount_fee`"			=> "'%s'",
+			"`amount_net`"			=> "'%s'",
+			"`currency`"			=> "'%s'",
+			"`account_id`"			=> "'%s'",
+			"`first_name`"			=> "'%s'",
+			"`last_name`"			=> "'%s'",
+			"`post_data`"			=> "'%s'",
+			"`extra_information`"	=> "'SUCCESSFUL PAYMENT!'",
+			"`details`"				=> "'$details, Points were added to your account!'",
+		), PAYMENTTYPE_VALID,
 		$txn_id,
 		$real_txn_id,
 		$_POST['payer_email'],
@@ -343,25 +348,25 @@ class PayPal
 		$currency	= $_POST['mc_currency'];
 		
 		//Insert log for negative transaction with the amount in negative
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"				=> "'3'",
-			"transaction_id"		=> "'%s'",
-			"real_transaction_id"	=> "'%s'",
-			"sender_email"			=> "'%s'",
-			"payment_status"		=> "'%s'",
-			"item_name"				=> "'%s'",
-			"amount_gross"			=> "'%s'",
-			"amount_fee"			=> "'%s'",
-			"amount_net"			=> "'%s'",
-			"currency"				=> "'%s'",
-			"account_id"			=> "'%s'",
-			"first_name"			=> "'%s'",
-			"last_name"				=> "'%s'",
-			"post_data"				=> "'%s'",
-			"extra_information"		=> "'REVERSED PAYMENT!'",
-			"details"				=> "'Transaction was reversed or refunded, Points were deducted from your account!'",
-		), "log_payments_paypal", false,
+			"`status`"				=> "'3'",
+			"`transaction_id`"		=> "'%s'",
+			"`real_transaction_id"	=> "'%s'",
+			"`sender_email`"		=> "'%s'",
+			"`payment_status`"		=> "'%s'",
+			"`item_name`"			=> "'%s'",
+			"`amount_gross`"		=> "'%s'",
+			"`amount_fee`"			=> "'%s'",
+			"`amount_net`"			=> "'%s'",
+			"`currency`"			=> "'%s'",
+			"`account_id`"			=> "'%s'",
+			"`first_name`"			=> "'%s'",
+			"`last_name`"			=> "'%s'",
+			"`post_data`"			=> "'%s'",
+			"`extra_information`"	=> "'REVERSED PAYMENT!'",
+			"`details`"				=> "'Transaction was reversed or refunded, Points were deducted from your account!'",
+		), PAYMENTTYPE_VALID,
 		$_POST['parent_txn_id'],
 		$_POST['txn_id'],
 		$_POST['payer_email'],
@@ -390,24 +395,24 @@ class PayPal
 		$currency	= $_POST['mc_currency'];
 		
 		//Insert log for pending transaction
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"			=> "'2'",
-			"transaction_id"	=> "'%s'",
-			"sender_email"		=> "'%s'",
-			"payment_status"	=> "'%s'",
-			"item_name"			=> "'%s'",
-			"amount_gross"		=> "'%s'",
-			"amount_fee"		=> "'%s'",
-			"amount_net"		=> "'%s'",
-			"currency"			=> "'%s'",
-			"account_id"		=> "'%s'",
-			"first_name"		=> "'%s'",
-			"last_name"			=> "'%s'",
-			"post_data"			=> "'%s'",
-			"extra_information"	=> "'UNFINISHED PAYMENT!'",
-			"details"			=> "'Transaction is currently pending, Points will be added once the transaction is completed'",
-		), "log_payments_paypal", false,
+			"`status`"			=> "'2'",
+			"`transaction_id`"	=> "'%s'",
+			"`sender_email`"	=> "'%s'",
+			"`payment_status`"	=> "'%s'",
+			"`item_name`"		=> "'%s'",
+			"`amount_gross`"	=> "'%s'",
+			"`amount_fee`"		=> "'%s'",
+			"`amount_net`"		=> "'%s'",
+			"`currency`"		=> "'%s'",
+			"`account_id`"		=> "'%s'",
+			"`first_name`"		=> "'%s'",
+			"`last_name`"		=> "'%s'",
+			"`post_data`"		=> "'%s'",
+			"`extra_information`"=> "'UNFINISHED PAYMENT!'",
+			"`details`"			=> "'Transaction is currently pending, Points will be added once the transaction is completed'",
+		), PAYMENTTYPE_VALID,
 		$_POST['txn_id'],
 		$_POST['payer_email'],
 		$_POST['payment_status'],
@@ -432,24 +437,24 @@ class PayPal
 		$currency	= $_POST['mc_currency'];
 		
 		//Insert log for failed transaction
-		$this->sql->Insert(
+		$this->LogPayment(
 		array(
-			"status"			=> "'1'",
-			"transaction_id"	=> "'%s'",
-			"sender_email"		=> "'%s'",
-			"payment_status"	=> "'%s'",
-			"item_name"			=> "'%s'",
-			"amount_gross"		=> "'%s'",
-			"amount_fee"		=> "'%s'",
-			"amount_net"		=> "'%s'",
-			"currency"			=> "'%s'",
-			"account_id"		=> "'%s'",
-			"first_name"		=> "'%s'",
-			"last_name"			=> "'%s'",
-			"post_data"			=> "'%s'",
-			"extra_information"	=> "'FAILED PAYMENT!'",
-			"details"			=> "'Transaction Failed'",
-		), "log_payments_paypal", false,
+			"`status`"			=> "'1'",
+			"`transaction_id`"	=> "'%s'",
+			"`sender_email`"	=> "'%s'",
+			"`payment_status`"	=> "'%s'",
+			"`item_name`"		=> "'%s'",
+			"`amount_gross`"	=> "'%s'",
+			"`amount_fee`"		=> "'%s'",
+			"`amount_net`"		=> "'%s'",
+			"`currency`"		=> "'%s'",
+			"`account_id`"		=> "'%s'",
+			"`first_name`"		=> "'%s'",
+			"`last_name`"		=> "'%s'",
+			"`post_data`"		=> "'%s'",
+			"`extra_information`"=> "'FAILED PAYMENT!'",
+			"`details`"			=> "'Transaction Failed'",
+		), PAYMENTTYPE_VALID,
 		$_POST['txn_id'],
 		$_POST['payer_email'],
 		$_POST['payment_status'],
@@ -477,6 +482,27 @@ class PayPal
 			$postdata .= "[$key] = $value\r\n";
 		}
 		return $postdata;
+	}
+	
+	private function LogPayment($columns, $paymenttype)
+	{
+		$args = func_get_args();
+		array_shift($args); array_shift($args);
+		
+		if($paymenttype == PAYMENTTYPE_VALID)
+		{
+			$table = "log_payments_paypal";
+		}
+		else
+		{
+			$table = "log_invalidpayments_paypal";
+		}
+		
+		$query = new MMQueryBuilder();
+		$query->Insert("`$table`")->Columns($columns, $args)->Build();
+		$result = $this->sql->query($query, DBNAME);
+		
+		return $result;
 	}
 	
 }
