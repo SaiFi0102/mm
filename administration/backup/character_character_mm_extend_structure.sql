@@ -1,0 +1,5 @@
+CREATE TABLE `character_mm_extend` (
+`guid`  INT(15) UNSIGNED NOT NULL ,
+`donated`  INT(5) UNSIGNED NOT NULL DEFAULT 0 ,
+PRIMARY KEY (`guid`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8

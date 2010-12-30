@@ -2,4 +2,6 @@ forums/*
 .tmp_style.css*
 .project
 .buildpath
+/.settings
 /.settings/*
+administration/logs/*.txt

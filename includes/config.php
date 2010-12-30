@@ -21,7 +21,7 @@ $DATABASE_CONNECTION = array(
 );
 
 define("DBNAME", "realmd"); //Database with the website and realm tables
-$LOGON_REALMLIST = "logon.dominationwow.com"; //Realmlist to tell people to set
+$LOGON_REALMLIST = "127.0.0.1"; //Realmlist to tell people to set
 $LOGON_CRAWLERUSERNAME = "SEARCHENGINECRAWLER"; //Username of any account used for crawlers' login
 $LOGON_CRAWLERUSERPASS = "SUPERSECRETCRAWLERONLY"; //and its password
 
@@ -36,7 +36,7 @@ $REALM[1] = array(
 	'W_DB'	=> 'world1', //Database with the stored tables
 	'NAME'	=> "Funserver",
 	'CAP'	=> 200,
-	'IP'	=> '66.219.29.67',
+	'IP'	=> '127.0.0.1',
 	'PORT'	=> 8129,
 	'SOAP'	=> array(
 		'user'	=> 'RAREMOTE', //Username of account with gmlevel 4 in UPPERCASE

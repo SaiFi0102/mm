@@ -1,16 +1,17 @@
-/*
-SQLyog Community Edition- MySQL GUI v8.13 
-MySQL - 5.1.41 : Database - website
-*********************************************************************
-*/
+/*Table structure for table `account_mm_extend` */
 
-/*!40101 SET NAMES utf8 */;
+DROP TABLE IF EXISTS `account_mm_extend`;
 
-/*!40101 SET SQL_MODE=''*/;
+CREATE TABLE `account_mm_extend` (
+  `accountid` int(11) unsigned NOT NULL,
+  `donationpoints` int(50) NOT NULL DEFAULT '0',
+  `donated` int(50) NOT NULL DEFAULT '0',
+  `votepoints` int(50) NOT NULL DEFAULT '0',
+  `voted` int(50) NOT NULL DEFAULT '0',
+  `resetcode` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`accountid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*Table structure for table `configs` */
 
 DROP TABLE IF EXISTS `configs`;
@@ -21,10 +22,6 @@ CREATE TABLE `configs` (
   `type` enum('string','integer','boolean','array','float','double') NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-/*Data for the table `configs` */
-
-insert  into `configs`(`name`,`content`,`type`) values ('websitename','Test Site','string'),('userminlen','5','integer'),('usermaxlen','22','integer'),('captchapubkey','6LeXNroSAAAAAN8J5lJW4oKOdo96uTJzcyz9EK5Y','string'),('captchaprivkey','6LeXNroSAAAAAPmJG4iDmaZbHLqSOTVp5-Ro6SYQ','string'),('donationemail','saif.rehman123@live.com','string'),('websiteurl','http://115.186.113.218','string'),('metakeyw','Keywords,Keywords','string'),('metadesc','This is my server\'s description for google and other shitty search enjunz','string'),('metaextra','<!-- Google Code or Javascript or anything here -->','string');
 
 /*Table structure for table `log_donatereward_delivery` */
 
@@ -41,7 +38,47 @@ CREATE TABLE `log_donatereward_delivery` (
   `sent` tinyint(1) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-/*Data for the table `log_donatereward_delivery` */
+/*Table structure for table `log_invalidpayments_alertpay` */
+
+DROP TABLE IF EXISTS `log_invalidpayments_alertpay`;
+
+CREATE TABLE `log_invalidpayments_alertpay` (
+  `status` tinyint(1) DEFAULT NULL COMMENT '0=success, 1=failure, 2=pending, 3=reversed',
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `sender_email` varchar(255) DEFAULT NULL,
+  `payment_status` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `amount` double DEFAULT NULL,
+  `currency` varchar(255) DEFAULT NULL,
+  `account_id` int(50) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `details` text,
+  `extra_information` longtext,
+  `post_data` longtext,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+/*Table structure for table `log_invalidpayments_moneybookers` */
+
+DROP TABLE IF EXISTS `log_invalidpayments_moneybookers`;
+
+CREATE TABLE `log_invalidpayments_moneybookers` (
+  `status` tinyint(1) DEFAULT NULL COMMENT '0=success, 1=failure, 2=pending, 3=reversed',
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `sender_email` varchar(255) DEFAULT NULL,
+  `payment_status` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `amount` double DEFAULT NULL,
+  `currency` varchar(255) DEFAULT NULL,
+  `account_id` int(50) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `details` text,
+  `extra_information` longtext,
+  `post_data` longtext,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 /*Table structure for table `log_invalidpayments_paypal` */
 
@@ -65,16 +102,36 @@ CREATE TABLE `log_invalidpayments_paypal` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-/*Data for the table `log_invalidpayments_paypal` */
+/*Table structure for table `log_payments_alertpay` */
 
-/*Table structure for table `log_payments_paypal` */
+DROP TABLE IF EXISTS `log_payments_alertpay`;
 
-DROP TABLE IF EXISTS `log_payments_paypal`;
-
-CREATE TABLE `log_payments_paypal` (
+CREATE TABLE `log_payments_alertpay` (
   `status` tinyint(1) DEFAULT NULL COMMENT '0=success, 1=failure, 2=pending, 3=reversed',
   `transaction_id` varchar(255) DEFAULT NULL,
-  `real_transaction_id` varchar(255) DEFAULT NULL,
+  `sender_email` varchar(255) DEFAULT NULL,
+  `payment_status` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `amount_gross` double DEFAULT NULL,
+  `amount_net` double DEFAULT NULL,
+  `amount_fee` double DEFAULT NULL,
+  `currency` varchar(255) DEFAULT NULL,
+  `account_id` int(50) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `details` text,
+  `extra_information` longtext,
+  `post_data` longtext,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+
+/*Table structure for table `log_payments_moneybookers` */
+
+DROP TABLE IF EXISTS `log_payments_moneybookers`;
+
+CREATE TABLE `log_payments_moneybookers` (
+  `status` tinyint(1) DEFAULT NULL COMMENT '0=success, 1=failure, 2=pending, 3=reversed',
+  `transaction_id` varchar(255) DEFAULT NULL,
   `sender_email` varchar(255) DEFAULT NULL,
   `payment_status` varchar(255) DEFAULT NULL,
   `item_name` varchar(255) DEFAULT NULL,
@@ -87,9 +144,31 @@ CREATE TABLE `log_payments_paypal` (
   `extra_information` longtext,
   `post_data` longtext,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='SUM(amount WHERE(status=0)) - SUM(amount WHERE(status=3))';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
-/*Data for the table `log_payments_paypal` */
+/*Table structure for table `log_payments_paypal` */
+
+DROP TABLE IF EXISTS `log_payments_paypal`;
+
+CREATE TABLE `log_payments_paypal` (
+  `status` tinyint(1) DEFAULT NULL COMMENT '0=success, 1=failure, 2=pending, 3=reversed',
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `real_transaction_id` varchar(255) DEFAULT NULL,
+  `sender_email` varchar(255) DEFAULT NULL,
+  `payment_status` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `amount_gross` double DEFAULT NULL,
+  `amount_net` double DEFAULT NULL,
+  `amount_fee` double DEFAULT NULL,
+  `currency` varchar(255) DEFAULT NULL,
+  `account_id` int(50) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `details` text,
+  `extra_information` longtext,
+  `post_data` longtext,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='SUM(amount WHERE(status=0)) - SUM(amount WHERE(status=3))';
 
 /*Table structure for table `log_votereward_delivery` */
 
@@ -106,8 +185,6 @@ CREATE TABLE `log_votereward_delivery` (
   `sent` tinyint(1) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-/*Data for the table `log_votereward_delivery` */
-
 /*Table structure for table `log_votes` */
 
 DROP TABLE IF EXISTS `log_votes`;
@@ -118,8 +195,6 @@ CREATE TABLE `log_votes` (
   `accountid` int(15) DEFAULT NULL,
   `time` int(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-/*Data for the table `log_votes` */
 
 /*Table structure for table `news` */
 
@@ -135,8 +210,6 @@ CREATE TABLE `news` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-/*Data for the table `news` */
-
 /*Table structure for table `news_comments` */
 
 DROP TABLE IF EXISTS `news_comments`;
@@ -151,8 +224,6 @@ CREATE TABLE `news_comments` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-/*Data for the table `news_comments` */
-
 /*Table structure for table `online` */
 
 DROP TABLE IF EXISTS `online`;
@@ -164,8 +235,6 @@ CREATE TABLE `online` (
   `online` tinyint(1) NOT NULL,
   UNIQUE KEY `id` (`uid`,`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-/*Data for the table `online` */
 
 /*Table structure for table `rewards_donation` */
 
@@ -181,8 +250,6 @@ CREATE TABLE `rewards_donation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `rewards_donation` */
-
 /*Table structure for table `rewards_voting` */
 
 DROP TABLE IF EXISTS `rewards_voting`;
@@ -197,8 +264,6 @@ CREATE TABLE `rewards_voting` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `rewards_voting` */
-
 /*Table structure for table `vote_gateways` */
 
 DROP TABLE IF EXISTS `vote_gateways`;
@@ -210,9 +275,3 @@ CREATE TABLE `vote_gateways` (
   `url` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-/*Data for the table `vote_gateways` */
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
