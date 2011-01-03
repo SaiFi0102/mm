@@ -5,7 +5,7 @@ $AJAX_PAGE = true;
 
 //################ Required Files ################
 require_once("init.php");
-error_reporting(0);
+error_reporting(E_ERROR);
 
 //################ Required Data ################
 if(!isset($_POST['rid']) || empty($REALM[$_POST['rid']]))

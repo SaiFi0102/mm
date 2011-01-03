@@ -67,11 +67,11 @@ function FetchVoteLogs()
 	$query->Select("`log_votes`")->Columns("*");
 	if($USER['loggedin'])
 	{
-		$query->Where("`ip` = '%s' OR `accountid` = '%s'", $_SERVER['REMOTE_ADDR'], $USER['id']);
+		$query->Where("`ip` = '%s' OR `accountid` = '%s'", GetIp(), $USER['id']);
 	}
 	else
 	{
-		$query->Where("`ip` = '%s'", $_SERVER['REMOTE_ADDR']);
+		$query->Where("`ip` = '%s'", GetIp());
 	}
 	$query->Build();
 	$votes = MMMySQLiFetch($DB->query($query, DBNAME));
@@ -100,24 +100,24 @@ function TallyVote()
 	
 	//If already voted in last 12 hour
 	$query = new MMQueryBuilder();
-	$query->Select("`log_votes`")->Columns("`gateway`");
+	$query->Select("`log_votes`")->Columns(array("COUNT(*)"=>"numrows"));
 	if($USER['loggedin'])
 	{
-		$query->Where("(`accountid` = '%s' OR `ip` = '%s') AND `gateway` = '%s'", $USER['id'], $_SERVER['REMOTE_ADDR'], $_POST['gateway']);
+		$query->Where("(`accountid` = '%s' OR `ip` = '%s') AND `gateway` = '%s'", $USER['id'], GetIp(), $_POST['gateway']);
 	}
 	else
 	{
-		$query->Where("`ip` = '%s' AND `gateway` = '%s'", $_SERVER['REMOTE_ADDR'], $_POST['gateway']);
+		$query->Where("`ip` = '%s' AND `gateway` = '%s'", GetIp(), $_POST['gateway']);
 	}
 	$query->Build();
-	$result = $DB->query($query, DBNAME);
+	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
-	if($result->num_rows == 0)
+	if((int)$result['numrows'] == 0)
 	{
 		//Add vote to logs
 		$accountid = $USER['loggedin'] ? $USER['id'] : '0';
 		$query = new MMQueryBuilder();
-		$query->Insert("`log_votes`")->Columns(array("`gateway`"=>"'%s'", "`ip`"=>"'%s'", "`accountid`"=>"'%s'", "`time`"=>"'%s'"), $_POST['gateway'], $_SERVER['REMOTE_ADDR'], $accountid, time())->Build();
+		$query->Insert("`log_votes`")->Columns(array("`gateway`"=>"'%s'", "`ip`"=>"'%s'", "`accountid`"=>"'%s'", "`time`"=>"'%s'"), $_POST['gateway'], GetIp(), $accountid, time())->Build();
 		$DB->query($query, DBNAME);
 		
 		//Modify Vote Points
@@ -126,8 +126,6 @@ function TallyVote()
 			ModifyVotePoints($USER['id'], RPPV);
 		}
 	}
-	$result->close();
-	unset($result);
 	
 	return $gateway['url'];
 }

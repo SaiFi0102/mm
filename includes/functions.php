@@ -28,6 +28,29 @@ function ValidateEmail($data, $strict = false)
 }
 
 /**
+ * 
+ * Gets real ip address
+ * 
+ * @return string
+ */
+function GetIp()
+{
+	if(!empty($_SERVER['HTTP_CLIENT_IP'])) //check ip from share internet
+	{
+		$ip = $_SERVER['HTTP_CLIENT_IP'];
+	}
+	elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) //to check ip is pass from proxy
+	{
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+	else
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
+	return $ip;
+}
+
+/**
  * Formats the timestamp to time()'s format
  *
  * @param string $string time()'s format
@@ -214,7 +237,7 @@ function CheckUsername($username)
 	{
 		return USERNAME_ILLEGAL_CHARACTER;
 	}
-	if(preg_match("#\s#i", $username))
+	if(preg_match('#\s#i', $username))
 	{
 		return USERNAME_ILLEGAL_SPACE;
 	}
@@ -228,15 +251,13 @@ function CheckUsername($username)
 	}
 	
 	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns("`username`")->Where("`username` = '%s'", $username)->Build();
-	$result = $DB->query($query, DBNAME);
+	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`username` = '%s'", $username)->Build();
+	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
-	if($result->num_rows > 0)
+	if((int)$result['numrows'] > 0)
 	{
 		return USERNAME_EXISTS;
 	}
-	$result->close();
-	unset($result);
 	
 	return 0;
 }
@@ -266,15 +287,13 @@ function CheckEmail($email, $confirmemail=null)
 	}
 	
 	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns("`email`")->Where("`email` = '%s'", $email)->Build();
-	$result = $DB->query($query, DBNAME);
+	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`email` = '%s'", $email)->Build();
+	$result = MMMySQLiFetch($DB->query($query, DBNAME));
 	
-	if($result->num_rows > 0)
+	if((int)$result['numrows'] > 0)
 	{
 		return EMAIL_EXISTS;
 	}
-	$result->close();
-	unset($result);
 	
 	return 0;
 }
@@ -386,7 +405,7 @@ function ConvertGold($money)
  */
 function ParseGold(&$str)
 {
-	preg_match_all("#\[gold\](.+?)\[/gold\]#s", $str, $moneys);
+	preg_match_all('#\[gold\](.+?)\[/gold\]#s', $str, $moneys);
 	foreach($moneys[0] as $moneyy)
 	{
 		$money = str_replace(array("[gold]", "[/gold]"), "", $moneyy);
@@ -751,7 +770,7 @@ function RandomOnlinePlayers($rid)
 function RemoveGetRefFromLogin($url)
 {
 	$url = urldecode($url);
-	$url = preg_replace(array("#\?ref=(.+)#i", "#\&ref=(.+)#i"), "", $url);
+	$url = preg_replace(array('#\?ref=(.+)#i', '#\&ref=(.+)#i'), "", $url);
 	return $url;
 }
 
@@ -825,6 +844,40 @@ function IsAssocArray($array)
     }
     return false;
 }
+
+/**
+ * 
+ * Returns country ISO 3166-Alpha-1(2 Letter) Code
+ * From IP
+ * @param string $ip
+ * 
+ * @return mixed
+ */
+/*function GetCountryCodeByIp($ip)
+{
+	$longip = sprintf("%u", ip2long($ip));
+	if(!$longip)
+	{
+		return false; //If ip is invalid or is IPV6
+	}
+	global $DB;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`ip2country`")->Columns(array("`country_code`", "COUNT(*)"=>"numrows"))->Where("'%s' BETWEEN `begin_ip_num` AND `end_ip_num`", $longip)->Build();
+	$data = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	
+	if((int)$data['numrows'] < 1)
+	{
+		print $data['numrows'];
+		return false; //If that range of ip is not availible in our database
+	}
+	if($data['country_code'] == "EU")
+	{
+		return false; //We dont have exact country of that ip
+	}
+	
+	return $data['country_code'];
+}*/
 
 /**
  * Sends an email using SWIFTMAILER package

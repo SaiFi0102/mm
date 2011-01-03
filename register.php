@@ -31,8 +31,8 @@ function FinalRegister($username, $password, $email, $flags)
 	"`email`"		=> "'%s'",
 	"`expansion`"	=> "'%s'",
 	"`gmlevel`"		=> "'0'",
-	"`last_ip`"		=> "'{$_SERVER['REMOTE_ADDR']}'",
-	), $username, $sha_pass, $email, FixExpansionFlags($flags))
+	"`last_ip`"		=> "'%s'",
+	), $username, $sha_pass, $email, FixExpansionFlags($flags), GetIp())
 	->Build();
 	
 	//Insert into account table

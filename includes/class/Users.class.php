@@ -104,7 +104,7 @@ class Users
 		//Build Query
 		$query = new MMQueryBuilder();
 		$query->Replace("`online`")
-		->Columns(array('`uid`'=>"'%s'", '`ip`'=>"'%s'", '`lastvisit`'=>"'%s'", '`online`'=>"'1'"), $uid, $_SERVER['REMOTE_ADDR'], time())->Build();
+		->Columns(array('`uid`'=>"'%s'", '`ip`'=>"'%s'", '`lastvisit`'=>"'%s'", '`online`'=>"'1'"), $uid, GetIp(), time())->Build();
 		$result = $this->db->query($query, DBNAME);
 	}
 	

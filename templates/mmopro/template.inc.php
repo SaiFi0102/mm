@@ -17,23 +17,21 @@ $SHOWVOTEPOPUP = false;
 if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
 {
 	$query = new MMQueryBuilder();
-	$query->Select("`log_votes`")->Columns("`gateway`");
+	$query->Select("`log_votes`")->Columns(array("COUNT(*)"=>"numrows"));
 	if($USER['loggedin'])
 	{
-		$query->Where("`ip` = '%s' OR `accountid` = '%s'", $_SERVER['REMOTE_ADDR'], $USER['id']);
+		$query->Where("`ip` = '%s' OR `accountid` = '%s'", GetIp(), $USER['id']);
 	}
 	else
 	{
-		$query->Where("`ip` = '%s'", $_SERVER['REMOTE_ADDR']);
+		$query->Where("`ip` = '%s'", GetIp());
 	}
 	$query->Build();
-	$result = $DB->query($query, DBNAME);
-	if($result->num_rows == 0)
+	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	if((int)$result['numrows'] == 0)
 	{
 		$SHOWVOTEPOPUP = true;
 	}
-	$result->close();
-	unset($result);
 }
 
 //Website online users' data

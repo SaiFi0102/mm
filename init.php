@@ -6,7 +6,6 @@ ob_start("ob_gzhandler");
 
 //############### ERRORS/PHP INI #################
 error_reporting(E_ALL ^ E_NOTICE);
-//error_reporting(E_ALL);
 ini_set("log_errors", 1);
 ini_set("display_errors", 0);
 if(!$AJAX_PAGE)
@@ -75,7 +74,7 @@ require_once(DOC_ROOT."/includes/class/Realm.class.php");
 
 
 //################ Maintenance ################
-if($OFFLINE_MAINTENANCE && $USER['access'] < 4 && strpos($_SERVER['PHP_SELF'], 'login.php') === false && strpos($_SERVER['PHP_SELF'], 'payments.php') === false)
+if($OFFLINE_MAINTENANCE && $USER['access'] < 4 && !$AJAX_PAGE && strpos($_SERVER['PHP_SELF'], 'login.php') === false && strpos($_SERVER['PHP_SELF'], 'payments.php') === false)
 {
 	$cms->BannedAccess(true);
 	eval($cms->SetPageAccess(ACCESS_ALL));

@@ -118,15 +118,14 @@ class Realm
 		//If server is offline no need to go furthur
 		if($status == false)
 		{
-			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$maxonline['maxplayers']);
+			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$uptime['maxplayers']);
 		}
 		
 		//Online Players Query
 		$query = new MMQueryBuilder();
-		$query->Select("`characters`")->Columns("`guid`")->Where("`online` <> 0")->Build();
-		$result = $this->db->query($query, $this->realmconf['CH_DB']);
-		$online = $result->num_rows;
-		$result->close();
+		$query->Select("`characters`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`online` <> 0")->Build();
+		$result = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
+		$online = $result['numrows'];
 		unset($result);
 		
 		return array(
@@ -203,7 +202,7 @@ class Realm
 		}
 		else
 		{
-			$session = intval($session) + 1;
+			$session = (int)$session + 1;
 		}
 		
 		//Fetch Reward and Check for errors
@@ -355,7 +354,7 @@ class Realm
 	{
 		$date = date('D d/m/Y');
 		$time = date('G:i:s');
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = GetIp();
 		$error = $e->getMessage();
 		$errorcode = $e->getCode();
 		$file = $e->getFile();

@@ -59,7 +59,7 @@ class MMMySQLi extends mysqli
 			
 			//Variables for logging mysql error in file
 			$time = date('D d/m/Y, g:i a');
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = GetIp();
 			$error = $this->connect_error;
 			$request = $_SERVER['REQUEST_URI'];
 			
@@ -179,7 +179,7 @@ $errorstring = "|----------------------------Connection Error-------------------
 			
 		//Variables for logging mysql error in file
 		$time = date('D d/m/Y, g:i a');
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = GetIp();
 		$error = $this->error;
 		$request = $_SERVER['REQUEST_URI'];
 		
