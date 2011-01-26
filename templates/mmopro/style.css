@@ -3,6 +3,8 @@ ol,ul{margin-bottom:0}
 pre{word-wrap:break-word;margin:0}
 fieldset legend{color:#187aa3;font-size:16px;font-weight:700}
 a{color:#9bf;text-decoration:underlined}
+a:hover,ins{text-decoration:none}
+a:visited,a:active{color:#abf}
 .redirect_container{margin-top:20%}
 #con1{width:962px;text-align:left}
 #header{height:129px;display:block}
@@ -135,8 +137,6 @@ table.center{width:70%;margin-left:10%;margin-right:0}
 .pagestablebox{padding:10px}
 .pagestable td,.pagestable th{font-size:15px;font-weight:700}
 .pagestablelr,.pagestablelr a{font-size:20px;font-wight:bold;padding-top:15px;color:#007}
-a:hover,ins{text-decoration:none}
-a:visited,a:active{color:#abf}
 .sliding_text_text a:hover,#numbers a:hover{text-decoration:none;color:#fff}
 .box3,.float_left,.left{float:left}
 .float_right,.right{float:right}

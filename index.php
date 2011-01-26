@@ -4,7 +4,6 @@ $AJAX_PAGE = false;
 
 //################ Required Files ################
 require_once("init.php");
-//require_once("includes/class/Pager.class.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(true);
@@ -18,19 +17,6 @@ $page_name[] = array("News"=>"index.php");
 //################ Constants ################
 
 //################ Page Functions ################
-function FetchNews($limit = "0,5")
-{
-	global $DB;
-	
-	//Build Query
-	$query = new MMQueryBuilder();
-	$query->Select("`news`")->Columns(array('*', '(SELECT COUNT(*) FROM `news_comments` WHERE `newsid` = `news`.`id`)'=>'commentcount'))
-	->Order("`sticky` DESC, `date` DESC")->Limit("%s", null, $limit)->Build();
-	$result = $DB->query($query, DBNAME);
-	
-	$return = MMMySQLiFetch($result);
-	return $return;
-}
 function FetchNewsById($nid)
 {
 	global $DB;
@@ -68,7 +54,6 @@ if(isset($_GET['id']))
 }
 else
 {
-	$newsarr = FetchNews("0,5");
 	eval($templates->Output('news_home'));
 }
 ?>

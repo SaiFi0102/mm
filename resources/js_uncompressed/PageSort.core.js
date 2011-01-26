@@ -1,4 +1,3 @@
-var ReloadPageSortTimeOut;
 var TotalElements = 0;
 var TotalPages = 1;
 
@@ -29,10 +28,6 @@ $.fn.PageSort = function(o)
 			PagesTableNum: 3,
 			PagesTableStyle: "3ColWide", //Values: 3ColWide
 			
-			CallBeforeLoadTotal: function (){},
-			CallAfterLoadTotal: function (TotalElements, TotalPages){},
-			CallOnLoadTotalError: function (XMLHttpRequest, textStatus, errorThrown){},
-			
 			CallBeforeLoad: function (){},
 			CallAfterLoad: function (JSONData){},
 			CallOnLoadError: function (XMLHttpRequest, textStatus, errorThrown){},
@@ -45,49 +40,10 @@ $.fn.PageSort = function(o)
 		/**
 		 * ************* FUNCTIONS **************
 		 */
-		//Load Total Elements
-		function LoadTotal(callback)
-		{
-			//Call Before Loading Total
-			$(o.PagesTableContainer).hide();
-			o.CallBeforeLoadTotal();
-			
-			//Load
-			$.ajax(
-			{
-				url: o.JSONFile,
-				dataType: "html",
-				data: {data: "totalonly"},
-				type: "POST",
-				
-				success: function(total)
-				{
-					TotalElements = parseInt(total);
-					TotalPages = Math.floor(TotalElements/o.ElementsPerPage);
-					if(CurrentPage > TotalPages && TotalPages != 0)
-					{
-						CurrentPage = TotalPages;
-					}
-					o.CallAfterLoadTotal(TotalElements, TotalPages);
-					callback();
-				},
-				
-				error: function(XMLHttpRequest, textStatus, errorThrown)
-				{
-					o.CallOnLoadTotalError(XMLHttpRequest, textStatus, errorThrown);
-					o.CallOnError(XMLHttpRequest, textStatus, errorThrown);
-					PageSortError = true;
-				}
-			});
-		}
-		
 		function LoadJSONData(callback)
 		{
-			if(TotalElements < 1)
-			{
-				return;
-			}
 			//Call before loading data
+			$(o.PagesTableContainer).hide();
 			o.CallBeforeLoad();
 			
 			//Load
@@ -97,13 +53,12 @@ $.fn.PageSort = function(o)
 				dataType: "json",
 				data: {data: "JSONData", ordercolumn: o.OrderColumn, ordermethod: o.OrderMethod, limitstart: GetLimitStart(), limitrows: o.ElementsPerPage},
 				type: "POST",
-				
 				success: function(JSONData)
 				{
-					o.CallAfterLoad(JSONData);
+					SetElementVariables(JSONData.TotalElements);
+					o.CallAfterLoad(JSONData, TotalElements, TotalPages);
 					callback();
 				},
-				
 				error: function(XMLHttpRequest, textStatus, errorThrown)
 				{
 					o.CallOnLoadError(XMLHttpRequest, textStatus, errorThrown);
@@ -111,6 +66,16 @@ $.fn.PageSort = function(o)
 					PageSortError = true;
 				}
 			});
+		}
+		
+		function SetElementVariables(numelements)
+		{
+			TotalElements = parseInt(numelements);
+			TotalPages = Math.ceil(TotalElements/o.ElementsPerPage);
+			if(CurrentPage > TotalPages && TotalPages != 0)
+			{
+				CurrentPage = TotalPages;
+			}
 		}
 		
 		function GetLimitStart()
@@ -189,7 +154,7 @@ $.fn.PageSort = function(o)
 				//Last Page
 				if((CurrentPage + fi) <= TotalPages)
 				{
-					pagetablehtml += '<td>...</td><td><a class="switchpage" href="#Page:'+TotalPages+'">'+TotalPages+'</a></td>'
+					pagetablehtml += '<td>...</td><td><a class="switchpage" href="#Page:'+TotalPages+'">'+TotalPages+'</a></td>';
 				}
 				
 				pagetablehtml += '</tr></table></div>';
@@ -198,9 +163,8 @@ $.fn.PageSort = function(o)
 				pagetablehtml += '<div class="clear"></div>';
 			}
 			
-			$(o.PagesTableContainer).html(pagetablehtml).stop(true,true).fadeIn(500);
+			$(o.PagesTableContainer).html(pagetablehtml).stop(true,true).fadeIn(500, "easeOutQuad");
 			delete pagetablehtml;
-			callback();
 		}
 		
 		function BindPageSwitch()
@@ -236,17 +200,12 @@ $.fn.PageSort = function(o)
 				CurrentPage = 1;
 			}
 			
-			LoadTotal(function()
+			LoadJSONData(function()
 			{
 				if(!PageSortError)
 				{
-					LoadJSONData(function()
-					{
-						if(!PageSortError)
-						{
-							WritePagesTable(BindPageSwitch);
-						}
-					});
+					WritePagesTable();
+					BindPageSwitch();
 				}
 			});
 		}
@@ -260,4 +219,4 @@ $.fn.PageSort = function(o)
 		}
 		Load();
 	});
-}
+};

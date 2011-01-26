@@ -72,17 +72,18 @@ function FetchNews($ordercolumn, $ordermethod, $limitstart="0", $limitrows="5")
 }
 switch($_POST['data'])
 {
-	case "totalonly":
-		print GetTotalNews();
-	break;
-	
 	case "JSONData":
 		if(!isset($_POST['ordercolumn']) || !isset($_POST['ordermethod']) || !isset($_POST['limitstart']) || !isset($_POST['limitrows']))
 		{
 			exit;
 		}
+		$totalnews = GetTotalNews();
+		$totalnews = array("TotalElements"=>$totalnews);
+		
 		$fetchnews = FetchNews($_POST['ordercolumn'], $_POST['ordermethod'], $_POST['limitstart'], $_POST['limitrows']);
-		print json_encode($fetchnews);
+		$fetchnews = array("MDElements"=>$fetchnews);
+		
+		print json_encode(array_merge($totalnews, $fetchnews));
 	break;
 }
 

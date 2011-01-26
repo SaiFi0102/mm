@@ -853,7 +853,7 @@ function IsAssocArray($array)
  * 
  * @return mixed
  */
-/*function GetCountryCodeByIp($ip)
+function GetCountryCodeByIp($ip)
 {
 	$longip = sprintf("%u", ip2long($ip));
 	if(!$longip)
@@ -868,7 +868,6 @@ function IsAssocArray($array)
 	
 	if((int)$data['numrows'] < 1)
 	{
-		print $data['numrows'];
 		return false; //If that range of ip is not availible in our database
 	}
 	if($data['country_code'] == "EU")
@@ -877,7 +876,7 @@ function IsAssocArray($array)
 	}
 	
 	return $data['country_code'];
-}*/
+}
 
 /**
  * Sends an email using SWIFTMAILER package

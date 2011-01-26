@@ -165,7 +165,7 @@ class Realm
 		}
 		catch(Exception $e) //Don't give fatal error if there is a problem
 		{
-			$this->_LogSoapError($e);
+			$this->_LogSoapError($e, $command);
 			return array('sent'=>false, 'message'=>$e->getMessage());
 		}
 		return array('sent'=>true, 'message'=>$result);
@@ -181,7 +181,7 @@ class Realm
 	 */
 	public function SendReward($rewardid, $characterid, $votedonate)
 	{
-		global $USER;
+		global $USER, $cms;
 		
 		//If $votedonate is incorrect
 		if($votedonate != REWARD_VOTE && $votedonate != REWARD_DONATE)
@@ -226,7 +226,7 @@ class Realm
 		//Fetch Character and check if it exists
 		$query = new MMQueryBuilder();
 		$query->Select("`characters`")->Columns("`name`")->Where("`guid` = '%s' AND `account` = '%s'", $characterid, $USER['id'])->Build();
-		$character = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		$character = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
 		
 		if(!count($character))
 		{
@@ -290,7 +290,7 @@ class Realm
 			$command .= $character['name']; //Character Name
 			$command .= " \"Thank you!\""; //Subject
 			$command .= " \"Dear ". FirstCharUpper($character['name']) .",\r\n\r\nThank you for supporting our server. We hope you enjoy your play!\r\n\r\nRegards,\r\n{$cms->config['websitename']} Staff\""; //Body
-			$command .= $reward['gold'];
+			$command .= " " . $reward['gold'];
 			
 			//Now connect to SOAP and send the gold
 			$result = $this->ExecuteSoapCommand($command);
@@ -350,7 +350,7 @@ class Realm
 	 * Logs soap error with variable $e class Exception into file soaperror.log in adminstration/logs
 	 * @param Exception $e
 	 */
-	private function _LogSoapError($e)
+	private function _LogSoapError($e, $command)
 	{
 		$date = date('D d/m/Y');
 		$time = date('G:i:s');
@@ -364,6 +364,7 @@ $errorstring = "\r\n
 |----------------------------SOAP Command Error-----------------------------------
 |Date: $date, Time: $time, From: $ip
 |Where: $file(Line: $line) Error Code: $errorcode
+|Command: $command
 |Error: $error
 |----------------------------SOAP Command Error-----------------------------------";
 		
