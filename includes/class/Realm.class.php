@@ -99,17 +99,21 @@ class Realm
 		
 		//Uptime Query
 		$query = new MMQueryBuilder();
-		$query->Select("`uptime`")->Columns(array("`starttime`", "MAX(`maxplayers`)"=>"maxplayers"))
-		->Where("`realmid` = '%s'", $this->rid)->Order("`starttime` DESC")->Limit("1")->Build();
+		$query->Select("`uptime`")->Columns("`starttime`")->Where("`realmid` = '%s'", $this->rid)
+		->Order("`starttime` DESC")->Limit("1")->Build();
 		$uptime = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		
+		$query = new MMQueryBuilder();
+		$query->Select("`uptime`")->Columns(array("MAX(`maxplayers`)"=>"maxplayers"))->Where("`realmid` = '%s'", $this->rid)->Build();
+		$maxonline = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		if($uptime['starttime'] == null)
 		{
 			$uptime['starttime'] = time();
 		}
-		if($uptime['maxplayers'] == null)
+		if($maxonline['maxplayers'] == null)
 		{
-			$uptime['maxplayers'] = 0;
+			$maxonline['maxplayers'] = 0;
 		}
 		
 		//Uptime String
@@ -118,7 +122,7 @@ class Realm
 		//If server is offline no need to go furthur
 		if($status == false)
 		{
-			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$uptime['maxplayers']);
+			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$maxonline['maxplayers']);
 		}
 		
 		//Online Players Query
@@ -132,7 +136,7 @@ class Realm
 			"status" => true,
 			"online" => $online,
 			"uptime" => $struptime,
-			"maxplayers" => $uptime['maxplayers'],
+			"maxplayers" => $maxonline['maxplayers'],
 		);
 	}
 	
