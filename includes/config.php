@@ -72,7 +72,7 @@ $email['smtp']['password'] = ''; //Leave empty if using anonymous
 $email['smtp']['encrypted'] = false;
 
 //OTHER CONFIGS
-$usetemplate = "mmopro";
+$usetemplate = "wow";
 
 $COOKIECONF = array(
 	'cookiepath' => '',
@@ -86,8 +86,6 @@ $USERTIMEOUT = 5;
  * ***************** Core Configurations *******************
  * *********************************************************
  */
-$configfile['fullpath'] = "";
-$configfile['language'] = "english"; // Language must be lowercase, To see a list of languages check /languages directory
 $DEBUG = true; //Shows Debug messages on the footer
 $OFFLINE_MAINTENANCE = false;
 define("IPN_ALERTPAY_SECURITY_CODE", "oDOIxWomBxyxaEnQ");

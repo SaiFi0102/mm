@@ -113,7 +113,7 @@ $.fn.PageSort = function(o)
 					pagetablehtml += '<div class="right"><div class="pagestablelr"><a class="switchpage" href="#Page:'+(CurrentPage+1)+'">Next</a></div></div>';
 				}
 				
-				pagetablehtml += '<div align="center"><table cellpadding="2px" cellspacing="0" border="1px" class="pagestable"><tr>';
+				pagetablehtml += '<div align="center"><table class="pagestable"><tr>';
 				
 				//First Page
 				if(CurrentPage > (o.PagesTableNum+1))

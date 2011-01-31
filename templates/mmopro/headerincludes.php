@@ -18,7 +18,6 @@
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/core.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/ajax.core.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.cycle.all.min.js"></script>
-<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.easing.1.1.1.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/jquery.lightbox-0.5.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/tooltip.core.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/PageSort.core.js"></script>
