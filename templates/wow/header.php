@@ -8,17 +8,16 @@ if($SHOWVOTEPOPUP)eval($templates->Output("vote_popup", false, false, false, tru
 <div id="banner">
 <div id="banner-top"></div>
 <div id="banner-mid">
-<div id="banner-right"></div>
 <div id="accountbox">
 
 <?php if($USER['loggedin']) { ?>
 <h3>Hi <?php print FirstCharUpperThenLower($USER['username']); ?>,</h3><br />
 <div id="content">
-	You are ....,<br />
-	...<br />
-	.......<br />
-	.....<br />
-	.....................
+	<?php if($USER['last_login'] == "0000-00-00 00:00:00") print "You've never logged in before in game.<br />Please check the <a href='howtoconnect.php'>Connection Guide here</a> to help you start!";
+	else print "Your account was most recently logged in from game on,<br />" . ConvertMysqlTimestamp($USER['last_login']) . " from the IP, " . $USER['last_ip']; ?>.<br />
+	Below are some useful links you might find useful,<br /><br />
+	<a href="account.php">Account Manager</a>, <a href="characters.php">Character List</a>,<br />
+	<a href="logout.php" rel="nofollow">Logout</a>.
 </div>
 <?php } else { ?>
 <h3>Login</h3><br />

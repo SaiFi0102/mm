@@ -1,12 +1,12 @@
 </div>
 <?php if($DEBUG && $USER['access'] >= 4) { ?>
-<div class="main">
+<div class="clear"><div class="main">
 <div class="main_title">SQL Queries</div>
 <div class="content">
 	<h3>$DB</h3>
 	<?php _print_r($DB->ArrQuery); ?>
 </div>
-</div>
+</div></div>
 <?php } ?>
 
 </div>

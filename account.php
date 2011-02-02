@@ -34,7 +34,7 @@ function UpdateAccount($changeflags, $changepassword)
 	}
 	if($changepassword)
 	{
-		$query->AddColumns(array("`sha_pass_hash`"=>"'%s'"), $newpass);
+		$query->AddColumns(array("`sha_pass_hash`"=>"'%s'", "`sessionkey`"=>"''", "`v`"=>"''", "`s`"=>"''"), $newpass);
 	}
 	$query->Build();
 	

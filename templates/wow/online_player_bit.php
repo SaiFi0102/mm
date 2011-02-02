@@ -23,22 +23,3 @@
 <tr id="CHAR_DETAILS_<?php print $_cdata['guid']; ?>" style="display:none;">
 	<td colspan="5"></td>
 </tr>
-
-<script type="text/javascript">
-$("#CHAR_ONLINE_<?php print $_cdata['guid']; ?>").click(function(){
-	char_ajax = $.ajax({
-		url: "includes/ajax/character_details.php",
-		success: function(msg){
-			$("#CHAR_DETAILS_<?php print $_cdata['guid']; ?> td").html(msg);
-			$("#CHAR_DETAILS_<?php print $_cdata['guid']; ?>").hide().fadeIn(500);
-		},
-		beforeSend: function(){
-			$("#CHAR_ONLINE_<?php print $_cdata['guid']; ?>").hide();
-			$("#CHAR_DETAILS_<?php print $_cdata['guid']; ?> td").html('<img src="<?php print $cms->config['websiteurl']; ?>/images/loading-small.gif" height="16" width="16" alt="Loading" />');
-			$("#CHAR_DETAILS_<?php print $_cdata['guid']; ?>").show();
-		},
-		data: {cid: '<?php print $_cdata['guid']; ?>', rid: '<?php print $_GET['rid']; ?>'},
-		type: "POST"
-	});
-});
-</script>

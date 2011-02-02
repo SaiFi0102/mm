@@ -160,6 +160,7 @@ width:335px;
 }
 #banner #accountbox {
 padding:30px 0 0 5%;
+text-shadow: 2px 1px #000000;
 float:left;
 }
 #banner #accountbox #content {
@@ -233,6 +234,7 @@ float:right;
 width:30%;
 }
 .leftside {
+float:left;
 width:65%;
 }
 .redirect_container {
