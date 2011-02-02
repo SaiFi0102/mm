@@ -6,12 +6,6 @@ if(!defined("INCLUDED"))
 	exit();
 }
 
-//Sliding area data
-$MMOPRO_SLIDER = array();
-$query = new MMQueryBuilder();
-$query->Select("`mmopro_slidingarea`")->Columns("*")->Order("`order` ASC")->Build();
-$MMOPRO_SLIDER = MMMySQLiFetch($DB->query($query, DBNAME));
-
 //Vote popup data
 $SHOWVOTEPOPUP = false;
 if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SELF'], "login.php") === false && strpos($_SERVER['PHP_SELF'], "register.php") === false && strpos($_SERVER['PHP_SELF'], "dominate.php") === false && strpos($_SERVER['PHP_SELF'], "logout.php") === false)
