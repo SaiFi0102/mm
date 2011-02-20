@@ -9,8 +9,6 @@ require_once("init.php");
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Payments");
 

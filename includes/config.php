@@ -35,6 +35,7 @@ $REALM[1] = array(
 	'CH_DB'	=> 'character1', //Database with the stored tables
 	'W_DB'	=> 'world1', //Database with the stored tables
 	'NAME'	=> "Funserver",
+	'COLOR'	=> "#5588ff",
 	'CAP'	=> 200,
 	'IP'	=> '127.0.0.1',
 	'PORT'	=> 8085,

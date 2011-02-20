@@ -63,23 +63,18 @@ class Templates
 		{
 			exit("<table width=100% height=100%><tr><td valign=middle align=center><h1 style='color: #ababab;'>No template name is given on this page.</h1><a href='javascript:history.go(-1)'>Click here to go back.</a></td></tr></table>");
 		}
+		
 		//variables
-		$tpath = "templates/$this->theme/$templatename.php"; //Template file
+		$tpath = "templates/{$this->theme}/$templatename.php"; //Template file
 		$error = "<table width=100% height=100%><tr><td valign=middle align=center><h1 style='color: #ababab;'>The template '$templatename' does not exist.</h1><a href='javascript:history.go(-1)'>Click here to go back.</a></td></tr></table>"; //Error Message when template file is not found
+		if($GLOBALS['AJAX_PAGE'])
+		{
+			$tpath = "../../" . $tpath; //Ajax and Json files are in /includes/ajax|json
+		}
 		
 		if(!file_exists($tpath))
 		{
-			if($GLOBALS['AJAX_PAGE'] == true)
-			{
-				if(!file_exists("../../".$tpath))
-				{
-					exit($error);
-				}
-			}
-			else
-			{
-				exit($error);
-			}
+			exit($error);
 		}
 		return $tpath;
 	}
@@ -98,28 +93,15 @@ class Templates
 	public function Output($templatename, $showheader = true, $showfooter = true, $showheadinclude = true, $intemplate = false)
 	{
 		global $cms, $page_name;
-		$error = "<table width=100% height=100%><tr><td valign=middle align=center><h1 style='color: #ababab;'>The theme '$this->theme' does not exist.</h1><a href='javascript:history.go(-1)'>Click here to go back.</a></td></tr></table>"; //Error Message when template file is not found
 		$return = null;
 		
-		//Check if theme exists
-		if(file_exists("templates/{$this->theme}/template.inc.php"))
+		//Templates basic include file
+		if(!$GLOBALS['AJAX_PAGE'])
 		{
-			if(!$GLOBALS['AJAX_PAGE'])
-			{
-				$return .= 'include_once("templates/'.$this->theme.'/template.inc.php");';
-			}
-		}
-		else
-		{
-			exit($error);
+			$return .= 'include_once("templates/'.$this->theme.'/template.inc.php");';
 		}
 		
-		//Varaibles
-		$config = $cms->config;
-		$access = $cms->CheckAccess();
-		$dontfetch = false;
-		
-		if(!$access && !$intemplate)
+		if(!$cms->CheckAccess() && !$intemplate)
 		{
 			if($templatename != 'redirect')
 			{
@@ -134,6 +116,7 @@ $REDIRECT_INTERVAL = 2000;
 $REDIRECT_TYPE = "notice";
 eval($templates->Redirect());
 exit();';
+					return $return;
 					$dontfetch = true;
 				}
 				else
@@ -165,7 +148,7 @@ exit();';
 					{
 						if(!$name)
 						{
-							//In case there is no url key($name) will be 0 and value($url) will be the name
+							//In case there is no url key($name) will be numeric and value($url) will be the name
 							$pagetitle .= $url . " &#187; ";
 							$htmltitle .= $url . " &#187; ";
 							$metakeywords .= ",".$url;
@@ -190,8 +173,7 @@ $META_KEYWORDS = "'.$metakeywords.'";
 $META_DESCRIPTION = $cms->config["metadesc"];
 $META_EXTRA = $cms->config["metaextra"];';
 			
-			$pageendtime = microtime(true);
-			$totaltime = $pageendtime - START_TIME;
+			$totaltime = microtime(true) - START_TIME;
 			$totaltime = round($totaltime, 4);
 			$return .= '$executiontime = '.$totaltime.' . " Seconds";';
 		}

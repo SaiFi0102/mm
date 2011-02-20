@@ -260,6 +260,18 @@ width:379px;
 z-index:-1;
 }
 
+/*Server Status*/
+.serverstatus th {
+padding:6px;
+text-shadow:#000000 2px 2px 2px;
+font-size:15px;
+}
+.serverstatus td {
+text-align:center;
+font-size:13px;
+color:#eeeeff;
+}
+
 /*All Themes must have content below*/
 /*Character Box*/
 .characters {

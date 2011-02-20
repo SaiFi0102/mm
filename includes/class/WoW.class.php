@@ -1,17 +1,5 @@
 <?php
 
-/**
- * 
- * This class contains ACCOUNT MANAGER's basic
- * variables of game client
- * 
- * @author Saif
- * @copyright © Lich King's Fury
- * @version 1.2
- * @clientversion 3.1.0
- * 
- */
-
 // here go definitions as borrowed from Acent emu code
 define('SKILL_DEFENSE',95);
 

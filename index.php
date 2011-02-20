@@ -9,14 +9,30 @@ require_once("init.php");
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("News"=>"index.php");
 
-//################ Constants ################
-
 //################ Page Functions ################
+function FetchNews($start=0, $limit=5)
+{
+	global $DB;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`news`")->Columns("*")->Order("`sticky` DESC, `date` DESC")->Limit($start, $limit)->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	
+	return $return;
+}
+function FetchTotalNews()
+{
+	global $DB;
+	
+	$query = new MMQueryBuilder();
+	$query->Select("`news`")->Columns(array("COUNT(*)"=>"numrows"))->Build();
+	$return = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	
+	return $return['numrows'];
+}
 function FetchNewsById($nid)
 {
 	global $DB;
@@ -54,6 +70,8 @@ if(isset($_GET['id']))
 }
 else
 {
+	$news = FetchNews();
+	$numnews = FetchTotalNews();
 	eval($templates->Output('news_home'));
 }
 ?>

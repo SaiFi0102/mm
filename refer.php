@@ -10,12 +10,8 @@ require_once("init.php");
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_REGISTERED));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Referrals"=>"refer.php");
-
-//################ Constants ################
 
 //################ Page Functions ################
 function GetRefferedPlayersString()
@@ -34,7 +30,6 @@ function GetRefferedPlayersString()
 	return $return;
 }
 
-//################ Template's Output ################
 $referredbyme = GetRefferedPlayersString();
 eval($templates->Output("refer"));
 ?>

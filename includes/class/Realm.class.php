@@ -96,13 +96,14 @@ class Realm
 	function CheckRealmStatusAndOnlinePlayers()
 	{
 		$status = pfsockopen($this->realmconf['IP'], $this->realmconf['PORT'], $errno, $errstr, 5);
-		
+		$startimee = microtime(1);
 		//Uptime Query
 		$query = new MMQueryBuilder();
 		$query->Select("`uptime`")->Columns("`starttime`")->Where("`realmid` = '%s'", $this->rid)
 		->Order("`starttime` DESC")->Limit("1")->Build();
 		$uptime = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
+		//Max Online Players Query
 		$query = new MMQueryBuilder();
 		$query->Select("`uptime`")->Columns(array("MAX(`maxplayers`)"=>"maxplayers"))->Where("`realmid` = '%s'", $this->rid)->Build();
 		$maxonline = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
@@ -122,21 +123,31 @@ class Realm
 		//If server is offline no need to go furthur
 		if($status == false)
 		{
-			return array("status"=>false, "online"=>0, "uptime"=>"Offline", "maxplayers"=>$maxonline['maxplayers']);
+			return array(
+				"status"	=> false,
+				"online"	=> 0,
+				"horde"		=> 0,
+				"alliance"	=> 0,
+				"uptime"	=> "Offline",
+				"maxplayers"=> $maxonline['maxplayers']
+			);
 		}
 		
 		//Online Players Query
 		$query = new MMQueryBuilder();
-		$query->Select("`characters`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`online` <> 0")->Build();
+		$query->Select("`characters`")->Where("`online` <> 0")
+		->Columns(array("COUNT(*)"=>"numrows", "(SELECT COUNT(*) FROM `characters` WHERE `online` <> 0 AND (`race`='1' OR `race`='3' OR `race`='4' OR `race`='7' OR `race`='11'))"=>"numalliance", "(SELECT COUNT(*) FROM `characters` WHERE `online` <> 0 AND (`race`='2' OR `race`='5' OR `race`='6' OR `race`='8' OR `race`='10'))"=>"numhorde"))
+		->Build();
+		
 		$result = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
-		$online = $result['numrows'];
-		unset($result);
 		
 		return array(
-			"status" => true,
-			"online" => $online,
-			"uptime" => $struptime,
-			"maxplayers" => $maxonline['maxplayers'],
+			"status"	=> true,
+			"online"	=> $result['numrows'],
+			"horde"		=> $result['numhorde'],
+			"alliance"	=> $result['numalliance'],
+			"uptime"	=> $struptime,
+			"maxplayers"=> $maxonline['maxplayers'],
 		);
 	}
 	

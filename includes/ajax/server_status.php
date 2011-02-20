@@ -8,7 +8,7 @@ require_once("init.php");
 error_reporting(E_ERROR);
 
 //################ Required Data ################
-if(!isset($_POST['rid']) || empty($REALM[$_POST['rid']]))
+if(!isset($_POST['sure']))
 {
 	exit("Error: Please report an administrator!");
 }
@@ -18,10 +18,14 @@ $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ Page Functions ################
-$rclass = new Realm($_POST['rid']);
-$status = $rclass->CheckRealmStatusAndOnlinePlayers();
+$status = array();
+foreach($REALM as $rid => $rdata)
+{
+	$rclass = new Realm($rid);
+	$status[$rid] = $rclass->CheckRealmStatusAndOnlinePlayers();
+	unset($rclass);
+}
 
-//################ Template's Output ################
 $print = json_encode($status);
 print $print;
 ?>

@@ -9,15 +9,9 @@ require_once("init.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_NONE));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("SOAP Remote Console"=>"soapconsole.php");
 
-//################ Constants ################
-
 //################ Page Functions ################
-
-//################ Template's Output ################
 eval($templates->Output("soapconsole"));
 ?>

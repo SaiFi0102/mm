@@ -316,7 +316,7 @@ class AlertPay
 			"`post_data`"		=> "'%s'",
 			"`extra_information`"=> "'SUCCESSFUL PAYMENT!'",
 			"`details`"			=> "'$details, Points were added to your account!'",
-		), PAYMENTTYPE_INVALID,
+		), PAYMENTTYPE_VALID,
 		$transactionReferenceNumber,
 		$customerEmailAddress,
 		$transactionStatus,

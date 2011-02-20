@@ -9,12 +9,9 @@ require_once("init.php");
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_REGISTERED));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Account Management"=>"account.php");
 
-//################ Constants ################
 //################ Page Functions ################
 function UpdateAccount($changeflags, $changepassword)
 {
@@ -104,7 +101,6 @@ if(isset($_POST['submit']))
 	}
 }
 
-//################ Template's Output ################
 eval(($templates->Output('account_form')));
 
 ?>

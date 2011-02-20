@@ -9,13 +9,9 @@ require_once("init.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
-//################ Resources ################ 
-WoW::getZonesArray();
-
 //################ General Variables ################
 $page_name[] = array("Online Players"=>"online.php");
-
-//################ Constants ################
+WoW::getZonesArray();
 
 //################ Page Functions ################
 function FetchOnlinePlayers()
@@ -29,7 +25,6 @@ function FetchOnlinePlayers()
 	return $return;
 }
 
-//################ Template's Output ################
 if(empty($_GET['rid']) || empty($REALM[$_GET['rid']]))
 {
 	$page_name[] = array("Select Realm");

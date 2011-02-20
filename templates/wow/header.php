@@ -73,48 +73,33 @@ Remember Me?
 <div class="main_title">Realm Status</div>
 <div class="content">
 
-<table width="100%">
+<table width="100%" class="serverstatus">
 <?php foreach($REALM as $rid => $rdata)
 {?>
 	<tr>
-		<th colspan="2"><?php print $rdata['NAME']; ?>'s Status</th>
+		<th style="color:<?php print $rdata['COLOR']; ?>;">
+			<?php print $rdata['NAME']; ?>
+			<a href="online.php?rid=<?php print $rid; ?>" id="status_state_<?php print $rid; ?>">
+				<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' id="status_loadingicon_<?php print $rid; ?>" />
+				<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/uparrow.gif' alt='Server is up!' height='18' width='19' id="status_uparrow_<?php print $rid; ?>" style="display:none;" />
+				<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/downarrow.gif' alt='Server is down but it will be back up soon :)' height='18' width='19' id="status_downarrow_<?php print $rid; ?>" style="display:none;" />
+			</a>
+		</th>
 	</tr>
 	<tr>
-		<td>State:</td>
-		<td><div id="server_status_state_<?php print $rid; ?>"><img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading' height='16' width='16' /></div></td>
+		<td>
+			<a href="online.php?rid=<?php print $rid; ?>" id="status_loader_<?php print $rid; ?>">
+				<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' />
+			</a>
+			<div id="status_content_<?php print $rid; ?>" style="display:none;">
+				<span id="status_online_<?php print $rid; ?>"></span> Online Players(Maximum Online: <span id="status_maxonline_<?php print $rid; ?>"></span>).<br />
+				<span style="color:#6666FF;"><span id="status_alliance_<?php print $rid; ?>"></span> Alliance</span> &amp; <span style="color:#FF6666;"><span id="status_horde_<?php print $rid; ?>"></span> Horde</span>.<br />
+				Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
+			</div>
+		</td>
 	</tr>
-	<tr>
-		<td>Online Players:</td>
-		<td><div id="server_status_online_<?php print $rid; ?>"><img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading' height='16' width='16' /></div></td>
-	</tr>
-	<tr>
-		<td>Uptime:</td>
-		<td><div id="server_status_uptime_<?php print $rid; ?>"><img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading' height='16' width='16' /></div></td>
-	</tr>
-<script type="text/javascript">
-function LoadStatus_<?php print $rid; ?>()
-{
-	$.ajax({
-		url: "includes/ajax/server_status.php",dataType: "json",data: {rid: '<?php print $rid; ?>'},type: "POST",
-		success: function(msg){
-			$("#server_status_state_<?php print $rid; ?>").hide();$("#server_status_online_<?php print $rid; ?>").hide();$("#server_status_uptime_<?php print $rid; ?>").hide();
-			if(msg['status']){
-				$("#server_status_state_<?php print $rid; ?>").html("<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/uparrow.gif' alt='Online' height='19' width='18' />");
-			}
-			else{
-				$("#server_status_state_<?php print $rid; ?>").html("<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/downarrow.gif' alt='Offline' height='19' width='18' />");
-			}
-			$("#server_status_state_<?php print $rid; ?>").fadeIn(750);$("#server_status_online_<?php print $rid; ?>").html("<a href='online.php?rid=<?php print $rid; ?>'>" + msg['online']+" (Maximum Online "+msg['maxplayers']+")</a>").fadeIn(750);$("#server_status_uptime_<?php print $rid; ?>").html(msg['uptime']).fadeIn(750);
-		},
-		error: function(){$("#server_status_state_<?php print $rid; ?>, #server_status_online_<?php print $rid; ?>, #server_status_uptime_<?php print $rid; ?>").html("Error Loading");}
-	});
-	setTimeout("LoadStatus_<?php print $rid; ?>()", 120000);
-}
-$(document).ready(function(){
-	LoadStatus_<?php print $rid; ?>();
-});
-</script>
-<?php } ?>
+<?php
+}?>
 	<tr>
 		<th colspan="2" align="center">set realmlist <?php print $LOGON_REALMLIST; ?></th>
 	</tr>

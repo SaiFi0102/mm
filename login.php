@@ -9,12 +9,8 @@ require_once("init.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_UNREGISTERED));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Login"=>"login.php");
-
-//################ Constants ################
 
 //################ Page Functions ################
 function LogIn($user, $pass, $lifetime)
@@ -30,7 +26,6 @@ function LogIn($user, $pass, $lifetime)
 	}
 }
 
-//################ Template's Output ################
 if(isset($_POST['submit']))
 {
 	//From page

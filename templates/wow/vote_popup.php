@@ -24,7 +24,6 @@ if(count($ppgateways)){
 	</div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){$("#votepopup_modal").show();$("#votepopup_popup").fadeIn(500);});
-$(".votepopup_close").click(function(){$("#votepopup_modal").hide();$("#votepopup_popup").hide(500);});
+$(document).ready(function(){$("#votepopup_modal").show();$("#votepopup_popup").fadeIn(500);});$(".votepopup_close").click(function(){$("#votepopup_modal").hide();$("#votepopup_popup").animate({top:'-200px', opacity: '0'}, 500, "easeInCubic", function(){$(this).hide();});});
 </script>
 <?php }?>

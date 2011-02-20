@@ -9,22 +9,15 @@ require_once("init.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_REGISTERED));
 
-//################ Resources ################ 
+//################ General Variables ################
+$page_name[] = array("My Characters"=>"characters.php");
 WoW::getZonesArray();
 foreach($REALM as $rid => $rdata)
 {
 	$rclass[$rid] = new Realm($rid);
 }
 
-//################ General Variables ################
-$page_name[] = array("My Characters"=>"characters.php");
-
-//################ Constants ################
-
 //################ Page Functions ################
-
-
-//################ Template's Output ################
 foreach($REALM as $rid => $rdata)
 {
 	$cdata[$rid] = $rclass[$rid]->FetchCharactersByAccountID("", $USER['id']);

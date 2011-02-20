@@ -9,18 +9,11 @@ require_once("init.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_REGISTERED));
 
-//################ Resources ################ 
-WoW::getZonesArray();
-
 //################ General Variables ################
 $page_name[] = array("Character"=>"character.php");
-
-//################ Constants ################
+WoW::getZonesArray();
 
 //################ Page Functions ################
-
-
-//################ Template's Output ################
 if(empty($_GET['cid']) || empty($_GET['rid']) || empty($REALM[$_GET['rid']]))
 {
 	//Redirect to characters list

@@ -7,21 +7,14 @@ require_once("init.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(false);
-eval($cms->SetPageAccess(ACCESS_REGISTERED));
+eval($cms->SetPageAccess(ACCESS_ALL));
 
 //################ General Variables ################
-$page_name[] = array("QuadroPop"=>$_SERVER['REQUEST_URI']);
-$template = "quadropop"; //The template to use for the page. Dont include .tpl inside quotes.
+$page_name[] = array("Page Name"=>"default.php");
+$template = "template"; //The template to use for the page. Dont include .tpl inside quotes.
+
+//################ Constants ################
 
 //################ Page Functions ################
-if(!empty($_GET['gameid']))
-{
-	
-}
-else
-{
-	$template = "quadropop_wgi";
-}
-
 eval($templates->Output($template));
 ?>

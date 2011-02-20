@@ -16,11 +16,9 @@ else
 	eval($cms->SetPageAccess(ACCESS_REGISTERED));
 }
 
-//################ Resources ################
-WoW::getZonesArray();
-
 //################ General Variables ################
 $page_name[] = array("Vote"=>"vote.php");
+WoW::getZonesArray();
 
 //################ Constants ################
 define("RPPV", $cms->config['rppv']);

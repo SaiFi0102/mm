@@ -37,6 +37,12 @@ class MMMySQLi extends mysqli
 	public $NumQueries = 0;
 	
 	/**
+	 * Total time taken to execute all queries
+	 * @var float
+	 */
+	public $QueriesExecutionTime = 0.0;
+	
+	/**
 	 * 
 	 * Connects to MySQL using MySQLi and checks if any error exists in connection
 	 * @param string $host
@@ -105,6 +111,7 @@ $errorstring = "|----------------------------Connection Error-------------------
 	public function query($query, $database = null)
 	{
 		//Variables
+		$qstarttime = microtime(1);
 		$args = func_get_args(); array_shift($args); array_shift($args); //Get array of extra arguments only
 		$vargs = array();
 		$resultmode = MYSQLI_STORE_RESULT;
@@ -163,6 +170,7 @@ $errorstring = "|----------------------------Connection Error-------------------
 		$this->ArrQuery[] = $query;
 		$this->LastQuery = $query;
 		$this->NumQueries++;
+		$this->QueriesExecutionTime += (microtime(1)-$qstarttime);
 		
 		return $result;
 	}
@@ -276,6 +284,7 @@ function MMMySQLiFetch($mysqli_result)
 	return $array;
 }
 
+$totalbuildtime = 0.0;
 class MMQueryBuilder
 {
 	//Variables
@@ -472,6 +481,8 @@ class MMQueryBuilder
 	//Build
 	public function Build()
 	{
+		global $totalbuildtime;
+		$bstarttime = microtime(1);
 		//Query Type was not set
 		if($this->MMQryType == MMQryType_Unset)
 		{
@@ -622,6 +633,7 @@ class MMQueryBuilder
 		
 		//Update QueryString
 		$this->QueryString = $query;
+		$totalbuildtime += (microtime(1)-$bstarttime);
 		return $this->QueryString;
 	}
 }

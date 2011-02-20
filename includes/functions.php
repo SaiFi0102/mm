@@ -41,7 +41,8 @@ function GetIp()
 	}
 	elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) //to check ip is pass from proxy
 	{
-		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		$ip = explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']);
+		$ip = $ip[0];
 	}
 	else
 	{

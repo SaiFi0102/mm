@@ -1,8 +1,7 @@
 <?php
-//################ Page Start Time ################
+//################ Page Start Variables ################
 define("START_MEMORY", memory_get_usage());
 define("START_TIME", microtime(true));
-ob_start("ob_gzhandler");
 
 //############### ERRORS/PHP INI #################
 error_reporting(E_ALL ^ E_NOTICE);
@@ -25,7 +24,6 @@ if(!defined("INCLUDED"))
 }
 
 //################ Constants ################
-define("TIMENOW", time());
 define("DOC_ROOT", dirname(__FILE__));
 
 //################ Variables ################
@@ -69,9 +67,6 @@ require_once(DOC_ROOT."/includes/class/Templates.class.php");
 $templates = new Templates($usetemplate);
 require_once(DOC_ROOT."/includes/class/WoW.class.php");
 require_once(DOC_ROOT."/includes/class/Realm.class.php");
-
-//################ Functions ################
-
 
 //################ Maintenance ################
 if($OFFLINE_MAINTENANCE && $USER['access'] < 4 && !$AJAX_PAGE && strpos($_SERVER['PHP_SELF'], 'login.php') === false && strpos($_SERVER['PHP_SELF'], 'payments.php') === false)

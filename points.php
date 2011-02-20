@@ -16,13 +16,9 @@ else
 	eval($cms->SetPageAccess(ACCESS_REGISTERED));
 }
 
-//################ Resources ################ 
-WoW::getZonesArray();
-
 //################ General Variables ################
 $page_name[] = array($cms->config['websitename']." Points"=>"points.php");
-
-//################ Constants ################
+WoW::getZonesArray();
 
 //################ Page Functions ################
 function FetchTransactionsPayPal($uid)
@@ -66,7 +62,6 @@ function FetchDonationRewards($rid)
 	return $return;
 }
 
-//################ Template's Output ################
 $action = $_GET['act'];
 switch($action)
 {

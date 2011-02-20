@@ -9,8 +9,6 @@ require_once("init.php");
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Terms of Service"=>"tos.php");
 $template = "tos"; //The template to use for the page. Dont include .tpl inside quotes.
@@ -18,7 +16,5 @@ $template = "tos"; //The template to use for the page. Dont include .tpl inside 
 //################ Constants ################
 
 //################ Page Functions ################
-
-//################ Template's Output ################
 eval($templates->Output($template));
 ?>

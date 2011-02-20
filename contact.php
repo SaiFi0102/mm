@@ -9,12 +9,8 @@ require_once("init.php");
 $cms->BannedAccess(true);
 eval($cms->SetPageAccess(ACCESS_REGISTERED));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Contact Us"=>$_SERVER['REQUEST_URI']);
-
-//################ Constants ################
 
 //################ Page Functions ################
 if(isset($_POST['submit']))
@@ -39,6 +35,5 @@ if(isset($_POST['submit']))
 	}
 }
 
-//################ Template's Output ################
 eval($templates->Output("contact"));
 ?>

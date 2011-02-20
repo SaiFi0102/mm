@@ -10,12 +10,6 @@ require_once("includes/recaptcha/recaptchalib.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_UNREGISTERED));
 
-//################ Resources ################ 
-
-//################ General Variables ################
-
-//################ Constants ################
-
 //################ Page Functions ################
 function FinalRegister($username, $password, $email, $flags)
 {
@@ -154,7 +148,6 @@ function RemoveResetCode()
 	return $DB->affected_rows;
 }
 
-//################ Template's Output ################
 switch($_GET['act'])
 {
 	case "retrieve":

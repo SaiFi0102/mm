@@ -9,17 +9,11 @@ require_once("init.php");
 $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_ALL));
 
-//################ Resources ################ 
-
 //################ General Variables ################
 $page_name[] = array("Player PvP Statistics"=>"pvp.php");
 $template = "pvp_stats"; //The template to use for the page. Dont include .tpl inside quotes.
 
-//################ Constants ################
-
 //################ Page Functions ################
-
-//################ Template's Output ################
 $query = new MMQueryBuilder();
 $query->Select("`character_pvp`")->Columns(array("*", "(SELECT `name` FROM `characters` WHERE `guid`=`character_pvp`.`guid`)"=>"`charactername`"))
 ->Order("`totalkills` DESC")->Limit("100")->Build();
