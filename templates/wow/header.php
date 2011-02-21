@@ -71,7 +71,7 @@ Remember Me?
 <div class="rightside">
 <div class="main">
 <div class="main_title">Realm Status</div>
-<div class="content">
+<div class="content" id="status_table">
 
 <table width="100%" class="serverstatus">
 <?php foreach($REALM as $rid => $rdata)
@@ -92,8 +92,8 @@ Remember Me?
 				<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' />
 			</a>
 			<div id="status_content_<?php print $rid; ?>" style="display:none;">
-				<span id="status_online_<?php print $rid; ?>"></span> Online Players(Maximum Online: <span id="status_maxonline_<?php print $rid; ?>"></span>).<br />
-				<span style="color:#6666FF;"><span id="status_alliance_<?php print $rid; ?>"></span> Alliance</span> &amp; <span style="color:#FF6666;"><span id="status_horde_<?php print $rid; ?>"></span> Horde</span>.<br />
+				<b><span id="status_online_<?php print $rid; ?>"></span></b> Online Players(Maximum Online: <b><span id="status_maxonline_<?php print $rid; ?>"></span></b>).<br />
+				<span style="color:#6666FF;"><b><span id="status_alliance_<?php print $rid; ?>"></span></b> Alliance</span> &amp; <span style="color:#FF6666;"><b><span id="status_horde_<?php print $rid; ?>"></span></b> Horde</span>.<br />
 				Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
 			</div>
 		</td>

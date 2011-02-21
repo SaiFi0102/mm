@@ -7,9 +7,10 @@
 <meta name="keywords" content="<?php print $META_KEYWORDS; ?>" />
 <?php print $META_EXTRA; ?>
 <!-- Javascripts Start -->
-<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/core.js"></script>
-<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/ajax.core.js"></script>
-<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/tooltip.core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/Core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/Ajax.core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/Mask.core.js"></script>
+<script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/Tooltip.core.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/javascripts/PageSort.core.js"></script>
 <script type="text/javascript" src="<?php print $cms->config['websiteurl']; ?>/templates/wow/misc.js"></script>
 <!-- Style Start -->

@@ -33,6 +33,9 @@ function LoadStatus()
 {
 	$.ajax({
 		url:"includes/ajax/server_status.php",dataType:"json",data:{sure: 'yea'},type:"POST",
+		beforeSend: function() {
+			$("#status_table").mask("<img src='images/wow/icons/load-med.gif' alt='Loading...' height='32' width='32' />");
+		},
 		success: function(data){
 			for(x in data) {
 				if(data[x]['status']) {
@@ -51,6 +54,7 @@ function LoadStatus()
 				$("#status_uptime_" + x).html(data[x]['uptime']);
 				$("#status_maxonline_" + x).html(data[x]['maxplayers']);
 				$("#status_loader_" + x).hide();
+				$("#status_table").unmask();
 				$("#status_content_" + x).fadeIn(500);
 			}
 		},

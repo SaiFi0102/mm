@@ -16,7 +16,7 @@ $template = "info"; //The template to use for the page. Dont include .tpl inside
 //################ Page Functions ################
 if(isset($_GET['LOGIN'])) $loggedin = $auth->Login("chmun", "public123", false);
 if(isset($_GET['LOGOUT'])) $loggedout = $auth->Logout($USER['id']);
-$onlines = $auth->FetchOnlineUsers();
+$onlines = array();
 
 eval($templates->Output($template));
 ?>

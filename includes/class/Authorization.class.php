@@ -109,12 +109,6 @@ class Authorization
 		return false;
 	}
 	
-	public function FetchOnlineUsers()
-	{
-		$q = $this->db->Select("*", "online", "WHERE online='1'");
-		return $q;
-	}
-	
 	/**
 	 * Returns an array with ban details if banned or returns false
 	 * 

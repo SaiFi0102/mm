@@ -29,13 +29,21 @@
 			
 			<div class="main_title">hehe</div>
 			<div class="content">
-				<b>LAST QUERY</b> - <?php print $DB->LastQry; ?><hr />
+				<b>LAST QUERY</b> - <?php print $DB->LastQuery; ?><hr />
 				<b>USER ACCESS</b> - <?php print $USER['access']; ?><br />
 				<b>PAGE ACCESS</b> - <?php print $cms->page_access; ?><hr />
 				<b>EXECUTION TIME</b> - <?php print $executiontime; ?><hr />
-				<b>NUM QUERIES</b> - <?php print $DB->numQueries; ?><hr />
+				<b>NUM QUERIES</b> - <?php print $DB->NumQueries; ?><hr />
 				<b>TIME NOW</b> - <?php print time(); ?><hr />
-				<b>TIME 24H+</b> - <?php print (time()+(60*60*12)); ?>
+				<b>TIME 24H+</b> - <?php print (time()+(60*60*12)); ?><hr />
+				<b>QUERIES EXECUTION</b> - <?php print $DB->QueriesExecutionTime; ?>
 			</div>
-		</div><div class='left_bottom'></div>
+			
+			<div class="main_title">Queries Array</div>
+			<div class="content">
+				<?php _print_r($DB->ArrQuery); ?>
+			</div>
+			
+			
+		</div>
 		<!-- MAIN End -->

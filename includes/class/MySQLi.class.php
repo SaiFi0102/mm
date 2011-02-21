@@ -167,10 +167,11 @@ $errorstring = "|----------------------------Connection Error-------------------
 		}
 		
 		//...
-		$this->ArrQuery[] = $query;
+		$executiontime = (microtime(1)-$qstarttime);
+		$this->ArrQuery[] = array("string"=>$query, "executiontime"=> $executiontime);
 		$this->LastQuery = $query;
 		$this->NumQueries++;
-		$this->QueriesExecutionTime += (microtime(1)-$qstarttime);
+		$this->QueriesExecutionTime += $executiontime;
 		
 		return $result;
 	}

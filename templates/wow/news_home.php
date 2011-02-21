@@ -41,7 +41,7 @@ $("#newsloader").PageSort({
 JSONFile:"includes/json/news.json.php",ElementsPerPage:5,TotalElements:<?php print $numnews; ?>,OrderColumn:"date",OrderMethod:"DESC",PagesTableContainer:"#newspagestable",
 CallBeforeLoad:function()
 {
-	$("#newscontainer").stop(true,true).hide();$("#newsloader").stop(true,true).fadeIn(500, "easeOutQuad");
+	$("#newscontainer").mask("<span style='font-size:16px;'>Loading</span><br /><img src='images/wow/icons/load-med.gif' alt='Loading...' height='32' width='32' />");
 },
 CallAfterLoad:function(JSONData, totalelements, totalpages)
 {
@@ -53,11 +53,11 @@ CallAfterLoad:function(JSONData, totalelements, totalpages)
 		nc_html += '<div class="main"><div class="main_title"><a href="index.php?id=' + JSONData.MDElements[x]['id'] + '">' + JSONData.MDElements[x]['title'] + '</a></div>';
 		nc_html += '<div class="content">' + JSONData.MDElements[x]['body'] + '<div class="timestamp">Posted on ' + JSONData.MDElements[x]['date'] + ' by ' + JSONData.MDElements[x]['by'] + '</div></div></div><div class="left_bottom"></div>';
 	}
-	$("#newscontainer").html(nc_html);delete nc_html;$("#newsloader").stop(true,true).hide();$("#newscontainer").stop(true,true).fadeIn(1000, "easeOutQuad");}
+	$("#newscontainer").html(nc_html);delete nc_html;$("#newsloader").stop(true,true).hide();$("#newscontainer").unmask().stop().hide().fadeIn(1000, "easeOutQuad");}
 },
 CallOnError:function(XMLHttpRequest, textStatus, errorThrown)
 {
-	$("#newscontainer").hide();$("#newsloader").hide();$("#newsloaderror").fadeIn(1000, "easeOutQuad");
+	$("#newscontainer").hide().unmask();$("#newsloader").hide();$("#newsloaderror").fadeIn(1000, "easeOutQuad");
 }
 });
 }
