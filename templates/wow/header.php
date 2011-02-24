@@ -1,6 +1,7 @@
 <body>
 <?php
-if($SHOWVOTEPOPUP)eval($templates->Output("vote_popup", false, false, false, true));
+if($SHOWVOTEPOPUP && !$uclass->firstvisit)eval($templates->Output("vote_popup", false, false, false, true));
+if($uclass->firstvisit)eval($templates->Output("firstvisit_popup", false, false, false, true));
 ?>
 <div id="full">
 <!-- Logo -->

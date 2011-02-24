@@ -374,6 +374,7 @@ border-bottom:0px;
 .tooltip {
 background:#110033;
 border:1px solid #bbbbbb;
+border-bottom:3px solid #bbbbbb;
 padding:8px;
 color:#dddddd;
 }

@@ -17,7 +17,7 @@ if(count($news))
 		$newz['body'] = str_replace("\r\n", "<br />", $newz['body']);
 		$newz['body'] = str_replace("\n", "<br />", $newz['body']);
 		print '<div class="main"><div class="main_title"><a href="index.php?id=' . $newz['id'] . '">' . $newz['title'] . '</a></div>';
-		print '';
+		print '<div class="content">' . $newz['body'] . '<div class="timestamp">Posted on ' . ConvertMysqlTimestamp($newz['date']) . ' by ' . $newz['by'] . '</div></div></div>';
 	}
 }
 ?>
@@ -41,7 +41,7 @@ CallAfterLoad:function(JSONData, totalelements, totalpages)
 	for(x in JSONData.MDElements)
 	{
 		nc_html += '<div class="main"><div class="main_title"><a href="index.php?id=' + JSONData.MDElements[x]['id'] + '">' + JSONData.MDElements[x]['title'] + '</a></div>';
-		nc_html += '';
+		nc_html += '<div class="content">' + JSONData.MDElements[x]['body'] + '<div class="timestamp">Posted on ' + JSONData.MDElements[x]['date'] + ' by ' + JSONData.MDElements[x]['by'] + '</div></div></div>';
 	}
 	$("#newscontainer").html(nc_html);delete nc_html;$("#newsloader").stop(true,true).hide();$("#newscontainer").unmask().stop().hide().fadeIn(1000, "easeOutQuad");}
 },

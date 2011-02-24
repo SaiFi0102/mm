@@ -20,6 +20,7 @@ class Users
 	public $user = array();
 	public $ban;
 	public $banned;
+	public $firstvisit = false;
 	private $db;
 	
 	/**
@@ -39,6 +40,7 @@ class Users
 			$this->ClearOfflineUsers();
 			$this->ClearExpiredVotes();
 			$this->BanStatus();
+			$this->IsFirstVisit();
 			$this->LoginUpdate();
 		}
 	}
@@ -104,7 +106,30 @@ class Users
 		//Build Query
 		$query = new MMQueryBuilder();
 		$query->Replace("`online`")
-		->Columns(array('`uid`'=>"'%s'", '`ip`'=>"'%s'", '`lastvisit`'=>"'%s'", '`online`'=>"'1'"), $uid, GetIp(), time())->Build();
+		->Columns(array(
+			'`uid`'					=> "'%s'",
+			'`ip`'					=> "'%s'",
+			'`lastvisit`'			=> "'%s'",
+			'`online`'				=> "'1'",
+			'`visits`'				=> "visits + '1'",
+			'`request_uri`'			=> "'%s'",
+			'`header_host`'			=> "'%s'",
+			'`header_connection`'	=> "'%s'",
+			'`header_user_agent`'	=> "'%s'",
+			'`header_cache_control`'=> "'%s'",
+			'`header_accept`'		=> "'%s'",
+			'`header_accept_encoding`'=> "'%s'",
+			'`header_accept_language`'=> "'%s'",
+			'`header_accept_charset`'=> "'%s'",	
+		),
+		$uid, GetIp(), time(), $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], $_SERVER['HTTP_CONNECTION'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTP_CACHE_CONTROL'], $_SERVER['HTTP_ACCEPT'], $_SERVER['HTTP_ACCEPT_ENCODING'], $_SERVER['HTTP_ACCEPT_LANGUAGE'], $_SERVER['HTTP_ACCEPT_CHARSET']);
+
+		if($this->firstvisit)
+		{
+			$query->AddColumns(array('`firstvisit`' => "CURRENT_TIMESTAMP"));
+		}
+		
+		$query->Build();
 		$result = $this->db->query($query, DBNAME);
 	}
 	
@@ -126,6 +151,17 @@ class Users
 		{
 			$this->ban = $ban;
 			$this->banned = true;
+		}
+	}
+	
+	public function IsFirstVisit()
+	{
+		$query = new MMQueryBuilder();
+		$query->Select("`online`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`ip` = '%s'", GetIp())->Build();
+		$result = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		if(intval($result['numrows']) < 1)
+		{
+			$this->firstvisit = true;
 		}
 	}
 }

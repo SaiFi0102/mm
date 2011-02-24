@@ -87,7 +87,7 @@ $USERTIMEOUT = 5;
  * ***************** Core Configurations *******************
  * *********************************************************
  */
-$DEBUG = false; //Shows Debug messages on the footer
+$DEBUG = true; //Shows Debug messages on the footer
 $OFFLINE_MAINTENANCE = false;
 define("IPN_ALERTPAY_SECURITY_CODE", "oDOIxWomBxyxaEnQ");
 define("IPN_MONEYBOOKERS_PASSWORD", "password");
