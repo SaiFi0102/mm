@@ -6,5 +6,5 @@
 			<h4>Description/Role:</h4>
 			<?php print $rdata['DESC_LONG']; ?><br />
 	</div>
-</div><div class='left_bottom'></div>
+</div>
 <?php }?>

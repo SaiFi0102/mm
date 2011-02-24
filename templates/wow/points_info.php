@@ -123,7 +123,7 @@ $("#amount_paypal").change(function()
 		<?php } ?>
 		</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>
 
 <div class="main">
 	<div class="main_title">Transactions</div>
@@ -252,4 +252,4 @@ $("#amount_paypal").change(function()
 			
 		</table>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

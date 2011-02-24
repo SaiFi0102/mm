@@ -1,1 +1,0 @@
-<div class="errorbox">Wrong character selected or character does not exists in this realm.</div>

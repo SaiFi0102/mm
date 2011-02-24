@@ -2,6 +2,7 @@
 <?php
 if($SHOWVOTEPOPUP)eval($templates->Output("vote_popup", false, false, false, true));
 ?>
+<div id="full">
 <!-- Logo -->
 <div id="logo"></div>
 <div id="topline"></div>
@@ -67,7 +68,9 @@ Remember Me?
 <div class="errorbox" style="margin-bottom: 6px;"><h4>JavaScript support have been disabled or is not allowed in your browser. Please enable JavaScript for better experience or use a newer browser.</h4></div>
 </noscript>
 
-<?php if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
+<?php
+if(!isset($NOFLOATING) && !$NOFLOATING) {
+if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 <div class="rightside">
 <div class="main">
 <div class="main_title">Realm Status</div>
@@ -76,38 +79,39 @@ Remember Me?
 <table width="100%" class="serverstatus">
 <?php foreach($REALM as $rid => $rdata)
 {?>
-	<tr>
-		<th style="color:<?php print $rdata['COLOR']; ?>;">
-			<?php print $rdata['NAME']; ?>
-			<a href="online.php?rid=<?php print $rid; ?>" id="status_state_<?php print $rid; ?>">
-				<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' id="status_loadingicon_<?php print $rid; ?>" />
-				<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/uparrow.gif' alt='Server is up!' height='18' width='19' id="status_uparrow_<?php print $rid; ?>" style="display:none;" />
-				<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/downarrow.gif' alt='Server is down but it will be back up soon :)' height='18' width='19' id="status_downarrow_<?php print $rid; ?>" style="display:none;" />
-			</a>
-		</th>
-	</tr>
-	<tr>
-		<td>
-			<a href="online.php?rid=<?php print $rid; ?>" id="status_loader_<?php print $rid; ?>">
-				<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' />
-			</a>
-			<div id="status_content_<?php print $rid; ?>" style="display:none;">
-				<b><span id="status_online_<?php print $rid; ?>"></span></b> Online Players(Maximum Online: <b><span id="status_maxonline_<?php print $rid; ?>"></span></b>).<br />
-				<span style="color:#6666FF;"><b><span id="status_alliance_<?php print $rid; ?>"></span></b> Alliance</span> &amp; <span style="color:#FF6666;"><b><span id="status_horde_<?php print $rid; ?>"></span></b> Horde</span>.<br />
-				Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
-			</div>
-		</td>
-	</tr>
+<tr>
+<th style="color:<?php print $rdata['COLOR']; ?>;">
+	<?php print $rdata['NAME']; ?>
+	<a href="online.php?rid=<?php print $rid; ?>" id="status_state_<?php print $rid; ?>">
+		<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' id="status_loadingicon_<?php print $rid; ?>" />
+		<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/uparrow.gif' alt='Server is up!' height='18' width='19' id="status_uparrow_<?php print $rid; ?>" style="display:none;" />
+		<img src='<?php print $cms->config['websiteurl']; ?>/images/icons/downarrow.gif' alt='Server is down but it will be back up soon :)' height='18' width='19' id="status_downarrow_<?php print $rid; ?>" style="display:none;" />
+	</a>
+</th>
+</tr>
+<tr>
+<td>
+	<a href="online.php?rid=<?php print $rid; ?>" id="status_loader_<?php print $rid; ?>">
+		<img src='<?php print $cms->config['websiteurl']; ?>/images/wow/icons/load-small.gif' alt='Loading...' height='16' width='16' />
+	</a>
+	<div id="status_content_<?php print $rid; ?>" style="display:none;">
+		<b><span id="status_online_<?php print $rid; ?>"></span></b> Online Players(Maximum Online: <b><span id="status_maxonline_<?php print $rid; ?>"></span></b>).<br />
+		<span style="color:#6666FF;"><b><span id="status_alliance_<?php print $rid; ?>"></span></b> Alliance</span> &amp; <span style="color:#FF6666;"><b><span id="status_horde_<?php print $rid; ?>"></span></b> Horde</span>.<br />
+		Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
+	</div>
+</td>
+</tr>
 <?php
 }?>
-	<tr>
-		<th colspan="2" align="center">set realmlist <?php print $LOGON_REALMLIST; ?></th>
-	</tr>
+<tr>
+	<th colspan="2" align="center">set realmlist <?php print $LOGON_REALMLIST; ?></th>
+</tr>
 </table>
 
 </div>
 </div>
 </div>
-<?php } ?>
-
 <div class="leftside">
+<?php } } else { ?>
+<div>
+<?php } ?>

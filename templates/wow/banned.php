@@ -11,4 +11,4 @@
 			Please contact us if you think this is an error.
 		</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

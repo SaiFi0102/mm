@@ -6,7 +6,7 @@
 		<input type="button" value="Send" name="soapsend" id="soapsend" />
 	</div>
 </div>
-<div class='left_bottom'></div>
+
 <script type="text/javascript">
 $("#soapcommand").one("focus", function()
 {

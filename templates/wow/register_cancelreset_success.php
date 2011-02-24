@@ -3,4 +3,4 @@
 	<div class="content">
 		<div class="successbox">Password reset request was successfully cancelled.</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

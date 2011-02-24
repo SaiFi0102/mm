@@ -22,4 +22,4 @@
 		}
 		?>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

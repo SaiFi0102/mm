@@ -12,7 +12,7 @@
 	</span>
 	</div>";
 	?>
-</div><div class='left_bottom'></div>
+</div>
 
 <div class='main'>
 	<div class="main_title">Comments</div>
@@ -37,4 +37,4 @@
 			}
 			?>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

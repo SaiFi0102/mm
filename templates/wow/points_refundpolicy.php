@@ -10,4 +10,4 @@
 		<b>Points</b> are referred to points received after making a payment on any gateway from our point system.<br />
 		<b>Account</b> is referred to the account of the user registered through our website.
 	</div>
-</div><div class='left_bottom'></div>
+</div>

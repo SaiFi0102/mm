@@ -18,4 +18,4 @@ $(document).ready(function(){
 		
 		<div class="clear"></div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

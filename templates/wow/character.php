@@ -12,7 +12,7 @@
 		}
 		?>
 	</div>
-</div><div class='left_bottom'></div>
+</div>
 <?php
 if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $USER['id'])
 {?>
@@ -30,7 +30,7 @@ if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $US
 			</form>
 		</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>
 <?php
 }
 ?>

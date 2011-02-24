@@ -17,4 +17,4 @@
 			<li>Refunds issued or Reversal of payments deducts the amount of points that were given.</li>
 		</ul>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

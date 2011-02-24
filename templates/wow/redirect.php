@@ -23,5 +23,5 @@ switch($REDIRECT_TYPE)
 			<br />
 			<div class="<?php print $REDIRECT_TYPE; ?>"><?php print $REDIRECT_MESSAGE; ?></div>
 		</div>
-	</div><div class='left_bottom'></div>
+	</div>
 </div>

@@ -7,4 +7,4 @@
 			Please login and make sure to change your password to your desired password from <a href="account.php">here</a>.
 		</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

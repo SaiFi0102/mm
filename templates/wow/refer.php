@@ -12,4 +12,4 @@
 			<b>Referred by you:</b> <?php print $referredbyme; ?>
 		</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

@@ -9,4 +9,4 @@
 		
 		<h4>Page STILL under construction!</h4>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

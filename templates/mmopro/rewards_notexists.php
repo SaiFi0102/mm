@@ -1,1 +1,0 @@
-<h5>There are no rewards in this realm.</h5>

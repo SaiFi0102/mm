@@ -63,6 +63,7 @@ print $print_rand_online;
 <div class="clear"></div>
 <div id="lichking"></div>
 <div class="footer_line"></div>
+</div>
 <div id="footer_loading">
 		<div id="footer_loading_text"></div>
 </div>

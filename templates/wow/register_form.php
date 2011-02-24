@@ -71,4 +71,4 @@
 		<center><input type="submit" name="submit" value="Register!" /></center>
 		</form>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

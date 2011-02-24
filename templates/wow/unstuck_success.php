@@ -3,4 +3,4 @@
 	<div class="content">
 		<div class="successbox">You were successfuly unstucked. You can log in now.</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

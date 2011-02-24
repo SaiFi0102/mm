@@ -289,7 +289,7 @@ function CheckEmail($email, $confirmemail=null)
 	
 	$query = new MMQueryBuilder();
 	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`email` = '%s'", $email)->Build();
-	$result = MMMySQLiFetch($DB->query($query, DBNAME));
+	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	if((int)$result['numrows'] > 0)
 	{

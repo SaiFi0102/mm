@@ -48,6 +48,7 @@ font-size:10px;
 #maincontainer {
 width:90%;
 margin:0 auto;
+text-shadow:#777777 2px 2px 2px;
 }
 
 /*Table*/
@@ -416,4 +417,7 @@ position:relative !important;
 }
 .masked-hidden {
 visibility:hidden !important;
+}
+#guide_os .windows_os:hover, #guide_os .mac_os:hover {
+background-color:#444444;
 }

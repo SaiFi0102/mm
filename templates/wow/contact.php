@@ -43,4 +43,4 @@
 		Address: <?php print $CONTACTDETAILS['ADDRESS']; ?><br /><br />
 		Phone: <?php print $CONTACTDETAILS['PHONE']; ?>
 	</div>
-</div><div class='left_bottom'></div>
+</div>

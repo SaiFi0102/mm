@@ -12,6 +12,7 @@ eval($cms->SetPageAccess(ACCESS_ALL));
 //################ General Variables ################
 $page_name[] = array("Connection Guide"=>"howtoconnect.php");
 $template = "howtoconnect"; //The template to use for the page. Dont include .tpl inside quotes.
+$NOFLOATING = true;
 
 //################ Page Functions ################
 eval($templates->Output($template));

@@ -10,4 +10,4 @@
 			However, we do not guarantee, nor should you expect, that your personal information and private communications will always remain private.
 		</div>
 	</div>
-</div><div class='left_bottom'></div>
+</div>
