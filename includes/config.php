@@ -73,7 +73,7 @@ $email['smtp']['password'] = ''; //Leave empty if using anonymous
 $email['smtp']['encrypted'] = false;
 
 //OTHER CONFIGS
-$usetemplate = "wow";
+$usetemplate = "cataclysm";
 
 $COOKIECONF = array(
 	'cookiepath' => '',

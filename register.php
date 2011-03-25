@@ -123,7 +123,8 @@ Please login as soon as possible and change the password to your own choice from
 Regards,
 {$cms->config['websitename']} Staff";
 	$query = new MMQueryBuilder();
-	$query->Update("`account`")->Columns(array("`sha_pass_hash`"=>"'%s'", "`sessionkey`"=>"''", "`v`"=>"''", "`s`"=>"''"), Sha1Pass($data['username'], $newpass))->Where("`id` = '%s'", $_GET['uid'])->Build();
+	$query->Update("`account`")->Columns(array("`sha_pass_hash`"=>"'%s'", "`sessionkey`"=>"''", "`v`"=>"''", "`s`"=>"''"), Sha1Pass($data['username'], $newpass))
+	->Where("`id` = '%s'", $_GET['uid'])->Build();
 	$DB->query($query, DBNAME);
 	
 	$query = new MMQueryBuilder();

@@ -1,0 +1,691 @@
+/*Basic n Tags*/
+body {
+font:12px Arial, Helvetica, sans-serif;
+color:#AAAAAA;
+line-height:150%;
+background:url('../../images/cataclysm/backgrounds/bg.jpg') #000000 no-repeat 50% 0;
+margin:0;
+}
+img {
+border:0;
+}
+a {
+color:#CF3F1B;
+text-decoration:underline;
+}
+a:hover {
+text-decoration:none;
+}
+hr {
+height:1px;
+background-color:#333333;
+border:0;
+}
+h1{font-size:22px;margin:5px 0;}
+h2{font-size:22px;margin:5px 0;}
+h3{font-size:20px;margin:5px 0;}
+h4{font-size:18px;margin:5px 0;}
+h5{font-size:16px;margin:5px 0;}
+h6{font-size:14px;margin:5px 0;}
+pre {
+margin:0;
+word-wrap:break-word;
+}
+input[type=text], input[type=password], textarea, select {
+margin:1px;
+background:#333333;
+color:#ffddaa;
+border:1px solid #777777;
+padding:4px;
+}
+.timestamp {
+text-align:right;
+font-size:10px;
+}
+#maincontainer {
+width:1160px;
+margin:0 auto;
+}
+#redirectcontainer {
+width:1160px;
+margin:0 auto;
+margin-top:200px;
+}
+
+/*Table*/
+table {
+border:1px solid #cccccc;
+margin-left:2px;
+margin-right:2px;
+}
+table th {
+padding:13px;
+background:#611300 url('../../images/cataclysm/overlays/navigation-active.png') repeat-x;
+border:1px solid #777777;
+color:#cccccc;
+font-size:12px;
+}
+table td {
+font-size:11px;
+padding:10px;
+border-left:1px solid #666666;
+border-bottom:1px solid #666666;
+background:#333333 url('../../images/cataclysm/overlays/navigation-active.png') repeat-x;
+}
+
+/*Float*/
+.right {
+float:right;
+}
+.left {
+float:left;
+}
+.clear {
+clear:both;
+}
+.center {
+text-align:center;
+}
+
+/*Notice boxes*/
+.errorbox {
+color:#ffaaaa;
+background:#1f1212 url('../../images/cataclysm/typography/dark/alert.png') repeat-x;
+border:1px solid #330011;
+-moz-border-radius:8px 8px 8px 8px;
+-webkit-border-radius:8px 8px 8px 8px;
+border-radius:8px 8px 8px 8px;
+margin-bottom:5px;
+padding:10px;
+}
+.errorbox span {
+padding-left:17px;
+background:url('../../images/cataclysm/typography/alert-icon.png') no-repeat;
+}
+.successbox {
+color:#00aa33;
+background:#121f18 url('../../images/cataclysm/typography/dark/approved.png') repeat-x;
+border:1px solid #004400;
+-moz-border-radius:8px 8px 8px 8px;
+-webkit-border-radius:8px 8px 8px 8px;
+border-radius:8px 8px 8px 8px;
+margin-bottom:5px;
+padding:10px;
+}
+.successbox span {
+padding-left:17px;
+background:url('../../images/cataclysm/typography/approved-icon.png') no-repeat;
+}
+.noticebox {
+color:#ddddff;
+background:#12181f url('../../images/cataclysm/typography/dark/notice.png') repeat-x;
+border:1px solid #000044;
+-moz-border-radius:8px 8px 8px 8px;
+-webkit-border-radius:8px 8px 8px 8px;
+border-radius:8px 8px 8px 8px;
+margin-bottom:5px;
+padding:10px;
+}
+.noticebox span {
+padding-left:17px;
+background:url('../../images/cataclysm/typography/attention-icon.png') no-repeat;
+}
+.errorbox ol, .errorbox ul, .successbox ol, .successbox ul, .noticebox ol, .noticebox ul {
+margin-bottom:0;
+padding-bottom:0;
+}
+
+/*Header*/
+#header {
+padding:12px;
+padding-bottom:0;
+height:89px;
+color:#ffddaa;
+}
+.greyinput input {
+color:#cccccc;
+}
+
+/*Wrappers*/
+#rt-body-surround {
+margin:0 -15px;
+}
+.rt-box-top {
+background:url('../../images/cataclysm/overlays/main-fill.png') 0 0;
+}
+.rt-box-top2 {
+background:url('../../images/cataclysm/overlays/main-corners.png') 0 0 no-repeat;
+}
+.rt-box-top3 {
+background:url('../../images/cataclysm/overlays/main-corners.png') 100% 0 no-repeat;
+}
+.rt-box-bottom {
+background:url('../../images/cataclysm/overlays/main-fill.png') 0 100%;
+}
+.rt-box-bottom2 {
+background:url('../../images/cataclysm/overlays/main-corners.png') 0 100% no-repeat;
+}
+.rt-box-bottom3 {
+background:url('../../images/cataclysm/overlays/main-corners.png') 100% 100% no-repeat;
+}
+.rt-box-bg {
+background:url('../../images/cataclysm/overlays/main-m.png') 0 0;
+margin:0 4px;
+}
+.rt-box-bg2 {
+background:url('../../images/cataclysm/overlays/main-l.png') 0 0 repeat-y;
+margin-left:-4px;
+}
+.rt-box-bg3 {
+background:url('../../images/cataclysm/overlays/main-r.png') 100% 0 repeat-y;
+margin-right:-4px;
+padding:0 15px;
+padding-top:12px;
+}
+.rt-shadowbar {
+background:url('../../images/cataclysm/overlays/main-shadow.png') 50% 0 no-repeat;
+}
+.rt-main-inner {
+background-image:url('../../images/cataclysm/overlays/content-bg.png');
+}
+.rt-box-top,.rt-box-bottom {
+margin:0 5px;
+height:5px;
+position:relative;
+}
+.rt-box-top2,.rt-box-bottom2 {
+left:-5px;
+}
+.rt-box-top3,.rt-box-bottom3 {
+right:-5px;
+}
+.rt-box-top2,.rt-box-top3,.rt-box-bottom2,.rt-box-bottom3 {
+position:absolute;
+height:5px;
+width:5px;
+top:0;
+}
+.rt-box-top2,.rt-box-top3,.rt-box-bottom2,.rt-box-bottom3 {
+position:absolute;
+height:5px;
+width:5px;
+top:0;
+}
+.rt-shadowbar {
+background:url('../../images/cataclysm/overlays/main-shadow.png') 50% 0 no-repeat;
+height:32px;
+}
+
+/*Links*/
+#rt-navigation {
+background:#373737 url('../../images/cataclysm/overlays/navigation-bg.png') 50% 0 repeat-x;
+height:54px;
+text-align:center;
+}
+.menutop {
+list-style:none;
+margin:0;
+padding:0 2px;
+position:relative;
+display:inline-block;
+}
+.menutop li {
+float:left;
+margin:0 -2px;
+height:54px;
+padding:0;
+position:relative;
+list-style:none;
+}
+.menutop li.root {
+background:transparent url('../../images/cataclysm/overlays/navigation-div.png') 100% 0 no-repeat;
+}
+.menutop li.root:hover {
+background:#bb5522;
+}
+.menutop li.root > .item, .menutop li > .item {
+color:#FFFFFF;
+}
+.menutop li.root > .item {
+white-space:nowrap;
+display:block;
+padding:0;
+font-size:12px;
+z-index:100;
+cursor:pointer;
+position:relative;
+margin:0;
+outline:none;
+}
+.menutop li.root > .item, .menutop li > .item {
+color:#FFFFFF;
+font-weight:bold;
+}
+.menutop li > .item {
+padding:10px;
+height:auto;
+display:block;
+font-size:13px;
+}
+.menutop li .item, .menutop li.active .item {
+display:block;
+margin:0;
+text-decoration:none;
+float:none;
+width:auto;
+}
+.menutop li.root > .item span {
+display:block;
+margin:0;
+outline:none;
+padding:20px 14px 4px 14px;
+width:auto;
+}
+.menutop li > .item span {
+display:block;
+width:100%;
+overflow:hidden;
+}
+
+/*Slider/PageNav*/
+#rt-showcase, #rt-showcase a:hover, #rt-showcase .inputbox, #rt-showcase .created-date {
+color:#EEEEEE;
+}
+#rt-showcase, .title1 .module-title, .box7 .rt-block, .box10 .rt-block {
+background-color:#951E01;
+}
+.showcase-overlay-dark {
+background-image:url('../../images/cataclysm/overlays/showcase-overlay.png');
+background-position:50% 0;
+background-repeat:repeat-x;
+border:1px solid #cc6677;
+padding:20px;
+padding-bottom:10px;
+text-align:center;
+width:910px;
+margin:0 auto;
+}
+#pagenav {
+background:url('../../images/cataclysm/overlays/main-shadow.png') 50% 0 no-repeat;
+font-size:16px;
+font-weight:bold;
+text-shadow:#000000 0px 0px 3px;
+padding-top:10px;
+}
+#pagenav a {
+color:#ff6677;
+}
+
+/*Main Content Boxes*/
+.rightside {
+float:right;
+}
+.rightside .wrapper {
+background:url('../../images/cataclysm/bdot_v.png') repeat-y;
+padding-left:3px;
+}
+.leftside {
+float:left;
+}
+#mainbox {
+color:#AAAAAA;
+background:#222222 url('../../images/cataclysm/overlays/content-bg.png') repeat-x;
+}
+.main {
+background:url('../../images/cataclysm/overlays/content-bg.png') repeat-x;
+}
+.leftside .main {
+width:867px;
+}
+.rightside .main {
+width:290px;
+background:url('../../images/cataclysm/overlays/content-bg-right.png') repeat-x;
+}
+.main_title_top {
+background:#951E01 url('../../images/cataclysm/overlays/title5-bg.png') 50% 0 repeat-x;
+height:2px;
+}
+.rightside .main_title_top {
+background-color:transparent;
+}
+.main_title {
+background:#951E01 url('../../images/cataclysm/overlays/navigation-active.png') 50% 0 repeat-x;
+padding:17px 12px 17px 12px;
+font-size:15px;
+font-weight:bold;
+text-shadow:#000000 1px 1px 3px;
+color:#FFFFFF;
+}
+.main_title a {
+color:#ffffff;
+}
+.rightside .main_title {
+background-color:#191919;
+padding:17px 7px 17px 7px;
+text-align:center;
+}
+.content {
+background:url('../../images/cataclysm/overlays/title5-bg.png') 50% 0 repeat-x;
+padding:5px 7px 5px 7px;
+}
+.rightside .bottom {
+background:url('../../images/cataclysm/bdot_h.png') repeat-x;
+height:3px;
+}
+.rightside .bottom-left {
+background:url('../../images/cataclysm/bdot_bl.png') no-repeat;
+height:3px;
+width:3px;
+}
+
+/*Footer*/
+#footer_container {
+background:#121212;
+border:#333333 1px solid;
+border-bottom:0;
+width:800px;
+margin:0 auto;
+padding:30px;
+padding-bottom:5px;
+}
+#footer_container ul {
+list-style-image: none;
+margin:0;
+padding:0;
+padding-top:5px;
+}
+#footer_container li {
+background-image:url('../../images/cataclysm/typography/bullet1.png');
+list-style:none;
+padding:0 0 0 15px;
+margin:0 0 3px;
+background-repeat:no-repeat;
+background-position:0 5px;
+}
+#footer_container .left {
+width:200px;
+}
+#footer_container .right {
+width:600px;
+}
+#footer_bar {
+background:#000000;
+border-top:#333333 1px solid;
+width:100%;
+padding:10px 0;
+}
+#footer_bar .text {
+width:800px;
+margin:0 auto;
+}
+
+/*Server Status*/
+.serverstatus th {
+padding:6px;
+text-shadow:#000000 2px 2px 2px;
+font-size:15px;
+}
+.serverstatus td {
+text-align:center;
+font-size:13px;
+color:#eeeeff;
+}
+
+/*Nivo*/
+/* The Nivo Slider styles */
+.nivoSlider {
+position:relative;
+}
+.nivoSlider img {
+position:absolute;
+top:0px;
+left:0px;
+text-align:center;
+}
+/* If an image is wrapped in a link */
+.nivoSlider a.nivo-imageLink {
+position:absolute;
+top:0px;
+left:0px;
+width:100%;
+height:100%;
+border:0;
+padding:0;
+margin:0;
+z-index:60;
+display:none;
+text-align:center;
+}
+/* The slices in the Slider */
+.nivo-slice {
+display:block;
+position:absolute;
+z-index:50;
+height:100%;
+}
+/* Caption styles */
+.nivo-caption {
+position:absolute;
+left:0px;
+bottom:0px;
+background:#000;
+color:#fff;
+opacity:0.8; /* Overridden by captionOpacity setting */
+width:100%;
+z-index:89;
+}
+.nivo-caption p {
+padding:5px;
+margin:0;
+}
+.nivo-caption a {
+display:inline !important;
+}
+.nivo-html-caption {
+display:none;
+}
+/* Direction nav styles (e.g. Next & Prev) */
+.nivo-directionNav a {
+position:absolute;
+top:45%;
+z-index:99;
+cursor:pointer;
+display:block;
+width:30px;
+height:30px;
+text-indent:-9999px;
+border:0;
+}
+.nivo-prevNav {
+background:url('../../images/cataclysm/arrow-left.png') no-repeat;
+left:0px;
+}
+.nivo-nextNav {
+background:url('../../images/cataclysm/arrow-right.png') no-repeat;
+right:0px;
+}
+/* Control nav styles (e.g. 1,2,3...) */
+.nivo-controlNav a {
+position:relative;
+z-index:99;
+cursor:pointer;
+}
+.nivo-controlNav a.active {
+font-weight:bold;
+}
+
+#slider {
+position:relative;
+width:910px; /* Change this to your images width */
+height:219px; /* Change this to your images height */
+}
+#slider img {
+position:absolute;
+top:0px;
+left:0px;
+}
+#slider a {
+border:0;
+display:block;
+}
+#slider .nivo-controlNav {
+position:absolute;
+top:-15px; /* Put the nav below the slider */
+width:100%;
+margin:0 auto;
+}
+#slider .nivo-controlNav img {
+display:inline; /* Unhide the thumbnails */
+position:relative;
+margin-left:2px;
+float:left;
+}
+#slider .nivo-controlNav .active img {
+border:1px solid #ffffff;
+}
+
+/*All Themes must have content below*/
+/*Character Box*/
+.characters {
+clear:both;
+margin-bottom:5px;
+padding:2px;
+border:2px solid #ffc800;
+min-height:100px;
+height:auto !important;
+height:100px;
+-webkit-border-radius:5px;
+-moz-border-radius:5px;
+border-radius:5px;
+background-color:#333333;
+}
+.characters .cleft {
+float:left;
+width:86px;
+}
+.characters .cright {
+float:right;
+width:150px;
+margin:5px;
+padding:5px;
+text-align:center;
+border:1px solid #ffc800;
+}
+.avatar {
+margin:0 auto;text-align:center;
+}
+.avatar .shell {
+position:relative;margin:10px auto;width:64px;height:64px;
+}
+.avatar .frame {
+position:absolute;background:url('../../images/avatars/default.gif') no-repeat;width:82px;height:83px;top:-8px;left:-8px;z-index:200;
+}
+.avatar .iconPosition {
+position:absolute;top:50px;left:46px;width:24px;text-align:center;color:#FFD823;z-index:300;
+}
+
+/*Item Quality*/ 
+.qc-artifact, .qc-artifact a, .qc-heirloom, .qc-heirloom a { color:#E6CC80; }
+.qc-legendary, .qc-legendary a { color:#ff8000; }
+.qc-epic, .qc-epic a { color:#a335ee; }
+.qc-rare, .qc-rare a { color:#0070FF; }
+.qc-uncommon, .qc-uncommon a { color:#1EFF00; }
+.qc-common, .qc-common a { color:#ffffff; }
+.qc-poor, .qc-poor a { color:#9D9D9D; }
+
+/*Page List Table*/
+.pagestablecontainer {
+}
+.pagestablebox {
+padding:10px;
+}
+.pagestable td, .pagestable th {
+font-size:15px;
+font-weight:bold;
+}
+.pagestablelr, .pagestablelr a {
+font-size:20px;
+font-weight:bold;
+padding-top:15px;
+color:#ffffff;
+}
+
+/*Voting Gateway Bit*/
+.vg_bit {
+border:1px solid;
+padding:5px;
+-webkit-border-radius:5px;
+-moz-border-radius:5px;
+border-radius:8px 8px 8px 8px;
+}
+
+/*Footer Loading Bar*/
+#footer_loading {
+position:fixed;
+bottom:0px;
+border-bottom:5px solid #227700;
+width:100%;
+display:none;
+}
+#footer_loading_text {
+width:100px;
+margin:0 auto;
+padding:8px;
+background-color:#227700;
+text-align:center;
+color:#11cc00;
+font-weight:bolder;
+-webkit-border-radius:7px 7px 0px 0px;
+-moz-border-radius:7px 7px 0px 0px;
+border-radius:7px 7px 0px 0px;
+border:1px solid #11cc00;
+border-bottom:0px;
+}
+
+.tooltip {
+background:#110033;
+border:1px solid #bbbbbb;
+border-bottom:3px solid #bbbbbb;
+padding:8px;
+color:#dddddd;
+}
+
+/*Masking*/
+.loadmask {
+z-index:100;
+position:absolute;
+top:0;
+left:0;
+-moz-opacity:0.5;
+opacity:.50;
+filter:alpha(opacity=50);
+background-color:#FFFFFF;
+width:100%;
+height:100%;
+zoom:1;
+}
+.loadmask-msg {
+z-index:20001;
+position:absolute;
+top:0;
+left:0;
+}
+.loadmask-msg div {
+padding:10px;
+cursor:wait;
+text-align:center;
+color:#ffffff;
+text-shadow:#ffffff 0px 0px 2px;
+}
+.masked {
+overflow:hidden !important;
+}
+.masked-relative {
+position:relative !important;
+}
+.masked-hidden {
+visibility:hidden !important;
+}
+#guide_os .windows_os:hover, #guide_os .mac_os:hover {
+background-color:#444444;
+}

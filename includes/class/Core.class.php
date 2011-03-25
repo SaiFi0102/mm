@@ -486,7 +486,7 @@ class Core
 	 * @param string $styleheader
 	 * @param string $stylefooter
 	 */
-	public function ErrorOutput($listno=1, $styleheader="<div width='100%' class='errorbox'>", $stylefooter="</div>")
+	public function ErrorOutput($listno=1, $styleheader="<div width='100%' class='errorbox'><span>", $stylefooter="</span></div>")
 	{
 		if(!isset($this->error_list[$listno]) || count($this->error_list[$listno]) == 0)
 		{
@@ -504,7 +504,7 @@ class Core
 		{
 			$return .= "The following errors occured.";
 		}
-		$return .= "<br />";
+		//$return .= "<br />";
 		
 		//List
 		$return .= "<ol>";
