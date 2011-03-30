@@ -329,7 +329,7 @@ float:left;
 }
 #mainbox {
 color:#AAAAAA;
-background:#222222 url('../../images/cataclysm/overlays/content-bg.png') repeat-x;
+background:#050202;
 }
 .main {
 background:url('../../images/cataclysm/overlays/content-bg.png') repeat-x;
@@ -349,7 +349,7 @@ height:2px;
 background-color:transparent;
 }
 .main_title {
-background:#951E01 url('../../images/cataclysm/overlays/navigation-active.png') 50% 0 repeat-x;
+background:url('../../images/cataclysm/overlays/title-left.gif') 50% 0 repeat-x;
 padding:17px 12px 17px 12px;
 font-size:15px;
 font-weight:bold;
@@ -360,7 +360,7 @@ color:#FFFFFF;
 color:#ffffff;
 }
 .rightside .main_title {
-background-color:#191919;
+background:url('../../images/cataclysm/overlays/title-right.gif') 50% 0 repeat-x;
 padding:17px 7px 17px 7px;
 text-align:center;
 }

@@ -15,8 +15,11 @@ $template = "pvp_stats"; //The template to use for the page. Dont include .tpl i
 
 //################ Page Functions ################
 $query = new MMQueryBuilder();
-$query->Select("`character_pvp`")->Columns(array("*", "(SELECT `name` FROM `characters` WHERE `guid`=`character_pvp`.`guid`)"=>"`charactername`"))
-->Order("`totalkills` DESC")->Limit("100")->Build();
+$query->Select("`character_pvp`")->Columns(array(
+	"`totalkills`", "`currentkills`", "`totaldeaths`", "`currentdeaths`", "`groupkills`",
+	"(SELECT `name` FROM `characters` WHERE `guid`=`character_pvp`.`guid`)"=>"`charactername`",
+	"((`totalkills`/SQRT(`totaldeaths`))*(`totalkills`/(`totaldeaths`+1)))+`killstreak`"=>"`score`"))
+->Order("`score` DESC")->Limit("100")->Build();
 $top_pvp = MMMySQLiFetch($DB->query($query, $REALM['1']['CH_DB']));
 eval($templates->Output($template));
 ?>

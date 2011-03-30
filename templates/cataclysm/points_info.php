@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">Payment Form</div>
 	<div class="content">
 		<div align="center">
@@ -125,7 +125,7 @@ $("#amount_paypal").change(function()
 	</div>
 </div>
 
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">Transactions</div>
 	<div class="content">
 		<table width="100%">

@@ -1,4 +1,4 @@
-<div class='main'><div class='main_title_top'></div>
+<div class='main'>
 	<?php
 	$news['body'] = str_replace("\r\n", "<br />", $news['body']);
 	$news['body'] = str_replace("\n", "<br />", $news['body']);
@@ -14,7 +14,7 @@
 	?>
 </div>
 
-<div class='main'><div class='main_title_top'></div>
+<div class='main'>
 	<div class="main_title">Comments</div>
 	<div class="content">
 			<?php

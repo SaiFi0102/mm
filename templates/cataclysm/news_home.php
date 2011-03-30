@@ -1,9 +1,9 @@
-<div id="newsloaderror" style="display:none;"><div class="main"><div class="main_title_top"></div>
+<div id="newsloaderror" style="display:none;"><div class="main">
 	<div class="main_title">Error Loading News</div>
 	<div class="content"><div class="errorbox" align="center"><span><h3>There was an error while loading news. Please reload page.</h3></span></div></div>
 </div></div>
 
-<div id="newsnotexists" <?php if(count($news)) print "style='display:none;'"; ?>><div class="main"><div class="main_title_top"></div>
+<div id="newsnotexists" <?php if(count($news)) print "style='display:none;'"; ?>><div class="main">
 	<div class="main_title">News</div>
 	<div class="content" style="margin-top:20px;"><h3 style="text-align:center;">There are no new updates.</h3></div>
 </div></div>
@@ -16,7 +16,7 @@ if(count($news))
 	{
 		$newz['body'] = str_replace("\r\n", "<br />", $newz['body']);
 		$newz['body'] = str_replace("\n", "<br />", $newz['body']);
-		print '<div class="main"><div class="main_title_top"></div><div class="main_title"><a href="index.php?id=' . $newz['id'] . '">' . $newz['title'] . '</a></div>';
+		print '<div class="main"><div class="main_title"><a href="index.php?id=' . $newz['id'] . '">' . $newz['title'] . '</a></div>';
 		print '<div class="content">' . $newz['body'] . '<div class="timestamp">Posted on ' . ConvertMysqlTimestamp($newz['date']) . ' by ' . $newz['by'] . '</div></div></div>';
 	}
 }
@@ -40,7 +40,7 @@ CallAfterLoad:function(JSONData, totalelements, totalpages)
 	nc_html = '';
 	for(x in JSONData.MDElements)
 	{
-		nc_html += '<div class="main"><div class="main_title_top"></div><div class="main_title"><a href="index.php?id=' + JSONData.MDElements[x]['id'] + '">' + JSONData.MDElements[x]['title'] + '</a></div>';
+		nc_html += '<div class="main"><div class="main_title"><a href="index.php?id=' + JSONData.MDElements[x]['id'] + '">' + JSONData.MDElements[x]['title'] + '</a></div>';
 		nc_html += '<div class="content">' + JSONData.MDElements[x]['body'] + '<div class="timestamp">Posted on ' + JSONData.MDElements[x]['date'] + ' by ' + JSONData.MDElements[x]['by'] + '</div></div></div>';
 	}
 	$("#newscontainer").html(nc_html);delete nc_html;$("#newsloader").stop(true,true).hide();$("#newscontainer").unmask().stop().hide().fadeIn(1000, "easeOutQuad");}

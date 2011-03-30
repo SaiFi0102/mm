@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">How to Connect and Play on Domination WoW</div>
 	<div class="content">
 		<textarea rows="20" cols="72.5" readonly="readonly" name="textarea" id="textarea"></textarea>

@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">Privacy Statement</div>
 	<div class="content">
 		<div style="font-size: 14px; color: #000;">

@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">Login</div>
 	<div class="content">
 		<?php print $cms->ErrorOutput(); ?>

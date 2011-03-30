@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title"><?php print $cms->config['websitename']; ?> Points Information</div>
 	<div class="content">
 		<h4><a href="points.php">[Form and Overview]</a> - <a href="points.php?act=spend">[<?php print $cms->config['websitename']; ?> Points Items]</a> - <a href="points.php?act=faq">[<?php print $cms->config['websitename']; ?> Points Faq]</a></h4>

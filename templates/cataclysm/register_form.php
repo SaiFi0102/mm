@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">Registration Form</div>
 	<div class="content">
 		<h3>All fields are required.</h3>

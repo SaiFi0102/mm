@@ -98,7 +98,7 @@ if(!isset($NOFLOATING) && !$NOFLOATING) {
 if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 <div class="rightside">
 <div class="wrapper">
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 <div class="main_title">Realm Status</div>
 <div class="content" id="status_table">
 <table width="100%" class="serverstatus">

@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">Reset lost password</div>
 	<div class="content">
 		<div class="successbox"><span>

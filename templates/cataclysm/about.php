@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">About Us</div>
 	<div class="content">
 		<h4>MysteriousSoul</h4>

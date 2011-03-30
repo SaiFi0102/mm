@@ -1,4 +1,4 @@
-<div class="main"><div class="main_title_top"></div>
+<div class="main">
 	<div class="main_title">You do not have access to this page!</div>
 	<div class="content">
 		<div class="errorbox"><span>

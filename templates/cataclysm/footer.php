@@ -13,7 +13,7 @@
 <div class="rt-shadowbar"></div>
 
 <?php if($DEBUG && $USER['access'] >= 4) { ?>
-<div class="clear"><div class="main"><div class="main_title_top"></div>
+<div class="clear"><div class="main">
 <div class="main_title">SQL Queries</div>
 <div class="content">
 	<h3>$DB</h3>
@@ -31,7 +31,7 @@ $print_rand_online = null;
 $unregisteredonline = 0;
 foreach($website_onlines as $odata)
 {
-	if($odata['uid'] == 0)
+	if(empty($odata['username']) || !$odata['uid'])
 	{
 		$unregisteredonline++;
 		continue;
