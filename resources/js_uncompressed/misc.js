@@ -34,7 +34,7 @@ function LoadStatus()
 	$.ajax({
 		url:"includes/ajax/server_status.php",dataType:"json",data:{sure: 'yea'},type:"POST",
 		beforeSend: function() {
-			$("#status_table").mask("<img src='images/wow/icons/load-med.gif' alt='Loading...' height='32' width='32' />");
+			$("#status_table").mask("<img src='images/cataclysm/mask-loader.gif' alt='Loading...' height='21' width='56' />");
 		},
 		success: function(data){
 			for(x in data) {
@@ -51,6 +51,8 @@ function LoadStatus()
 				$("#status_online_" + x).html(data[x]['online']);
 				$("#status_alliance_" + x).html(data[x]['alliance']);
 				$("#status_horde_" + x).html(data[x]['horde']);
+				$("#status_alliance_" + x).css("width", (parseInt(data[x]['alliance'])+1) * 189 / (parseInt(data[x]['online'])+2));
+				$("#status_horde_" + x).css("width", (parseInt(data[x]['horde'])+1) * 189 / (parseInt(data[x]['online'])+2));
 				$("#status_uptime_" + x).html(data[x]['uptime']);
 				$("#status_maxonline_" + x).html(data[x]['maxplayers']);
 				$("#status_loader_" + x).hide();
@@ -66,4 +68,18 @@ function LoadStatus()
 }
 $(document).ready(function() {
 	LoadStatus();
+});
+$(window).load(function(){
+$('#slider').nivoSlider({
+effect:'random', //Specify sets like: 'fold,fade,sliceDown'
+slices:15,
+animSpeed:500, //Slide transition speed
+pauseTime:5000,
+directionNav:true, //Next & Prev
+directionNavHide:true, //Only show on hover
+controlNav:true, //1,2,3...
+controlNavThumbs:true, //Use thumbnails for Control Nav
+pauseOnHover:true, //Stop animation while hovering
+captionOpacity:0.8 //Universal caption opacity
+});
 });

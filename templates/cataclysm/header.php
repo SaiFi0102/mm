@@ -121,8 +121,18 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 </a>
 <div id="status_content_<?php print $rid; ?>" style="display:none;">
 <b><span id="status_online_<?php print $rid; ?>"></span></b> Online Players(Maximum Online: <b><span id="status_maxonline_<?php print $rid; ?>"></span></b>).<br />
-<span style="color:#6666FF;"><b><span id="status_alliance_<?php print $rid; ?>"></span></b> Alliance</span> &amp; <span style="color:#FF6666;"><b><span id="status_horde_<?php print $rid; ?>"></span></b> Horde</span>.<br />
-Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
+<div id="onlinebar">
+<div id="horde">
+<div class="obar_logo"></div>
+<div class="obar" style="width:94px;" id="status_horde_<?php print $rid; ?>"></div>
+</div>
+<div id="ally">
+<div class="obar_logo">
+<div class="obar" style="width:95px;" id="status_alliance_<?php print $rid; ?>"></div>
+</div>
+</div>
+</div>
+<br />Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
 </div>
 </td>
 </tr>
@@ -134,6 +144,14 @@ Up for <span id="status_uptime_<?php print $rid; ?>"></span>.
 </table>
 </div>
 </div>
+
+<div class="main">
+<div class="main_title">Find us on Facebook</div>
+<div class="content">
+<iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fapps%2Fapplication.php%3Fid%3D151175154940833&amp;width=274&amp;colorscheme=dark&amp;show_faces=true&amp;stream=true&amp;header=false&amp;height=395" scrolling="no" frameborder="0" style="border:none;overflow:hidden;width:274px;height:400px;background:#050202;" allowTransparency="true"></iframe>
+</div>
+</div>
+
 </div>
 <div class="left"><div class="bottom-left"></div></div><div class="bottom"></div>
 </div>

@@ -136,7 +136,7 @@ class Realm
 		//Online Players Query
 		$query = new MMQueryBuilder();
 		$query->Select("`characters`")->Where("`online` <> 0")
-		->Columns(array("COUNT(*)"=>"numrows", "(SELECT COUNT(*) FROM `characters` WHERE `online` <> 0 AND (`race`='1' OR `race`='3' OR `race`='4' OR `race`='7' OR `race`='11'))"=>"numalliance", "(SELECT COUNT(*) FROM `characters` WHERE `online` <> 0 AND (`race`='2' OR `race`='5' OR `race`='6' OR `race`='8' OR `race`='10'))"=>"numhorde"))
+		->Columns(array("COUNT(*)"=>"numrows", "(SELECT COUNT(*) FROM `characters` WHERE `online` <> 0 AND (`race`='1' OR `race`='3' OR `race`='4' OR `race`='7' OR `race`='11'))"=>"numalliance"))
 		->Build();
 		
 		$result = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
@@ -144,7 +144,7 @@ class Realm
 		return array(
 			"status"	=> true,
 			"online"	=> $result['numrows'],
-			"horde"		=> $result['numhorde'],
+			"horde"		=> (int)$result['numrows']-(int)$result['numalliance'],
 			"alliance"	=> $result['numalliance'],
 			"uptime"	=> $struptime,
 			"maxplayers"=> $maxonline['maxplayers'],

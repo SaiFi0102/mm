@@ -371,6 +371,7 @@ padding:5px 7px 5px 7px;
 .rightside .bottom {
 background:url('../../images/cataclysm/bdot_h.png') repeat-x;
 height:3px;
+margin-left:3px;
 }
 .rightside .bottom-left {
 background:url('../../images/cataclysm/bdot_bl.png') no-repeat;
@@ -389,7 +390,7 @@ padding:30px;
 padding-bottom:5px;
 }
 #footer_container ul {
-list-style-image: none;
+list-style-image:none;
 margin:0;
 padding:0;
 padding-top:5px;
@@ -544,6 +545,50 @@ float:left;
 border:1px solid #ffffff;
 }
 
+/*Online Bar*/
+#onlinebar {
+width:100%;
+height:30px;
+text-align:center;
+}
+#onlinebar .obar_logo {
+height:30px;
+}
+#onlinebar .obar {
+height:30px;
+}
+#onlinebar #ally {
+float:left;
+text-align:left;
+}
+#onlinebar #horde .obar_logo {
+background:url('../../images/cataclysm/obar_horde_logo.png') no-repeat;
+float:right;
+width:29px;
+}
+#onlinebar #horde .obar {
+background:url('../../images/cataclysm/obar_horde.png') no-repeat 100% 0%;
+float:left;
+color:#FF6666;
+}
+#onlinebar #horde {
+float:right;
+text-align:right;
+}
+#onlinebar #ally .obar_logo  {
+background:url('../../images/cataclysm/obar_ally_logo.png') no-repeat;
+}
+#onlinebar #ally .obar {
+background:url('../../images/cataclysm/obar_ally.png') no-repeat;
+margin-left:29px;
+color:#0011bb;
+}
+#onlinebar .obar {
+padding-top:6px;
+text-align:center;
+text-shadow: #000000 1px 1px 4px;
+}
+
 /*All Themes must have content below*/
 /*Character Box*/
 .characters {
@@ -671,7 +716,6 @@ top:0;
 left:0;
 }
 .loadmask-msg div {
-padding:10px;
 cursor:wait;
 text-align:center;
 color:#ffffff;
