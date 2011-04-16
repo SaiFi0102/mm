@@ -37,7 +37,13 @@ function LoadStatus()
 			$("#status_table").mask("<img src='images/cataclysm/mask-loader.gif' alt='Loading...' height='21' width='56' />");
 		},
 		success: function(data){
+			totalonline = 0;
+			totalhorde = 0;
+			totalalliance = 0;
 			for(x in data) {
+				totalonline += parseInt(data[x]['online']);
+				totalhorde += parseInt(data[x]['horde']);
+				totalalliance += parseInt(data[x]['alliance']);
 				if(data[x]['status']) {
 					$("#status_loadingicon_" + x).stop().hide();
 					$("#status_downarrow_" + x).stop().hide();
@@ -59,6 +65,13 @@ function LoadStatus()
 				$("#status_table").unmask();
 				$("#status_content_" + x).fadeIn(500);
 			}
+			$("#status_online_total").html(totalonline);
+			$("#status_horde_total").html(totalhorde);
+			$("#status_alliance_total").html(totalalliance);
+			$("#status_horde_total").css("width", (totalhorde+1) * 189 / (totalonline+2));
+			$("#status_alliance_total").css("width", (totalalliance+1) * 189 / (totalonline+2));
+			$("#status_loader_total").hide();
+			$("#status_content_total").fadeIn(500);
 		},
 		error: function(){
 			

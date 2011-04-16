@@ -138,6 +138,28 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 </tr>
 <?php
 }?>
+
+<tr><th>Total</th></tr>
+<tr>
+<td>
+<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/spinner.gif' alt='Loading...' height='16' width='16' id="status_loader_total" />
+<div id="status_content_total" style="display:none;">
+<b><span id="status_online_total"></span></b> Online Players.<br />
+<div id="onlinebar">
+<div id="horde">
+<div class="obar_logo"></div>
+<div class="obar" style="width:94px;" id="status_horde_total"></div>
+</div>
+<div id="ally">
+<div class="obar_logo">
+<div class="obar" style="width:95px;" id="status_alliance_total"></div>
+</div>
+</div>
+</div>
+</div>
+</td>
+</tr>
+
 <tr>
 <th colspan="2" align="center">set realmlist <?php print $LOGON_REALMLIST; ?></th>
 </tr>
