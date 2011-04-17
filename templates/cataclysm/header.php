@@ -102,6 +102,26 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 <div class="main_title">Realm Status</div>
 <div class="content" id="status_table">
 <table width="100%" class="serverstatus">
+<tr><th>Total</th></tr>
+<tr>
+<td>
+<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/spinner.gif' alt='Loading...' height='16' width='16' id="status_loader_total" />
+<div id="status_content_total" style="display:none;">
+<b><span id="status_online_total"></span></b> Online Players.<br />
+<div id="onlinebar">
+<div id="horde">
+<div class="obar_logo"></div>
+<div class="obar" style="width:94px;" id="status_horde_total"></div>
+</div>
+<div id="ally">
+<div class="obar_logo">
+<div class="obar" style="width:95px;" id="status_alliance_total"></div>
+</div>
+</div>
+</div>
+</div>
+</td>
+</tr>
 <?php foreach($REALM as $rid => $rdata)
 {?>
 <tr>
@@ -139,27 +159,6 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 <?php
 }?>
 
-<tr><th>Total</th></tr>
-<tr>
-<td>
-<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/spinner.gif' alt='Loading...' height='16' width='16' id="status_loader_total" />
-<div id="status_content_total" style="display:none;">
-<b><span id="status_online_total"></span></b> Online Players.<br />
-<div id="onlinebar">
-<div id="horde">
-<div class="obar_logo"></div>
-<div class="obar" style="width:94px;" id="status_horde_total"></div>
-</div>
-<div id="ally">
-<div class="obar_logo">
-<div class="obar" style="width:95px;" id="status_alliance_total"></div>
-</div>
-</div>
-</div>
-</div>
-</td>
-</tr>
-
 <tr>
 <th colspan="2" align="center">set realmlist <?php print $LOGON_REALMLIST; ?></th>
 </tr>
@@ -170,7 +169,7 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 <div class="main">
 <div class="main_title">Find us on Facebook</div>
 <div class="content">
-<iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fapps%2Fapplication.php%3Fid%3D151175154940833&amp;width=274&amp;colorscheme=dark&amp;show_faces=true&amp;stream=true&amp;header=false&amp;height=395" scrolling="no" frameborder="0" style="border:none;overflow:hidden;width:274px;height:400px;background:#050202;" allowTransparency="true"></iframe>
+<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/apps/application.php?id=151175154940833" width="274" colorscheme="dark" show_faces="true" stream="true" header="false"></fb:like-box>
 </div>
 </div>
 
