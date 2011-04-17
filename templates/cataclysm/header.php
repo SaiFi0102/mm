@@ -46,6 +46,7 @@ else print "Your account was most recently logged in from game on,<br />" . Conv
 <li class="root"><a href="pvp.php" class="orphan item"><span>PvP</span></a></li>
 <li class="root"><a href="contact.php" class="orphan item"><span>Contact</span></a></li>
 <li class="root"><a href="realms.php" class="orphan item"><span>Realms</span></a></li>
+<li class="root"><a href="characters.php" class="orphan item"><span>Characters/Tools</span></a></li>
 
 <?php if($USER['loggedin']) { ?>
 <li class="root"><a href="logout.php" class="orphan item"><span>Logout</span></a></li>

@@ -10,4 +10,8 @@ ADD COLUMN `header_accept` VARCHAR(225) NULL AFTER `header_cache_control`,
 ADD COLUMN `header_accept_encoding` VARCHAR(225) NULL AFTER `header_accept`,
 ADD COLUMN `header_accept_language` VARCHAR(225) NULL AFTER `header_accept_encoding`,
 ADD COLUMN `header_accept_charset` VARCHAR(225) NULL AFTER `header_accept_language`;
+
 ALTER TABLE `realmd`.`news`     ADD COLUMN `link` VARCHAR(100) NULL AFTER `sticky`;
+ALTER TABLE `news`
+MODIFY COLUMN `date`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `body`;
+

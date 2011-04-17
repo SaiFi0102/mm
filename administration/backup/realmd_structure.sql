@@ -190,9 +190,10 @@ CREATE TABLE `news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` text,
   `body` longtext,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `by` varchar(50) DEFAULT 'Unknown',
   `sticky` tinyint(1) unsigned NOT NULL DEFAULT '0',
+ `link` varchar(100) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
