@@ -74,7 +74,7 @@ $("#amount_alertpay").change(function()
 });
 </script>
 			<br />
-			<?php if($cms->config['enable_alertpay']) {//TODO ?>
+			<?php if($cms->config['enable_alertpay']) { ?>
 			<input type="hidden" name="ap_purchasetype" value="item" />
 			<input type="hidden" name="ap_merchant" value="<?php print $cms->config['email_alertpay']; ?>" />
 			<input type="hidden" name="ap_itemname" value="Payment for: <?php print $USER['username']; ?>(ID:<?php print $USER['id']; ?>)" />
@@ -85,7 +85,7 @@ $("#amount_alertpay").change(function()
 			<input type="hidden" name="apc_1" value="<?php print $USER['id']; ?>" />
 			<input type="hidden" name="apc_2" value="_MM_PAYMENT" />
 			<input type="image" name="ap_image" src="https://www.alertpay.com//PayNow/7459EDD2962843B681B09B0080EFCA97b0en.gif" width="171" height="45" />
-			<?php } else {//TODO ?>
+			<?php } else { ?>
 			<img src="https://www.alertpay.com//PayNow/7459EDD2962843B681B09B0080EFCA97b0en.gif" width="171" height="45" border="0" onmouseover="toolTip(this, 'Currently not not allowed!');" />
 			<?php } ?>
 			</form>

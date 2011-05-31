@@ -1,7 +1,6 @@
 <?php
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
-exit("UNDERCONSTRUCTION"); //TODO
 
 //################ Required Files ################
 require_once("init.php");
@@ -14,22 +13,16 @@ eval($cms->SetPageAccess(ACCESS_REGISTERED));
 $page_name[] = array("Referrals"=>"refer.php");
 
 //################ Page Functions ################
-function GetRefferedPlayersString()
+function FetchRefferals()
 {
-	global $LOGONDB, $USER;
-	$q = $LOGONDB->Select("(SELECT username FROM account WHERE id=account_mm_extend.accountid) AS username", "account_mm_extend", "WHERE referred='%s'", false, $USER['id']);
+	global $DB, $USER;
+	$query = new MMQueryBuilder();
+	$query->Select("`account_referrals`")->Columns(array("*", "(SELECT `username` FROM `account` WHERE `id`=`account_referrals`.`to`)" => "username"))->Where("`by` = '%s'", $USER['id'])->Build();
+	$referrals = MMMySQLiFetch($DB->query($query, DBNAME));
 	
-	$return = null;
-	foreach($q as $qz)
-	{
-		$return .= FirstCharUpperThenLower($qz['username']);
-		$return .= ", ";
-	}
-	$return = substr($return, 0, -2);
-	
-	return $return;
+	return $referrals;
 }
 
-$referredbyme = GetRefferedPlayersString();
+$referredbyme = FetchRefferals();
 eval($templates->Output("refer"));
 ?>

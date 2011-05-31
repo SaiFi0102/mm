@@ -62,8 +62,9 @@ if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $US
 			{
 				$location = $REALM[$_GET['rid']]['UNSTUCK']['horde'];
 			}
-			$result = $rclass->ExecuteSoapCommand("tele name {$_cdata['name']} {$location}");
-			if(!$result['sent'])
+			$teleresult = $rclass->ExecuteSoapCommand("tele name {$_cdata['name']} {$location}");
+			$ressresult = $rclass->ExecuteSoapCommand("revive {$_cdata['name']}");
+			if(!$teleresult['sent'] && !$ressresult['sent'])
 			{
 				$cms->ErrorPopulate("There was a problem with the server, please try again later. If this problem persists, please contact an administrator!");
 			}

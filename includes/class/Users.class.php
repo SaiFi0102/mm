@@ -41,8 +41,8 @@ class Users
 			$this->ClearExpiredVotes();
 			$this->BanStatus();
 			$this->IsFirstVisit();
-			$this->LoginUpdate();
 		}
+		$this->LoginUpdate();
 	}
 	
 	/**
@@ -103,34 +103,66 @@ class Users
 		$time = time();
 		$uid = $this->user['loggedin'] ? $this->user['id'] : 0;
 		
-		//Build Query
+		//Build UPDATE Query for existing entry
 		$query = new MMQueryBuilder();
-		$query->Replace("`online`")
+		$query->Update("`online`")->Where("`uid` = '%s' AND `ip` = '%s'", $uid, GetIp())
 		->Columns(array(
-			'`uid`'					=> "'%s'",
-			'`ip`'					=> "'%s'",
-			'`lastvisit`'			=> "'%s'",
-			'`online`'				=> "'1'",
-			'`visits`'				=> "visits + '1'",
-			'`request_uri`'			=> "'%s'",
-			'`header_host`'			=> "'%s'",
-			'`header_connection`'	=> "'%s'",
-			'`header_user_agent`'	=> "'%s'",
-			'`header_cache_control`'=> "'%s'",
-			'`header_accept`'		=> "'%s'",
-			'`header_accept_encoding`'=> "'%s'",
-			'`header_accept_language`'=> "'%s'",
-			'`header_accept_charset`'=> "'%s'",	
-		),
-		$uid, GetIp(), time(), $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], $_SERVER['HTTP_CONNECTION'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTP_CACHE_CONTROL'], $_SERVER['HTTP_ACCEPT'], $_SERVER['HTTP_ACCEPT_ENCODING'], $_SERVER['HTTP_ACCEPT_LANGUAGE'], $_SERVER['HTTP_ACCEPT_CHARSET']);
-
-		if($this->firstvisit)
+			'`lastvisit`'	=> "'%s'",
+			'`online`'		=> "'1'",	
+		), time());
+		
+		if($this->firstvisit) //If firstvisit
 		{
 			$query->AddColumns(array('`firstvisit`' => "CURRENT_TIMESTAMP"));
 		}
-		
+		if($GLOBALS['AJAX_PAGE'] != true) //If it is not an ajax page, add extra columns
+		{
+			$query->AddColumns(array(
+				'`request_uri`' => "'%s'",
+				'`visits`' => "`visits` + 1",
+				'`header_host`'			=> "'%s'",
+				'`header_connection`'	=> "'%s'",
+				'`header_user_agent`'	=> "'%s'",
+				'`header_cache_control`'=> "'%s'",
+				'`header_accept`'		=> "'%s'",
+				'`header_accept_encoding`'=>"'%s'",
+				'`header_accept_language`'=>"'%s'",
+				'`header_accept_charset`'=> "'%s'",
+			), $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], $_SERVER['HTTP_CONNECTION'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTP_CACHE_CONTROL'], $_SERVER['HTTP_ACCEPT'], $_SERVER['HTTP_ACCEPT_ENCODING'], $_SERVER['HTTP_ACCEPT_LANGUAGE'], $_SERVER['HTTP_ACCEPT_CHARSET']);
+		}
 		$query->Build();
 		$result = $this->db->query($query, DBNAME);
+		
+		//Build INSERT Query for new entry
+		if($this->db->affected_rows < 1 && $GLOBALS['AJAX_PAGE'] != true)
+		{
+			$query = new MMQueryBuilder();
+			$query->Insert("`online`")
+			->Columns(array(
+				'`uid`'					=> "'%s'",
+				'`ip`'					=> "'%s'",
+				'`lastvisit`'			=> "'%s'",
+				'`online`'				=> "'1'",
+				'`visits`'				=> "'1'",
+				'`request_uri`'			=> "'%s'",
+				'`header_host`'			=> "'%s'",
+				'`header_connection`'	=> "'%s'",
+				'`header_user_agent`'	=> "'%s'",
+				'`header_cache_control`'=> "'%s'",
+				'`header_accept`'		=> "'%s'",
+				'`header_accept_encoding`'=>"'%s'",
+				'`header_accept_language`'=>"'%s'",
+				'`header_accept_charset`'=> "'%s'",	
+			),
+			$uid, GetIp(), time(), $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], $_SERVER['HTTP_CONNECTION'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTP_CACHE_CONTROL'], $_SERVER['HTTP_ACCEPT'], $_SERVER['HTTP_ACCEPT_ENCODING'], $_SERVER['HTTP_ACCEPT_LANGUAGE'], $_SERVER['HTTP_ACCEPT_CHARSET']);
+	
+			if($this->firstvisit)
+			{
+				$query->AddColumns(array('`firstvisit`' => "CURRENT_TIMESTAMP"));
+			}
+			$query->Build();
+			$result = $this->db->query($query, DBNAME);
+		}
 	}
 	
 	public function BanStatus()
@@ -159,7 +191,7 @@ class Users
 		$query = new MMQueryBuilder();
 		$query->Select("`online`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`ip` = '%s'", GetIp())->Build();
 		$result = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
-		if(intval($result['numrows']) < 1)
+		if((int)$result['numrows'] < 1)
 		{
 			$this->firstvisit = true;
 		}

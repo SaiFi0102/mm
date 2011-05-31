@@ -77,7 +77,7 @@ function LoadStatus()
 			
 		}
 	});
-	setTimeout("LoadStatus()", 120000);
+	setTimeout("LoadStatus()", 60000);
 }
 $(document).ready(function() {
 	LoadStatus();
