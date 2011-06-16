@@ -60,7 +60,7 @@ define('CRAWLERS_LIST', 'Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FA
  * $CHARACTERLIST_MUSTBEONLINE = false; //If set to true, it'll prevent it from being selected if the character is offline and if SELECTION is enabled
  * $CHARACTERLIST_NOT_MUSTBEOLINE = false; //If set to true, it'll prevent it from being selected if the character is online and if SELECTION is enabled
  * $CHARACTERLIST_RID = null; //REALMIDs are set in /includes/config.php
- * $CHARACTERLIST_SELECTION = false; //If set to true ... Ads radio button to select character with FROM variables as: Name=character_selected, Value=345(CharacterID)
+ * $CHARACTERLIST_SELECTION = false; //If set to true ... Adds radio button to select character with FROM variables as: Name=character_selected, Value=345(CharacterID)
  * 
  * --- Redirect GLOBAL Variables and Method ---
  * $REDIRECT_MESSAGE = "Redirection Message to show without times";

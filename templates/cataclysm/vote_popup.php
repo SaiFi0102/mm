@@ -9,7 +9,7 @@ if(count($ppgateways)){
 		<div class="noticebox" align="center"><span>Vote for us!<br />This popup dialog will not appear for 12 hours if you vote on atleast one gateway.<br />Thank you for your support!</span></div>
 		<br />
 		<?php
-		$previousvotes = array(); //If there voted on atleast one gateway. Popup wont show so no need to waste time
+		$previousvotes = array(); //If they voted on atleast one gateway. Popup wont show so no need to waste time
 		foreach($ppgateways as $vg_data)
 		{
 			eval($templates->Output("votegateway_bit", false, false, false, true));
@@ -23,6 +23,6 @@ if(count($ppgateways)){
 	</div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){$("#full").mask();$("#votepopup_popup").fadeIn(500);});$(".votepopup_close").click(function(){$("#full").unmask();$("#votepopup_popup").fadeOut(250, function(){$(this).hide();});});
+$(document).ready(function(){setTimeout(function(){$("#full").mask();$("#votepopup_popup").fadeIn(500);},5000);});$(".votepopup_close").click(function(){$("#full").unmask();$("#votepopup_popup").fadeOut(250, function(){$(this).hide();});});
 </script>
 <?php }?>

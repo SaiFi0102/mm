@@ -14,23 +14,45 @@
 	</div>
 </div>
 <?php
-if(isset($_GET['act']) && $_GET['act'] == "unstuck" && $_cdata['account'] == $USER['id'])
-{?>
-<div class="main">
-	<div class="main_title">Character Unstuck</div>
-	<div class="content">
-		<?php print $cms->ErrorOutput(); ?>
-		<div class="noticebox"><span>
-			Are you sure you want to use unstuck tool on this character?<br />
-			You will be revived and teleported.
-		</span></div><br />
-		<div align="center">
-			<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
-			<input type="submit" name="submit" value="Unstuck!" />
-			</form>
+if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
+{
+	if($_GET['act'] == "unstuck")
+	{?>
+	<div class="main">
+		<div class="main_title">Character Unstuck/Revive</div>
+		<div class="content">
+			<?php print $cms->ErrorOutput(); ?>
+			<div class="noticebox"><span>
+				Are you sure you want to use the Unstuck/Revive tool on this character?<br />
+				You will be revived and teleported to a safe location.
+			</span></div>
+			<div align="center">
+				<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
+				<input type="submit" name="submit" value="Unstuck!" />
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
-<?php
+	<?php
+	}
+	if($_GET['act'] == "customize")
+	{?>
+	<div class="main">
+		<div class="main_title">Character Rename/Customize</div>
+		<div class="content">
+			<?php print $cms->ErrorOutput(); ?>
+			<div class="noticebox"><span>
+				Are you sure you want to use Rename/Customize on this character for <b><i><?php print $cms->config['cost_customizetool']; ?> Vote Points</i></b>?<br />
+				You will be prompted to customize your character in the character selection screen in game.
+			</span></div>
+			<div align="center">
+				<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
+				<input type="submit" name="submit" value="Customize!" />
+				</form>
+			</div>
+		</div>
+	</div>
+	<?php
+	}
 }
 ?>

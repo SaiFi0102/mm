@@ -188,12 +188,22 @@ class Users
 	
 	public function IsFirstVisit()
 	{
+		global $USER;
 		$query = new MMQueryBuilder();
-		$query->Select("`online`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`ip` = '%s'", GetIp())->Build();
+		$query->Select("`online`")->Columns(array("visits","COUNT(*)"=>"numrows"))->Where("`ip` = '%s'", GetIp())->Build();
 		$result = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		
 		if((int)$result['numrows'] < 1)
 		{
 			$this->firstvisit = true;
+		}
+		if($result['visits'] == null)
+		{
+			$USER['visits'] = 1;
+		}
+		else
+		{
+			$USER['visits'] = (int)$result['visits'] + 1;
 		}
 	}
 }

@@ -1,6 +1,9 @@
 <body>
 <?php
-if($SHOWVOTEPOPUP && !$uclass->firstvisit)eval($templates->Output("vote_popup", false, false, false, true));
+if($SHOWVOTEPOPUP && !$uclass->firstvisit && $USER['visits'] >= 3)
+{
+	eval($templates->Output("vote_popup", false, false, false, true));
+}
 ?>
 <div id="full">
 <div id="maincontainer">

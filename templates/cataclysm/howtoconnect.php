@@ -45,7 +45,7 @@
 	<div class="content" style="font-size:18px;line-height:150%;">
 		<div class="right"><img src="<?php print $cms->config['websiteurl']; ?>/images/guide/windows/step1/2.jpg" alt="" width="639" height="670" /></div>
 		<div>
-			The first step is to <b><a href="register.php" title="Link to Registration Page" target="_blank">Register</a></b> an account on WoWMortal online. This account will be used to login on Website and the Game.<br /><br />
+			The first step is to <b><a href="register.php" title="Link to Registration Page" target="_blank">Register</a></b> an account on <?php print $cms->config['websitename']; ?> online. This account will be used to login on Website and the Game.<br /><br />
 			You can register by going to registration page by clicking on the "Register" link(s) above or by <b><a href="register.php" title="Link to Registration Page" target="_blank">clicking here</a></b>.<br /><br />
 			Once you have registered an account you can proceed to the next step for downloading and installing World of Warcraft.
 			

@@ -44,14 +44,25 @@ $CDATA_ZONEID = $_cdata['zone'];
 	if(isset($CHARACTERLIST_SHOW_TOOLS) && $CHARACTERLIST_SHOW_TOOLS)
 	{ ?>
 		<div class="cright">
-			<table border="0" cellpadding="0" cellspacing="0" align="center">
-			<tr valign="middle" align="center">
-				<td><a href="character.php?act=unstuck&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>"><img src="<?php print $cms->config['websiteurl']; ?>/images/icons/unstuck.png" height="40" width="40" alt="" onmouseover="toolTip(this, 'If your character is stuck or is lost, use this unstuck tool to teleport your self to your hearthstone location');" /></a></td>
-			</tr>
-			<tr valign="middle" align="center">
-				<td><u>Unstuck Character</u></td>
-			</tr>
-			</table>
+			<h5 style="color:#ffffff;text-align:center;text-shadow:#000000 1px 1px 0;">Player Tools</h5>
+			<a href="character.php?act=unstuck&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>" style="float:right;">
+				<div class="tool_bit">
+					<div class="tool_bit_border">
+						<img src="<?php print $cms->config['websiteurl']; ?>/images/icons/unstuck.png" height="40" width="40" alt="" />
+						<br />Unstuck/Revive
+						<br /><b>FREE!</b>
+					</div>
+				</div>
+			</a>
+			<a href="character.php?act=customize&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>" style="float:right;">
+				<div class="tool_bit">
+					<div class="tool_bit_border">
+						<img src="<?php print $cms->config['websiteurl']; ?>/images/icons/rename.png" height="40" width="40" alt="" />
+						<br />Rename/Customize
+						<br /><b>Cost:</b> <i><?php print $cms->config['cost_customizetool']; ?></i> Vote Points
+					</div>
+				</div>
+			</a>
 		</div><?php
 	}?>
 	

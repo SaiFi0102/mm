@@ -31,7 +31,7 @@ $print_rand_online = null;
 $unregisteredonline = 0;
 foreach($website_onlines as $odata)
 {
-	if(empty($odata['username']) || !$odata['uid'])
+	if(empty($odata['username']) || $odata['uid'] == 0)
 	{
 		$unregisteredonline++;
 		continue;

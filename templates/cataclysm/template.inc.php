@@ -31,7 +31,7 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 //Website online users' data
 $website_onlines = array();
 $query = new MMQueryBuilder();
-$query->Select("`online`", "DISTINCT")->Columns(array("uid", "(SELECT `username` FROM `account` WHERE `account`.`id`=`online`.`uid`)"=>"username"))
+$query->Select("`online`")->Columns(array("uid", "(SELECT `username` FROM `account` WHERE `account`.`id`=`online`.`uid`)"=>"username"))
 ->Where("`online` <> 0")->Build();
 $website_onlines = MMMySQLiFetch($DB->query($query, DBNAME));
 
