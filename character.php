@@ -130,7 +130,8 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 					"`command`"		=> "'%s'",
 					"`message`"		=> "'%s'",
 					"`sent`"		=> "'%s'",
-				), $_cdata['account'], $_cdata['guid'], $_cdata['name'], "character customize {$_cdata['name']}", $customresult['message'], $sent)->Build();
+					"`cost`"		=> "'%s'",
+				), $_cdata['account'], $_cdata['guid'], $_cdata['name'], "character customize {$_cdata['name']}", $customresult['message'], $sent, $cms->config['cost_customizetool'])->Build();
 				$DB->query($query, DBNAME);
 				
 				//If everything is ok

@@ -49,7 +49,7 @@ function FetchVoteRewards($rid)
 	global $DB;
 	
 	$query = new MMQueryBuilder();
-	$query->Select("`rewards_voting`")->Columns("*")->Where("`realm` = '%s'", $rid)->Build();
+	$query->Select("`rewards_voting`")->Columns("*")->Where("`realm` = '%s' AND `disabled` = '0'", $rid)->Build();
 	
 	$return = MMMySQLiFetch($DB->query($query, DBNAME));
 	

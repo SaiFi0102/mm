@@ -295,7 +295,7 @@ class Realm
 			}
 			
 			//Log Delivery
-			$this->_LogRewardDelivery($session, $command, $result['message'], $characterid, $rewardid, $logsent, $votedonate);
+			$this->_LogRewardDelivery($session, $command, $result['message'], $characterid, $rewardid, $logsent, $votedonate, $reward['points']);
 		}
 		
 		//Try to send the gold now. $command = .send money #playername "#subject" "#text" #money
@@ -321,7 +321,7 @@ class Realm
 			}
 			
 			//Log Gold Delivery
-			$this->_LogRewardDelivery($session, $command, $result['message'], $characterid, $rewardid, $logsent, $votedonate);
+			$this->_LogRewardDelivery($session, $command, $result['message'], $characterid, $rewardid, $logsent, $votedonate, $reward['points']);
 		}
 		
 		//Deduct points if success = true
@@ -388,7 +388,7 @@ $errorstring = "\r\n
 		fclose($f);
 	}
 	
-	private function _LogRewardDelivery($session, $command, $message, $cid, $rewardid, $sent, $votedonate)
+	private function _LogRewardDelivery($session, $command, $message, $cid, $rewardid, $sent, $votedonate, $cost)
 	{
 		//Table name
 		switch($votedonate)
@@ -421,8 +421,9 @@ $errorstring = "\r\n
 			'`characterid`'	=> "'%s'",
 			'`realmid`'		=> "'%s'",
 			'`rewardid`'	=> "'%s'",
-			'`sent`'		=> "'%s'",),
-		$session, $command, $message, $cid, $this->rid, $rewardid, $sent)->Build();
+			'`sent`'		=> "'%s'",
+			'`cost`'		=> "'%s'",
+		), $session, $command, $message, $cid, $this->rid, $rewardid, $sent, $cost)->Build();
 		
 		return $this->db->query($query, DBNAME);
 	}
