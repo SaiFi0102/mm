@@ -190,20 +190,20 @@ class Users
 	{
 		global $USER;
 		$query = new MMQueryBuilder();
-		$query->Select("`online`")->Columns(array("visits","COUNT(*)"=>"numrows"))->Where("`ip` = '%s'", GetIp())->Build();
-		$result = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		$query->Select("`online`")->Columns("visits")->Where("`ip` = '%s'", GetIp())->Build();
+		$online = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
-		if((int)$result['numrows'] < 1)
+		if($online['visits'] == null)
 		{
 			$this->firstvisit = true;
 		}
-		if($result['visits'] == null)
+		if($online['visits'] == null)
 		{
 			$USER['visits'] = 1;
 		}
 		else
 		{
-			$USER['visits'] = (int)$result['visits'] + 1;
+			$USER['visits'] = (int)$online['visits'] + 1;
 		}
 	}
 }
