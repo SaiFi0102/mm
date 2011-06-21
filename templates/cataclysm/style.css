@@ -296,13 +296,13 @@ overflow:hidden;
 color:#EEEEEE;
 }
 #rt-showcase, .title1 .module-title, .box7 .rt-block, .box10 .rt-block {
-background-color:#951E01;
+background-color:#2244aa;
 }
 .showcase-overlay-dark {
 background-image:url('../../images/cataclysm/overlays/showcase-overlay.png');
 background-position:50% 0;
 background-repeat:repeat-x;
-border:1px solid #cc6677;
+border:1px solid #6688ff;
 padding:20px;
 padding-bottom:10px;
 text-align:center;
@@ -353,8 +353,8 @@ height:2px;
 background-color:transparent;
 }
 .main_title {
-background:url('../../images/cataclysm/overlays/title-left.gif') 50% 0 repeat-x;
-padding:17px 12px 17px 12px;
+background:url('../../images/cataclysm/overlays/title-left.png') 50% 0 repeat-x;
+padding:18px 12px;
 font-size:15px;
 font-weight:bold;
 text-shadow:#000000 1px 1px 3px;
@@ -364,13 +364,16 @@ color:#FFFFFF;
 color:#ffffff;
 }
 .rightside .main_title {
-background:url('../../images/cataclysm/overlays/title-right.gif') 50% 0 repeat-x;
-padding:17px 7px 17px 7px;
+background:url('../../images/cataclysm/overlays/title-right.png') 50% 0 repeat-x;
+padding:18px 7px;
 text-align:center;
 }
 .content {
-background:url('../../images/cataclysm/overlays/title5-bg.png') 50% 0 repeat-x;
+background:url('../../images/cataclysm/overlays/content-border-left.png') repeat-y;
 padding:5px 7px 5px 7px;
+}
+.rightside .content {
+background:url('../../images/cataclysm/overlays/content-border-right.png') repeat-y;
 }
 .rightside .bottom {
 background:url('../../images/cataclysm/bdot_h.png') repeat-x;
