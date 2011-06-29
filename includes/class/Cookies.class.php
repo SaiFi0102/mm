@@ -46,7 +46,7 @@ class Cookies
 	 */
 	public function DeleteCookie($name)
 	{
-		return setcookie($name, "", time()-3600, $this->config['cookiepath'], $this->config['cookiedomain']) ? true : false;
+		return setcookie($name, "", time()-3600) ? true : false;
 	}
 }
 
