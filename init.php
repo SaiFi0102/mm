@@ -32,6 +32,7 @@ $USER = array();
 
 //################ Include required classes and pages for each page ################
 require_once(DOC_ROOT."/includes/common.php");
+require_once(DOC_ROOT."/includes/iso2country.include.php");
 require_once(DOC_ROOT."/includes/config.php");
 
 if($DEBUG && !$AJAX_PAGE)

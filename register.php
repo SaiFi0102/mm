@@ -11,22 +11,19 @@ $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_UNREGISTERED));
 
 //################ Page Functions ################
-function FinalRegister($username, $password, $email, $flags)
+function FinalRegister($email, $password, $countrycode, $sq1, $sq2, $sa1, $sa2)
 {
 	global $cookies, $DB;
 	
-	$sha_pass = Sha1Pass($username, $password);
+	$sha_pass = Sha1Pass($email, $password);
 	
 	$query = new MMQueryBuilder();
-	$query->Insert("`account`")
-	->Columns(array(
-	"`username`"	=> "'%s'",
-	"`sha_pass_hash`"=> "'%s'",
-	"`email`"		=> "'%s'",
-	"`expansion`"	=> "'%s'",
-	"`gmlevel`"		=> "'0'",
-	"`last_ip`"		=> "'%s'",
-	), $username, $sha_pass, $email, FixExpansionFlags($flags), GetIp())
+	$query->Insert("`account`")->Columns(array(
+		"`username`"	=> "'%s'",
+		"`sha_pass_hash`"=> "'%s'",
+		"`expansion`"	=> "'3'",
+		"`last_ip`"		=> "'%s'",
+	), $email, $sha_pass, GetIp())
 	->Build();
 	
 	//Insert into account table
@@ -35,18 +32,28 @@ function FinalRegister($username, $password, $email, $flags)
 	
 	if($return)
 	{
-		//Insert into account_mm_extend table
+		//Find the account id of the new account
 		$query = new MMQueryBuilder();
-		$query->Select("`account`")->Columns("`id`")->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $username, $sha_pass)->Build();
+		$query->Select("`account`")->Columns("`id`")->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $email, $sha_pass)->Build();
 		$accountid = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 		
+		//Insert extra details into account_mm_extend table
 		$query = new MMQueryBuilder();
-		$query->Insert("`account_mm_extend`")->Columns(array("`accountid`"=>"'%s'"), $accountid['id'])->Build();
+		$query->Insert("`account_mm_extend`")->Columns(array(
+			"`accountid`"		=> "'%s'",
+			"`countrycode`"		=> "'%s'",
+			"`secretquestion1`"	=> "'%s'",
+			"`secretquestion2`"	=> "'%s'",
+			"`secretanswer1`"	=> "'%s'",
+			"`secretanswer2`"	=> "'%s'",
+		), $accountid['id'], $countrycode, $sq1, $sq2, $sa1, $sa2)
+		->Build();
+		
 		$DB->query($query, DBNAME);
 	
 		//Login
-		$cookies->SetCookie("username", $username, false);
-		$cookies->SetCookie("password", $sha_pass, false);
+		$cookies->SetCookie("username", $email, true);
+		$cookies->SetCookie("password", $sha_pass, true);
 	}
 	
 	return $return;
@@ -58,7 +65,7 @@ function GenerateAndSendPasswordReset()
 	
 	//Query
 	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns(array("`id`", "`username`"))->Where("`email` = '%s'", $_POST['email'])->Build();
+	$query->Select("`account`")->Columns(array("`id`", "`username`"))->Where("`username` = '%s'", $_POST['email'])->Build();
 	$result = $DB->query($query, DBNAME);
 	if($result->num_rows < 1)
 	{
@@ -228,39 +235,35 @@ switch($_GET['act'])
 		if(isset($_POST['submit']))
 		{
 			//Check for errors
-			if(!isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['confirmpassword']) || !isset($_POST['email']) || !isset($_POST['confirmemail']) || !isset($_POST['flags']))
+			if(!isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['confirmpassword']) || !isset($_POST['countrycode']) || !isset($_POST['sq1']) || !isset($_POST['sq2']) || !isset($_POST['sa1']) || !isset($_POST['sa2']))
 			{
 				$cms->ErrorPopulate("An unknown error occurred, please contact an administrator.");
 				$cms->ErrorStopList();
 			}
 			
-			//Username check
-			$usercheck = CheckUsername($_POST['username']);
-			if($usercheck)
+			//Email check
+			$emailcheck = CheckEmail($_POST['email']);
+			if($emailcheck)
 			{
-				if($usercheck == USERNAME_EMPTY)
+				if($emailcheck == EMAIL_EMPTY)
 				{
-					$cms->ErrorPopulate("You did not enter a username.");
+					$cms->ErrorPopulate("You did not enter your email address.");
 				}
-				if($usercheck == USERNAME_ILLEGAL_CHARACTER)
+				if($emailcheck == EMAIL_LENTH_ABOVE)
 				{
-					$cms->ErrorPopulate("Your desired username contained illegal characters, please remove them and try again.");
+					$cms->ErrorPopulate("Your email address can not be longer than 64 characters.");
 				}
-				if($usercheck == USERNAME_ILLEGAL_SPACE)
+				if($emailcheck == EMAIL_FORMAT)
 				{
-					$cms->ErrorPopulate("Your desired username contained spaces, please remove them and try again.");
+					$cms->ErrorPopulate("The email address you entered is incorrect, please make sure your email is in the correct format(example@domain.tld).");
 				}
-				if($usercheck == USERNAME_LENTH_ABOVE)
+				if($emailcheck == EMAIL_ILLEGAL_SPACE)
 				{
-					$cms->ErrorPopulate("Your desired username cannot contain more than {$cms->config['usermaxlen']} characters, please try another.");
+					$cms->ErrorPopulate("The email address you entered contained spaces. Please enter your correct email address.");
 				}
-				if($usercheck == USERNAME_LENTH_BELOW)
+				if($emailcheck == EMAIL_EXISTS)
 				{
-					$cms->ErrorPopulate("Your desired username must contain atleast {$cms->config['userminlen']} characters, please try another.");
-				}
-				if($usercheck == USERNAME_EXISTS)
-				{
-					$cms->ErrorPopulate("Your desired username is already in use, please try another.");
+					$cms->ErrorPopulate("The email you entered is already in use with another account, if you forgot your password please <a href='register.php?act=retrieve'>click here</a>.");
 				}
 			}
 			
@@ -269,9 +272,9 @@ switch($_GET['act'])
 			{
 				$cms->ErrorPopulate("You did not enter a password.");
 			}
-			if($_POST['password'] == $_POST['username'])
+			if($_POST['password'] == $_POST['email'])
 			{
-				$cms->ErrorPopulate("Your desired password cannot be as same as your username.");
+				$cms->ErrorPopulate("Your desired password cannot be the same as your email address.");
 			}
 			if($_POST['password'] != $_POST['confirmpassword'])
 			{
@@ -282,26 +285,30 @@ switch($_GET['act'])
 				$cms->ErrorPopulate("Your password must contain atleast 5 characters, please use a stronger password.");
 			}
 			
-			//Email check
-			$emailcheck = CheckEmail($_POST['email'], $_POST['confirmemail']);
-			if($emailcheck)
+			//Country Check
+			if($_POST['countrycode'] == "XX" || empty($_POST['countrycode']))
 			{
-				if($emailcheck == EMAIL_EMPTY)
-				{
-					$cms->ErrorPopulate("You did not enter your email address.");
-				}
-				if($emailcheck == EMAIL_FORMAT)
-				{
-					$cms->ErrorPopulate("The email address you entered is incorrect, please make sure your email has a correct format(example@domain.tld).");
-				}
-				if($emailcheck == EMAIL_CONFIRM)
-				{
-					$cms->ErrorPopulate("The confirmation email address you entered does not match your email address.");
-				}
-				if($emailcheck == EMAIL_EXISTS)
-				{
-					$cms->ErrorPopulate("The email you entered is already in use with another account, if you forgot your password please <a href='register.php?act=retrieve'>click here</a>.");
-				}
+				$cms->ErrorPopulate("You did not select a country. Please select your country.");
+			}
+			if(!array_key_exists($_POST['countrycode'], $ISO2COUNTRY))
+			{
+				$cms->ErrorPopulate("You selected an invalid country. Please select your country.");
+			}
+			
+			//Secret Question Check
+			if(!array_key_exists($_POST['sq1'], $SECRETQUESTIONS['1'])) //Secret Question 1
+			{
+				$cms->ErrorPopulate("You selected an invalid Secret Question 1. Please select the Secret Question again from the list.");
+			}
+			if(!array_key_exists($_POST['sq2'], $SECRETQUESTIONS['2'])) //Secret Question 2
+			{
+				$cms->ErrorPopulate("You selected an invalid Secret Question 2. Please select the Secret Question again from the list.");
+			}
+			
+			//Secret Answer Check
+			if(strlen($_POST['sa1']) < 3 || strlen($_POST['sa2']) < 3)
+			{
+				$cms->ErrorPopulate("Your Secret Question's answer must have atleast 3 characters or more. Please enter a stronger answer.");
 			}
 			
 			//Captcha Check
@@ -314,7 +321,7 @@ switch($_GET['act'])
 			//If no error exists, try to register
 			if(!$cms->ErrorExists())
 			{
-				$register = FinalRegister($_POST['username'], $_POST['password'], $_POST['email'], $_POST['flags']);
+				$register = FinalRegister($_POST['email'], $_POST['password'], $_POST['countrycode'], $_POST['sq1'], $_POST['sq2'], $_POST['sa1'], $_POST['sa2']);
 				if($register)
 				{
 					$page_name[] = array("Success");
@@ -331,7 +338,8 @@ switch($_GET['act'])
 				}
 			}
 		}
-		$cms->ErrorSetHeading("The following errors occured while you were trying to register.");
+		$cms->ErrorSetHeading("The following errors occured while trying to register.");
+		$countrylisthtml = BuildCountryListHTML();
 		eval($templates->Output("register_form"));
 	break;
 }

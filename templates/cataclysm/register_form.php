@@ -5,70 +5,75 @@
 		<?php print($cms->ErrorOutput()); ?>
 		<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
 		
-		<fieldset>
-		<legend>Login Details</legend>
-			<table>
+			<table border="0" width="100%">
 				<tr>
-					<td>Username</td>
+					<th colspan="2">Login Details</th>
+				</tr>
+				
+				<tr>
+					<th>Email Address</th>
 					<td>
-						<input type="text" name="username" size="32"
-						maxlength="<?php print $cms->config['usermaxlen']; ?>"
-						<?php if(isset($_POST['username'])) print 'value="' . EscapeHtml($_POST['username']) . '"' ?> />
+						<input type="text" name="email" size="32" maxlength="<?php print $cms->config['usermaxlen']; ?>"
+						<?php if(isset($_POST['email'])) print 'value="' . EscapeHtml($_POST['email']) . '"' ?> />
 					 </td>
 				</tr>
 				
 				<tr>
-					<td>Password</td>
+					<th>Password</th>
 					<td>
 						<input type="password" name="password" size="32" />
 					 </td>
 				</tr>
 				
 				<tr>
-					<td>Confirm Password</td>
+					<th>Confirm Password</th>
 					<td>
 						<input type="password" name="confirmpassword" size="32" />
 					</td>
 				</tr>
-			</table>
-		</fieldset>
-		
-		<fieldset>
-		<legend>Personal Details</legend>	
-			<table>
+				
 				<tr>
-					<td>Email Address</td>
-					<td>
-						<input type="text" name="email" size="32"
-						<?php if(isset($_POST['email'])) print 'value="' . EscapeHtml($_POST['email']) . '"' ?> />
-					 </td>
+					<th colspan="2">Personal Details</th>
 				</tr>
 				
 				<tr>
-					<td>Confirm Email Address</td>
-					<td>
-						<input type="text" name="confirmemail" size="32" />
-					 </td>
+					<th>Secret Question 1</th>
+					<td><?php print BuildSecretQuestions(1); ?></td>
 				</tr>
-				
 				<tr>
-					<td>Choose your client</td>
+					<th>Answer</th>
 					<td>
-						<select name="flags">
-							<option value="2" selected="selected">Wrath of the Lich King</option>
-							<option value="1">Burning Crusade</option>
-							<option value="0">Classic WoW</option>
-						</select>
+						<input type="text" name="sa1" size="32"
+						<?php if(isset($_POST['sa1'])) print 'value="' . EscapeHtml($_POST['sa1']) . '"' ?> />
 					</td>
 				</tr>
+				<tr>
+					<th>Secret Question 2</th>
+					<td><?php print BuildSecretQuestions(2); ?></td>
+				</tr>
+				<tr>
+					<th>Answer</th>
+					<td>
+						<input type="text" name="sa2" size="32"
+						<?php if(isset($_POST['sa2'])) print 'value="' . EscapeHtml($_POST['sa2']) . '"' ?> />
+					</td>
+				</tr>
+				<tr>
+					<th>Country</th>
+					<td><?php print $countrylisthtml; ?></td>
+				</tr>
+				
+				<tr>
+					<th colspan="2">Image Verification</th>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><?php print recaptcha_get_html($cms->config['captchapubkey'], $captchaerror); ?></td>
+				</tr>
+				
+				<tr>
+					<th colspan="2" align="center"><input type="submit" name="submit" value=" Register! " /></th>
+				</tr>
 			</table>
-		</fieldset>
-		
-		<fieldset>
-		<legend>Captcha Verification</legend>
-			<?php print recaptcha_get_html($cms->config['captchapubkey'], $captchaerror); ?>
-		</fieldset>
-		<center><input type="submit" name="submit" value="Register!" /></center>
 		</form>
 	</div>
 </div>

@@ -268,27 +268,28 @@ function CheckUsername($username)
  * @param $email
  * @param $confirmemail
  */
-function CheckEmail($email, $confirmemail=null)
+function CheckEmail($email)
 {
-	global $DB;
+	global $cms, $DB;
 	if(empty($email) || $email == null)
 	{
 		return EMAIL_EMPTY;
+	}
+	if(strlen($email) > $cms->config['usermaxlen'])
+	{
+		return EMAIL_LENTH_ABOVE;
 	}
 	if(!ValidateEmail($email))
 	{
 		return EMAIL_FORMAT;
 	}
-	if($confirmemail != null)
+	if(preg_match('#\s#i', $email))
 	{
-		if($email != $confirmemail)
-		{
-			return EMAIL_CONFIRM;
-		}
+		return EMAIL_ILLEGAL_SPACE;
 	}
 	
 	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`email` = '%s'", $email)->Build();
+	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`username` = '%s'", $email)->Build();
 	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	if((int)$result['numrows'] > 0)
@@ -305,9 +306,9 @@ function CheckEmail($email, $confirmemail=null)
  */
 function FixExpansionFlags($flags)
 {
-	if((int)$flags > 2)
+	if((int)$flags > 3)
 	{
-		$return = 2;
+		$return = 3;
 	}
 	elseif((int)$flags < 0)
 	{
@@ -317,6 +318,55 @@ function FixExpansionFlags($flags)
 	{
 		$return = $flags;
 	}
+	return $return;
+}
+
+/**
+ * Builds a HTML source code with all countries
+ * in <select> form
+ */
+function BuildCountryListHTML()
+{
+	global $ISO2COUNTRY;
+	
+	//Select default selected country
+	if(isset($_POST['countrycode']))
+	{
+		$default = $_POST['countrycode'];
+	}
+	else
+	{
+		$default = GetCountryCodeByIp(GetIp());
+	}
+	
+	$return = "<select name='countrycode'><option value='XX'>Please select your country</option>"; //XX = Error
+	foreach($ISO2COUNTRY as $iso => $country)
+	{
+		$return .= "<option value='{$iso}'";
+		if($iso == $default) $return .= " selected='selected'"; //Default selected country
+		$return .= ">" . FirstCharUpperThenLower($country) . "</option>";
+	}
+	$return .= "</select>";
+	
+	return $return;
+}
+
+function BuildSecretQuestions($part)
+{
+	global $SECRETQUESTIONS;
+	
+	$return = "<select name='sq{$part}'>";
+	foreach($SECRETQUESTIONS[$part] as $id => $question)
+	{
+		$return .= "<option value='{$id}'";
+		if(isset($_POST["sq{$part}"]))
+		{
+			if($_POST["sq{$part}"] == $id) $return .= " selected='selected'"; //Previous entry
+		} 
+		$return .= ">{$question}</option>";
+	}
+	$return .= "</select>";
+	
 	return $return;
 }
 

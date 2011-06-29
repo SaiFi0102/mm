@@ -25,17 +25,20 @@ define('BAN_ACCOUNT', 500);
 define('BAN_IP', 501);
 define('BAN_BOTH', 502);
 
+define('EMAIL_EMPTY', 1);
+define('EMAIL_FORMAT', 2);
+define('EMAIL_CONFIRM', 3);
+define('EMAIL_EXISTS', 4);
+define('EMAIL_ILLEGAL_SPACE', 5);
+define('EMAIL_LENTH_ABOVE', 6);
+
+//Username system is deprecated, email adress is now username
 define('USERNAME_EMPTY', 1);
 define('USERNAME_ILLEGAL_CHARACTER', 2);
 define('USERNAME_ILLEGAL_SPACE', 3);
 define('USERNAME_LENTH_ABOVE', 4);
 define('USERNAME_LENTH_BELOW', 5);
 define('USERNAME_EXISTS', 6);
-
-define('EMAIL_EMPTY', 1);
-define('EMAIL_FORMAT', 2);
-define('EMAIL_CONFIRM', 3);
-define('EMAIL_EXISTS', 4);
 
 define('REWARD_VOTE', 0);
 define('REWARD_DONATE', 1);
@@ -50,6 +53,23 @@ define('PAYMENTTYPE_INVALID', 0);
 define('PAYMENTTYPE_VALID', 1);
 
 define('CRAWLERS_LIST', 'Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona');
+
+$SECRETQUESTIONS = array(
+	1 => array(
+		1 => "In which city were you born?",
+		2 => "What was the name of your first pet?",
+		3 => "Who was your childhood friend?",
+		4 => "What was the name of your favorite teacher?",
+		5 => "When did you start World of Warcraft?",
+	),
+	2 => array(
+		1 => "What was the make of your first car?",
+		2 => "What was your favorite place to visit as a child?",
+		3 => "Who is your favorite actor, musician, or artist?",
+		4 => "What high school did you attend?",
+		5 => "What street did you grow up on?",
+	)
+);
 
 /**
  * ###### SOME DOCUMENTS AND VARIABLES TO REMEMBER	######
