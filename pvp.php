@@ -7,7 +7,7 @@ require_once("init.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(false);
-eval($cms->SetPageAccess(ACCESS_ALL));
+eval($cms->SetPageAccess(ACCESS_NONE));
 
 //################ General Variables ################
 $page_name[] = array("Player PvP Statistics"=>"pvp.php");
