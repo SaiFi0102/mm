@@ -165,7 +165,7 @@ class Realm
 			$this->soapconn = new SoapClient(NULL,
 			array(
 				"location" =>		"http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
-				"uri"				=> "urn:MaNGOS",
+				"uri"				=> "urn:TC",
 				"style"				=> SOAP_RPC,
 				"login"				=> $this->realmconf['SOAP']['user'],
 				"password"			=> $this->realmconf['SOAP']['pass'],
