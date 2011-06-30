@@ -263,7 +263,7 @@ outline:none;
 .menutop li.root > .item, .menutop li > .item {
 color:#FFFFFF;
 font-weight:bold;
-text-shadow:#000000 1px 1px 0;
+text-shadow:#000000 0 0 4px;
 }
 .menutop li > .item {
 padding:10px;
@@ -430,13 +430,15 @@ margin:0 auto;
 /*Server Status*/
 .serverstatus th {
 padding:6px;
-text-shadow:#000000 2px 2px 2px;
+text-shadow:#000000 0px 0px 2px;
 font-size:15px;
+color:#ffffff;
 }
 .serverstatus td {
 text-align:center;
 font-size:13px;
 color:#eeeeff;
+text-shadow:#000000 1px 1px 0;
 }
 
 /*Nivo*/

@@ -274,7 +274,7 @@ switch($_GET['act'])
 			}
 			if($_POST['password'] == $_POST['email'])
 			{
-				$cms->ErrorPopulate("Your desired password cannot be the same as your email address.");
+				$cms->ErrorPopulate("Your password cannot be the same as your email address.");
 			}
 			if($_POST['password'] != $_POST['confirmpassword'])
 			{

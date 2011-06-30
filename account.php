@@ -79,18 +79,12 @@ if(isset($_POST['submit']))
 			//Password Check
 			if($_POST['newpassword'] == $USER['username'])
 			{
-				$cms->ErrorPopulate("Your new password cannot be same as your username.");
+				$cms->ErrorPopulate("Your new password cannot be same as your email address.");
 			}
 			if(strlen($_POST['newpassword']) < 5)
 			{
 				$cms->ErrorPopulate("Your new password must contain atleast 5 characters, please use a stronger password.");
 			}
-		}
-		
-		//If flags changed
-		if($_POST['newflags'] != $USER['expansion'])
-		{
-			$flagschange = true;
 		}
 		
 		//Update from DB
