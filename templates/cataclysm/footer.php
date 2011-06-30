@@ -25,28 +25,6 @@
 
 <div id="footer_container">
 <div class="right">
-<h5>Visitors</h5>
-<?php
-$print_rand_online = null;
-$unregisteredonline = 0;
-foreach($website_onlines as $odata)
-{
-	if(empty($odata['username']) || $odata['uid'] == 0)
-	{
-		$unregisteredonline++;
-		continue;
-	}
-	$print_rand_online .= $odata['username']. ", ";
-}
-
-$print_rand_online = substr($print_rand_online, 0, -2);
-print $print_rand_online;
-if($print_rand_online == null)
-{
-	print "No Visitors Online.";
-}
-?>
-
 <?php foreach($REALM as $rid => $rdata) { ?>
 <h5><?php print $rdata['NAME']; ?> Random 50 Online Players:</h5>
 <?php
@@ -66,7 +44,7 @@ print $print_rand_online;
 <div class="left">
 <h5>Visitors Online</h5>
 <ul>
-<?php print "<li><b>Total:</b> ".count($website_onlines). "</li><li><b>Players:</b> ".(count($website_onlines) - $unregisteredonline). "</li><li><b>Guests:</b> ". $unregisteredonline. "</li>"; ?>
+<?php print "<li><b>Total:</b> ".$website_onlines['numrows']. "</li><li><b>Players:</b> ".((int)$website_onlines['numrows'] - (int)$website_onlines['numrows_guests']). "</li><li><b>Guests:</b> ". $website_onlines['numrows_guests'] . "</li>"; ?>
 </ul>
 </div><div class="clear"></div>
 </div>

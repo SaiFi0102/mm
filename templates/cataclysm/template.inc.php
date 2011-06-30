@@ -31,9 +31,9 @@ if(strpos($_SERVER['PHP_SELF'], "vote.php") === false && strpos($_SERVER['PHP_SE
 //Website online users' data
 $website_onlines = array();
 $query = new MMQueryBuilder();
-$query->Select("`online`")->Columns(array("uid", "(SELECT `username` FROM `account` WHERE `account`.`id`=`online`.`uid`)"=>"username"))
-->Where("`online` <> 0")->Build();
-$website_onlines = MMMySQLiFetch($DB->query($query, DBNAME));
+$query->Select("`online`")->Columns(array("COUNT(*)"=>"numrows", "(SELECT COUNT(*) FROM `online` WHERE `online` <> '0' AND `uid` = '0')"=>"numrows_guests"))
+->Where("`online` <> '0'")->Build();
+$website_onlines = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 
 //Random online's data
 $rand_online = array();
