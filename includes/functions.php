@@ -914,16 +914,17 @@ function GetCountryCodeByIp($ip)
 	global $DB;
 	
 	$query = new MMQueryBuilder();
-	$query->Select("`ip2country`")->Columns(array("`country_code`", "COUNT(*)"=>"numrows"))->Where("'%s' BETWEEN `begin_ip_num` AND `end_ip_num`", $longip)->Build();
-	$data = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	$query->Select("`ip2country`")->Columns("`country_code`")->Where("'%s' BETWEEN `begin_ip_num` AND `end_ip_num`", $longip)->Build();
+	$result = $DB->query($query, DBNAME);
 	
-	if((int)$data['numrows'] < 1)
+	if($result->num_rows < 1)
 	{
 		return false; //If that range of ip is not availible in our database
 	}
+	$data = MMMySQLiFetch($result, "onerow: 1");
 	if($data['country_code'] == "EU")
 	{
-		return false; //We dont have exact country of that ip
+		return false; //EU(rope) is not an exact country
 	}
 	
 	return $data['country_code'];
