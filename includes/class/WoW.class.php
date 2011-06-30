@@ -23,7 +23,7 @@ define('SKILL_SPEARS',227);
 		private static $arrItemImages;	// this member contains displayId to image name mapping for items
 		
 		// Race names
-		public static $arrRace = array( 1 => 'Human', 2 => 'Orc', 3 => 'Dwarf', 4 => 'Night Elf', 5 => 'Undead', 6 => 'Tauren', 7 => 'Gnome', 8 => 'Troll', 10 => 'Blood Elf', 11 => 'Draenei' );
+		public static $arrRace = array( 1 => 'Human', 2 => 'Orc', 3 => 'Dwarf', 4 => 'Night Elf', 5 => 'Undead', 6 => 'Tauren', 7 => 'Gnome', 8 => 'Troll', 9 => 'Goblin', 10 => 'Blood Elf', 11 => 'Draenei', 22 => 'Worgen' );
 		
 		// Class names
 		public static $arrClass = array( 1 => 'Warrior', 2 => 'Paladin', 3 => 'Hunter', 4 => 'Rogue', 5 => 'Priest', 6 => 'Death Knight', 7 => 'Shaman', 8 => 'Mage', 9 => 'Warlock', 11 => 'Druid',);
@@ -148,23 +148,82 @@ define('SKILL_SPEARS',227);
 			622 => "Transport: Orgrim's Hammer",
 			623 => "Transport: The Skybreaker",
 			624 => "Vault of Archavon",
+			627 => "unused",
 			628 => "Isle of Conquest",
 			631 => "Icecrown Citadel",
 			632 => "The Forge of Souls",
+			637 => "Abyssal Maw Exterior",
+			638 => "Gilneas",
 			641 => "Transport: Alliance Airship BG",
 			642 => "Transport: HordeAirshipBG",
+			643 => "Throne of the Tides",
+			644 => "Halls of Origination",
+			645 => "Blackrock Caverns",
+			646 => "Deepholm",
 			647 => "Transport: Orgrimmar to Thunder Bluff",
+			648 => "LostIsles",
 			649 => "Trial of the Crusader",
 			650 => "Trial of the Champion",
+			651 => "ElevatorSpawnTest",
+			654 => "Gilneas2",
+			655 => "GilneasPhase1",
+			656 => "GilneasPhase2",
+			657 => "The Vortex Pinnacle",
 			658 => "Pit of Saron",
+			659 => "Lost Isles Volcano Eruption",
+			660 => "Deephome Ceiling",
+			661 => "Lost Isles Town in a Box",
+			662 => "Transport: Alliance Vashj'ir Ship",
 			668 => "Halls of Reflection",
+			669 => "Blackwing Descent",
+			670 => "Grim Batol",
+			671 => "The Bastion of Twilight",
 			672 => "Transport: The Skybreaker (Icecrown Citadel Raid)",
 			673 => "Transport: Orgrim's Hammer (Icecrown Citadel Raid)",
+			674 => "Transport: Ship to Vashj'ir",
 			712 => "Transport: The Skybreaker (IC Dungeon)",
 			713 => "Transport: Orgrim's Hammer (IC Dungeon)",
 			718 => "Trasnport: The Mighty Wind (Icecrown Citadel Raid)",
+			719 => "Mount Hyjal Phase 1",
+			720 => "Firelands",
+			721 => "Firelands Terrain 2",
 			723 => "Stormwind",
 			724 => "The Ruby Sanctum",
+			725 => "The Stonecore",
+			726 => "Twin Peaks",
+			727 => "STV Diamond Mine BG",
+			728 => "The Battle for Gilneas (Old City Map)",
+			730 => "Maelstrom Zone",
+			731 => "Stonetalon Bomb",
+			732 => "Tol Barad",
+			734 => "Ahn'Qiraj Terrace",
+			736 => "Twilight Highlands Dragonmaw Phase",
+			738 => "Ship to Vashj'ir (Orgrimmar -> Vashj'ir)",
+			739 => "Vashj'ir Sub - Horde",
+			740 => "Vashj'ir Sub - Alliance",
+			741 => "Twilight Highlands Horde Transport",
+			742 => "Vashj'ir Sub - Horde - Circling Abyssal Maw",
+			743 => "Vashj'ir Sub - Alliance circling Abyssal Maw",
+			746 => "Uldum Phase Oasis",
+			747 => "Transport: Deepholm Gunship",
+			748 => "Transport: Onyxia/Nefarian Elevator",
+			749 => "Transport: Gilneas Moving Gunship",
+			750 => "Transport: Gilneas Static Gunship",
+			751 => "Redridge - Orc Bomb",
+			752 => "Redridge - Bridge Phase One",
+			753 => "Redridge - Bridge Phase Two",
+			754 => "Throne of the Four Winds",
+			755 => "Lost City of the Tol'vir",
+			757 => "Baradin Hold",
+			759 => "Uldum Phased Entrance",
+			760 => "Twilight Highlands Phased Entrance",
+			761 => "The Battle for Gilneas",
+			762 => "Twilight Highlands Zeppelin 1",
+			763 => "Twilight Highlands Zeppelin 2",
+			764 => "Uldum - Phase Wrecked Camp",
+			765 => "Krazzworks Attack Zeppelin",
+			766 => "Transport: Gilneas Moving Gunship 02",
+			767 => "Transport: Gilneas Moving Gunship 03",
 		);
 		
 		// Area names
@@ -342,8 +401,10 @@ define('SKILL_SPEARS',227);
 				6 => "Horde",
 				7 => "Alliance",
 				8 => "Horde",
+				9 => "Alliance",
 				10 => "Horde",
 				11 => "Alliance",
+				22 => "Horde",
 		);
 		
 		//Race to Faction ID
@@ -356,8 +417,10 @@ define('SKILL_SPEARS',227);
 				6 => 2,
 				7 => 1,
 				8 => 2,
+				9 => 1,
 				10 => 2,
 				11 => 1,
+				22 => 2,
 		);
 		
 		//Gender
@@ -430,8 +493,10 @@ define('SKILL_SPEARS',227);
 				 6 => 'images/icons/race/6-0.gif',
 				 7 => 'images/icons/race/7-0.gif',
 				 8 => 'images/icons/race/8-0.gif',
+				 9 => 'images/icons/race/9-0.gif',
 				 10 => 'images/icons/race/10-0.gif',
-				 11 => 'images/icons/race/11-0.gif'
+				 11 => 'images/icons/race/11-0.gif',
+				 22 => 'images/icons/race/22-0.gif',
 			),
 			1 => array(
 				 1 => 'images/icons/race/1-1.gif',
@@ -442,8 +507,10 @@ define('SKILL_SPEARS',227);
 				 6 => 'images/icons/race/6-1.gif',
 				 7 => 'images/icons/race/7-1.gif',
 				 8 => 'images/icons/race/8-1.gif',
+				 9 => 'images/icons/race/9-1.gif',
 				 10 => 'images/icons/race/10-1.gif',
-				 11 => 'images/icons/race/11-1.gif'
+				 11 => 'images/icons/race/11-1.gif',
+				 22 => 'images/icons/race/22-1.gif',
 			)
 		);
 		
@@ -493,8 +560,10 @@ define('SKILL_SPEARS',227);
 				6 => "images/icons/pvpranks/rank_default_1.gif",
 				7 => "images/icons/pvpranks/rank_default_0.gif",
 				8 => "images/icons/pvpranks/rank_default_1.gif",
+				9 => "images/icons/pvpranks/rank_default_0.gif",
 				10 => "images/icons/pvpranks/rank_default_1.gif",
 				11 => "images/icons/pvpranks/rank_default_0.gif",
+				22 => "images/icons/pvpranks/rank_default_1.gif",
 		);
 		
 		//////

@@ -9,7 +9,7 @@ exit();
 		$s = trim($s);
 		$a = explode(",",$s);
 		$as = $a[0];
-		$rs[$as] = $a[5];
+		$rs[$as] = $a[6];
 	}
 	fclose($fd);
 	
