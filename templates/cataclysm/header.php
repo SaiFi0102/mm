@@ -17,7 +17,7 @@ else print "Your account was most recently logged in from game on,<br />" . Conv
 <?php } else { ?>
 <form action="login.php?ref=<?php print urlencode(RemoveGetRefFromLogin($_SERVER['REQUEST_URI'])); ?>" method="post">
 <div>
-<span class="greyinput" id="login_username_input"><input type="text" name="email" value="Email Address" maxlength="<?php print $cms->config['usermaxlen']; ?>" /></span><input type="submit" name="submit" value="Login" />
+<span class="greyinput" id="login_username_input"><input type="text" name="username" value="Username" maxlength="<?php print $cms->config['usermaxlen']; ?>" /></span><input type="submit" name="submit" value="Login" />
 </div>
 <div>
 <span class="greyinput" id="login_password_input"><input type="password" name="password" value="password" /></span><input type="button" name="register" value="Register" onclick="window.location='register.php';" />

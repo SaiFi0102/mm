@@ -62,7 +62,7 @@ class Users
 		}
 		$this->user['loggedin'] = true;
 		$USER = $this->user;
-		$USER['access'] = $USER['gmlevel'];
+		$USER['access'] =  0; //TODO: $USER['access'] = $USER['gmlevel'];
 		unset($USER['gmlevel']);
 		return $USER;
 	}

@@ -5,10 +5,10 @@
 		<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
 			<table>
 				<tr>
-					<th>Email Address</th>
+					<th>Username</th>
 					<td>
-						<input type="text" name="email" maxlength="<?php print $cms->config['usermaxlen']; ?>"
-						<?php if(isset($_POST['email'])) { print 'value="' . EscapeHtml($_POST['email']) . '"'; } ?> />
+						<input type="text" name="username" maxlength="<?php print $cms->config['usermaxlen']; ?>"
+						<?php if(isset($_POST['username'])) { print 'value="' . EscapeHtml($_POST['username']) . '"'; } ?> />
 					</td>
 				</tr>
 				<tr>

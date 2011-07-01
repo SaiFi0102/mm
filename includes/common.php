@@ -25,20 +25,19 @@ define('BAN_ACCOUNT', 500);
 define('BAN_IP', 501);
 define('BAN_BOTH', 502);
 
-define('EMAIL_EMPTY', 1);
-define('EMAIL_FORMAT', 2);
-define('EMAIL_CONFIRM', 3);
-define('EMAIL_EXISTS', 4);
-define('EMAIL_ILLEGAL_SPACE', 5);
-define('EMAIL_LENTH_ABOVE', 6);
-
-//Username system is deprecated, email adress is now username
 define('USERNAME_EMPTY', 1);
 define('USERNAME_ILLEGAL_CHARACTER', 2);
 define('USERNAME_ILLEGAL_SPACE', 3);
 define('USERNAME_LENTH_ABOVE', 4);
 define('USERNAME_LENTH_BELOW', 5);
 define('USERNAME_EXISTS', 6);
+
+define('EMAIL_EMPTY', 1);
+define('EMAIL_FORMAT', 2);
+define('EMAIL_CONFIRM', 3);
+define('EMAIL_EXISTS', 4);
+define('EMAIL_ILLEGAL_SPACE', 5);
+define('EMAIL_LENTH_ABOVE', 6);
 
 define('REWARD_VOTE', 0);
 define('REWARD_DONATE', 1);

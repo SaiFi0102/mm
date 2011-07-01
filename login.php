@@ -39,14 +39,14 @@ if(isset($_POST['submit']))
 	}
 	
 	//Check for errors
-	if(!isset($_POST['email']) || !isset($_POST['password']))
+	if(!isset($_POST['username']) || !isset($_POST['password']))
 	{
 		$cms->ErrorPopulate("An unknown error occurred, please contact an administrator.");
 		$cms->ErrorStopList();
 	}
-	if(empty($_POST['email']))
+	if(empty($_POST['username']))
 	{
-		$cms->ErrorPopulate("You did not enter your email address.");
+		$cms->ErrorPopulate("You did not enter your username.");
 	}
 	if(empty($_POST['password']))
 	{
@@ -64,9 +64,9 @@ if(isset($_POST['submit']))
 	//Login if no errors found
 	if(!$cms->ErrorExists())
 	{
-		if(!LogIn($_POST['email'], $_POST['password'], $remember))
+		if(!LogIn($_POST['username'], $_POST['password'], $remember))
 		{
-			$cms->ErrorPopulate("You entered an incorrect email address or password.");
+			$cms->ErrorPopulate("You entered an incorrect username or password.");
 		}
 		else
 		{

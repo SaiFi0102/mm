@@ -20,7 +20,7 @@ $DATABASE_CONNECTION = array(
 	'port'	=> '3306', //Listening Port of the MySQL server(Default: 3306)
 );
 
-define("DBNAME", "realmd"); //Database with the website and realm tables
+define("DBNAME", "auth"); //Database with the website and realm tables
 $LOGON_REALMLIST = "127.0.0.1"; //Realmlist to tell people to set
 $LOGON_CRAWLERUSERNAME = "SEARCHENGINECRAWLER"; //Username of any account used for crawlers' login
 $LOGON_CRAWLERUSERPASS = "SUPERSECRETCRAWLERONLY"; //and its password

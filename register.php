@@ -11,19 +11,20 @@ $cms->BannedAccess(false);
 eval($cms->SetPageAccess(ACCESS_UNREGISTERED));
 
 //################ Page Functions ################
-function FinalRegister($email, $password, $countrycode, $sq1, $sq2, $sa1, $sa2)
+function FinalRegister($username, $password, $email, $countrycode, $sq1, $sq2, $sa1, $sa2)
 {
 	global $cookies, $DB;
 	
-	$sha_pass = Sha1Pass($email, $password);
+	$sha_pass = Sha1Pass($username, $password);
 	
 	$query = new MMQueryBuilder();
 	$query->Insert("`account`")->Columns(array(
 		"`username`"	=> "'%s'",
 		"`sha_pass_hash`"=> "'%s'",
+		"`email`"		=> "'%s'",
 		"`expansion`"	=> "'3'",
 		"`last_ip`"		=> "'%s'",
-	), $email, $sha_pass, GetIp())
+	), $username, $sha_pass, $email, GetIp())
 	->Build();
 	
 	//Insert into account table
@@ -34,7 +35,7 @@ function FinalRegister($email, $password, $countrycode, $sq1, $sq2, $sa1, $sa2)
 	{
 		//Find the account id of the new account
 		$query = new MMQueryBuilder();
-		$query->Select("`account`")->Columns("`id`")->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $email, $sha_pass)->Build();
+		$query->Select("`account`")->Columns("`id`")->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $username, $sha_pass)->Build();
 		$accountid = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 		
 		//Insert extra details into account_mm_extend table
@@ -52,7 +53,7 @@ function FinalRegister($email, $password, $countrycode, $sq1, $sq2, $sa1, $sa2)
 		$DB->query($query, DBNAME);
 	
 		//Login
-		$cookies->SetCookie("username", $email, true);
+		$cookies->SetCookie("username", $username, true);
 		$cookies->SetCookie("password", $sha_pass, true);
 	}
 	
@@ -65,7 +66,7 @@ function GenerateAndSendPasswordReset()
 	
 	//Query
 	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns(array("`id`", "`username`"))->Where("`username` = '%s'", $_POST['email'])->Build();
+	$query->Select("`account`")->Columns(array("`id`", "`username`"))->Where("`email` = '%s'", $_POST['email'])->Build();
 	$result = $DB->query($query, DBNAME);
 	if($result->num_rows < 1)
 	{
@@ -235,10 +236,58 @@ switch($_GET['act'])
 		if(isset($_POST['submit']))
 		{
 			//Check for errors
-			if(!isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['confirmpassword']) || !isset($_POST['countrycode']) || !isset($_POST['sq1']) || !isset($_POST['sq2']) || !isset($_POST['sa1']) || !isset($_POST['sa2']))
+			if(!isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['confirmpassword']) || !isset($_POST['email']) || !isset($_POST['countrycode']) || !isset($_POST['sq1']) || !isset($_POST['sq2']) || !isset($_POST['sa1']) || !isset($_POST['sa2']))
 			{
 				$cms->ErrorPopulate("An unknown error occurred, please contact an administrator.");
 				$cms->ErrorStopList();
+			}
+			
+			//Username check
+			$usercheck = CheckUsername($_POST['username']);
+			if($usercheck)
+			{
+				if($usercheck == USERNAME_EMPTY)
+				{
+					$cms->ErrorPopulate("You did not enter a username.");
+				}
+				if($usercheck == USERNAME_ILLEGAL_CHARACTER)
+				{
+					$cms->ErrorPopulate("Your entered username contained illegal characters, please remove them and try again.");
+				}
+				if($usercheck == USERNAME_ILLEGAL_SPACE)
+				{
+					$cms->ErrorPopulate("Your entered username contained spaces, please remove them and try again.");
+				}
+				if($usercheck == USERNAME_LENTH_ABOVE)
+				{
+					$cms->ErrorPopulate("Your entered username cannot contain more than {$cms->config['usermaxlen']} characters, please try another.");
+				}
+				if($usercheck == USERNAME_LENTH_BELOW)
+				{
+					$cms->ErrorPopulate("Your entered username must contain atleast {$cms->config['userminlen']} characters, please try another.");
+				}
+				if($usercheck == USERNAME_EXISTS)
+				{
+					$cms->ErrorPopulate("Your entered username is already in use, please try another.");
+				}
+			}
+			
+			//Password Check
+			if(empty($_POST['password']) || $_POST['password'] == null)
+			{
+				$cms->ErrorPopulate("You did not enter a password.");
+			}
+			if($_POST['password'] == $_POST['email'])
+			{
+				$cms->ErrorPopulate("Your password cannot be the same as your email address.");
+			}
+			if($_POST['password'] != $_POST['confirmpassword'])
+			{
+				$cms->ErrorPopulate("Your password must match the confirmation password.");
+			}
+			if(strlen($_POST['password']) < 5)
+			{
+				$cms->ErrorPopulate("Your password must contain atleast 5 characters, please use a stronger password.");
 			}
 			
 			//Email check
@@ -265,24 +314,6 @@ switch($_GET['act'])
 				{
 					$cms->ErrorPopulate("The email you entered is already in use with another account, if you forgot your password please <a href='register.php?act=retrieve'>click here</a>.");
 				}
-			}
-			
-			//Password Check
-			if(empty($_POST['password']) || $_POST['password'] == null)
-			{
-				$cms->ErrorPopulate("You did not enter a password.");
-			}
-			if($_POST['password'] == $_POST['email'])
-			{
-				$cms->ErrorPopulate("Your password cannot be the same as your email address.");
-			}
-			if($_POST['password'] != $_POST['confirmpassword'])
-			{
-				$cms->ErrorPopulate("Your password must match the confirmation password.");
-			}
-			if(strlen($_POST['password']) < 5)
-			{
-				$cms->ErrorPopulate("Your password must contain atleast 5 characters, please use a stronger password.");
 			}
 			
 			//Country Check
@@ -321,7 +352,7 @@ switch($_GET['act'])
 			//If no error exists, try to register
 			if(!$cms->ErrorExists())
 			{
-				$register = FinalRegister($_POST['email'], $_POST['password'], $_POST['countrycode'], $_POST['sq1'], $_POST['sq2'], $_POST['sa1'], $_POST['sa2']);
+				$register = FinalRegister($_POST['username'], $_POST['password'], $_POST['email'], $_POST['countrycode'], $_POST['sq1'], $_POST['sq2'], $_POST['sa1'], $_POST['sa2']);
 				if($register)
 				{
 					$page_name[] = array("Success");

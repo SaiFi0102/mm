@@ -275,7 +275,7 @@ function CheckEmail($email)
 	{
 		return EMAIL_EMPTY;
 	}
-	if(strlen($email) > $cms->config['usermaxlen'])
+	if(strlen($email) > 256)
 	{
 		return EMAIL_LENTH_ABOVE;
 	}
@@ -289,7 +289,7 @@ function CheckEmail($email)
 	}
 	
 	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`username` = '%s'", $email)->Build();
+	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`email` = '%s'", $email)->Build();
 	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	if((int)$result['numrows'] > 0)

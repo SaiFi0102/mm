@@ -11,20 +11,18 @@
 				</tr>
 				
 				<tr>
-					<th>Email Address</th>
+					<th>Username</th>
 					<td>
-						<input type="text" name="email" size="32" maxlength="<?php print $cms->config['usermaxlen']; ?>"
-						<?php if(isset($_POST['email'])) print 'value="' . EscapeHtml($_POST['email']) . '"' ?> />
+						<input type="text" name="username" size="32" maxlength="<?php print $cms->config['usermaxlen']; ?>"
+						<?php if(isset($_POST['username'])) print 'value="' . EscapeHtml($_POST['username']) . '"' ?> />
 					 </td>
 				</tr>
-				
 				<tr>
 					<th>Password</th>
 					<td>
 						<input type="password" name="password" size="32" />
 					 </td>
 				</tr>
-				
 				<tr>
 					<th>Confirm Password</th>
 					<td>
@@ -36,6 +34,17 @@
 					<th colspan="2">Personal Details</th>
 				</tr>
 				
+				<tr>
+					<th>Country</th>
+					<td><?php print $countrylisthtml; ?></td>
+				</tr>
+				<tr>
+					<th>Email Address</th>
+					<td>
+						<input type="text" name="email" size="32" maxlength="256"
+						<?php if(isset($_POST['email'])) print 'value="' . EscapeHtml($_POST['email']) . '"' ?> />
+					 </td>
+				</tr>
 				<tr>
 					<th>Secret Question 1</th>
 					<td><?php print BuildSecretQuestions(1); ?></td>
@@ -57,10 +66,6 @@
 						<input type="text" name="sa2" size="32"
 						<?php if(isset($_POST['sa2'])) print 'value="' . EscapeHtml($_POST['sa2']) . '"' ?> />
 					</td>
-				</tr>
-				<tr>
-					<th>Country</th>
-					<td><?php print $countrylisthtml; ?></td>
 				</tr>
 				
 				<tr>
