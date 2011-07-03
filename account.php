@@ -49,7 +49,7 @@ function UpdateAccount($changeflags, $changepassword)
 if(isset($_POST['submit']))
 {
 	//If nothing changed
-	if(empty($_POST['newpassword']) && $_POST['newflags'] == $USER['expansion'])
+	if(empty($_POST['newpassword']))
 	{
 		$cms->ErrorPopulate("You did not change anything.");
 		$cms->ErrorStopList();

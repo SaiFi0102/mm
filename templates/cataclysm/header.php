@@ -41,7 +41,7 @@ else print "Your account was most recently logged in from game on,<br />" . Conv
 <div id="rt-navigation">
 <ul class="menutop">
 <li class="root"><a href="index.php" class="orphan item"><span>Home</span></a></li>
-<li class="root"><a href="./forums/" class="orphan item"><span>Forums</span></a></li>
+<li class="root"><a href="http://forums.wowmortal.com" class="orphan item"><span>Forums</span></a></li>
 <li class="root"><a href="howtoconnect.php" class="orphan item"><span>Connection Guide</span></a></li>
 <li class="root"><a href="account.php" class="orphan item"><span>Account</span></a></li>
 <li class="root"><a href="vote.php" class="orphan item"><span>Vote</span></a></li>
