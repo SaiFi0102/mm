@@ -44,6 +44,7 @@ $CHARACTERLIST_SELECTION = false;
 
 if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 {
+	//Character unstuck/revive
 	if($_GET['act'] == "unstuck")
 	{
 		$page_name[] = array("Unstuck/Revive"=>$_SERVER['REQUEST_URI']);
@@ -78,15 +79,17 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 			}
 		}
 	}
+	
+	//Character recustomization/rename
 	if($_GET['act'] == "customize")
 	{
 		$page_name[] = array("Rename/Customize"=>$_SERVER['REQUEST_URI']);
 		if(isset($_POST['submit']))
 		{
-			//Usermust have required vote points
-			if((int)$USER['votepoints'] < $cms->config['cost_customizetool']) //Cost is $cms->config['cost_customizetooll'] points
+			//User must have required vote points
+			if((int)$USER['votepoints'] < $cms->config['cost_customizetool']) //Cost
 			{
-				$cms->ErrorPopulate("The cost of this tool is {$cms->config['cost_customizetooll']} Vote Points. You only have {$USER['votepoints']} Vote Points. <a href='vote.php'>Click here to vote for us</a>.");
+				$cms->ErrorPopulate("The cost of this tool is {$cms->config['cost_customizetool']} Vote Points. You only have {$USER['votepoints']} Vote Points. <a href='vote.php'>Click here to vote for us</a>.");
 			}
 			//Check if user was ever banned
 			$query = new MMQueryBuilder();
@@ -100,17 +103,17 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 			if(!$cms->ErrorExists()) //If no errors
 			{
 				//execute command first to check if ther are no errors
-				$customresult = $rclass->ExecuteSoapCommand("character customize {$_cdata['name']}");
-				$sent = $customresult['sent'] ? 1 : 0;
+				$soapresult = $rclass->ExecuteSoapCommand("character customize {$_cdata['name']}");
+				$sent = $soapresult['sent'] ? 1 : 0;
 				
-				if($customresult['sent'])
+				if($soapresult['sent'])
 				{
 					//Deduct points
 					$query = new MMQueryBuilder();
 					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_customizetool'])->Where("`accountid` = '%s'", $USER['id'])->Build();
 					$result = $DB->query($query, DBNAME);
 					
-					//Duduct Points from GLOBAL varaible to remove confusion because of positioning
+					//Deduct Points from GLOBAL varaible to remove confusion because of positioning
 					if($result)
 					{
 						$USER['votepoints'] -= $cms->config['cost_customizetool'];
@@ -131,14 +134,96 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 					"`message`"		=> "'%s'",
 					"`sent`"		=> "'%s'",
 					"`cost`"		=> "'%s'",
-				), $_cdata['account'], $_cdata['guid'], $_cdata['name'], "character customize {$_cdata['name']}", $customresult['message'], $sent, $cms->config['cost_customizetool'])->Build();
+				), $_cdata['account'], $_cdata['guid'], $_cdata['name'], "character customize {$_cdata['name']}", $soapresult['message'], $sent, $cms->config['cost_customizetool'])->Build();
 				$DB->query($query, DBNAME);
 				
 				//If everything is ok
-				if($customresult['sent'])
+				if($soapresult['sent'])
 				{
 					eval($templates->Output("customize_success"));
 					exit();
+				}
+			}
+		}
+	}
+	
+	//Character faction changer
+	if($_GET['act'] == "factionchange")
+	{
+		$page_name[] = array("Faction Change"=>$_SERVER['REQUEST_URI']);
+		if(isset($_POST['submit']))
+		{
+			//User must have required vote points
+			if((int)$USER['votepoints'] < $cms->config['cost_factionchange']) //Cost
+			{
+				$cms->ErrorPopulate("The cost of this tool is {$cms->config['cost_factionchange']} Vote Points. You only have {$USER['votepoints']} Vote Points. <a href='vote.php'>Click here to vote for us</a>.");
+			}
+			
+			if(!$cms->ErrorExists()) //If no errors
+			{
+				//execute command first to check if ther are no errors
+				$soapresult = $rclass->ExecuteSoapCommand("character changefaction {$_cdata['name']}");
+				
+				if($soapresult['sent'])
+				{
+					//Deduct points
+					$query = new MMQueryBuilder();
+					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_factionchange'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+					$result = $DB->query($query, DBNAME);
+					
+					if($result)
+					{
+						$USER['votepoints'] -= $cms->config['cost_factionchange']; //Deduct Points from GLOBAL varaible to remove confusion because of positioning
+						
+						//Show success screen
+						eval($templates->Output("factionchange_success"));
+						exit();
+					}
+				}
+				else //If there was an error do not duduct points
+				{
+					$cms->ErrorPopulate("There was a problem with the server, please try again later. If this problem persists, please contact an administrator!");
+				}
+			}
+		}
+	}
+	
+	//Character race changer
+	if($_GET['act'] == "racechange")
+	{
+		$page_name[] = array("Race Change"=>$_SERVER['REQUEST_URI']);
+		if(isset($_POST['submit']))
+		{
+			//User must have required vote points
+			if((int)$USER['votepoints'] < $cms->config['cost_racechange']) //Cost
+			{
+				$cms->ErrorPopulate("The cost of this tool is {$cms->config['cost_racechange']} Vote Points. You only have {$USER['votepoints']} Vote Points. <a href='vote.php'>Click here to vote for us</a>.");
+			}
+			
+			if(!$cms->ErrorExists()) //If no errors
+			{
+				//execute command first to check if ther are no errors
+				$soapresult = $rclass->ExecuteSoapCommand("character changerace {$_cdata['name']}");
+				
+				if($soapresult['sent'])
+				{
+					//Deduct points
+					$query = new MMQueryBuilder();
+					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_racechange'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+					$result = $DB->query($query, DBNAME);
+					
+					if($result)
+					{
+						$USER['votepoints'] -= $cms->config['cost_racechange']; //Deduct Points from GLOBAL varaible to remove confusion because of positioning
+						
+						//Show success screen
+						eval($templates->Output("racechange_success"));
+						exit();
+					}
+				}
+				else //If there was an error do not duduct points
+				{
+					$cms->ErrorPopulate("There was a problem with the server, please try again later. If this problem persists, please contact an administrator!");
 				}
 			}
 		}
