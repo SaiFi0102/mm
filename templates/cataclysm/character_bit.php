@@ -63,6 +63,24 @@ $CDATA_ZONEID = $_cdata['zone'];
 					</div>
 				</div>
 			</a>
+			<a href="character.php?act=racechange&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>" style="float:right;">
+				<div class="tool_bit">
+					<div class="tool_bit_border">
+						<img src="<?php print $cms->config['websiteurl']; ?>/images/icons/racechange.png" height="40" width="40" alt="" />
+						<br />Race Change
+						<br /><b>Cost:</b> <i><?php print $cms->config['cost_racechange']; ?></i> Vote Points
+					</div>
+				</div>
+			</a>
+			<a href="character.php?act=factionchange&rid=<?php print $CHARACTERLIST_RID ?>&cid=<?php print $CDATA_GUID; ?>" style="float:right;">
+				<div class="tool_bit">
+					<div class="tool_bit_border">
+						<img src="<?php print $cms->config['websiteurl']; ?>/images/icons/factionchange.png" height="40" width="40" alt="" />
+						<br />Faction/Race Change
+						<br /><b>Cost:</b> <i><?php print $cms->config['cost_factionchange']; ?></i> Vote Points
+					</div>
+				</div>
+			</a>
 		</div><?php
 	}?>
 	
