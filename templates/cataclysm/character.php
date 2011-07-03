@@ -54,5 +54,43 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 	</div>
 	<?php
 	}
+	if($_GET['act'] == "factionchange")
+	{?>
+	<div class="main">
+		<div class="main_title">Character Faction Change</div>
+		<div class="content">
+			<?php print $cms->ErrorOutput(); ?>
+			<div class="noticebox"><span>
+				Are you sure you want to change the faction of this character for <b><i><?php print $cms->config['cost_factionchange']; ?> Vote Points</i></b>?<br />
+				You will be prompted to customize your character in the character selection screen in game.
+			</span></div>
+			<div align="center">
+				<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
+				<input type="submit" name="submit" value="Customize!" />
+				</form>
+			</div>
+		</div>
+	</div>
+	<?php
+	}
+	if($_GET['act'] == "racechange")
+	{?>
+	<div class="main">
+		<div class="main_title">Character Race Change</div>
+		<div class="content">
+			<?php print $cms->ErrorOutput(); ?>
+			<div class="noticebox"><span>
+				Are you sure you want to change the race of this character for <b><i><?php print $cms->config['cost_racechange']; ?> Vote Points</i></b>?<br />
+				You will be prompted to customize your character in the character selection screen in game.
+			</span></div>
+			<div align="center">
+				<form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
+				<input type="submit" name="submit" value="Customize!" />
+				</form>
+			</div>
+		</div>
+	</div>
+	<?php
+	}
 }
 ?>
