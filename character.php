@@ -65,8 +65,8 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 				{
 					$location = $REALM[$_GET['rid']]['UNSTUCK']['horde'];
 				}
-				$teleresult = $rclass->ExecuteSoapCommand("tele name {$_cdata['name']} {$location}"); //Teleport
-				$ressresult = $rclass->ExecuteSoapCommand("revive {$_cdata['name']}"); //and then revive
+				$teleresult = $rclass->ExecuteRemoteCommand("tele name {$_cdata['name']} {$location}"); //Teleport
+				$ressresult = $rclass->ExecuteRemoteCommand("revive {$_cdata['name']}"); //and then revive
 				if(!$teleresult['sent'] && !$ressresult['sent']) //If both functions did not work, return an error
 				{
 					$cms->ErrorPopulate("There was a problem with the server, please try again later. If this problem persists, please contact an administrator!");
@@ -103,7 +103,7 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 			if(!$cms->ErrorExists()) //If no errors
 			{
 				//execute command first to check if ther are no errors
-				$soapresult = $rclass->ExecuteSoapCommand("character customize {$_cdata['name']}");
+				$soapresult = $rclass->ExecuteRemoteCommand("character customize {$_cdata['name']}");
 				$sent = $soapresult['sent'] ? 1 : 0;
 				
 				if($soapresult['sent'])
@@ -162,7 +162,7 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 			if(!$cms->ErrorExists()) //If no errors
 			{
 				//execute command first to check if ther are no errors
-				$soapresult = $rclass->ExecuteSoapCommand("character changefaction {$_cdata['name']}");
+				$soapresult = $rclass->ExecuteRemoteCommand("character changefaction {$_cdata['name']}");
 				
 				if($soapresult['sent'])
 				{
@@ -203,7 +203,7 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 			if(!$cms->ErrorExists()) //If no errors
 			{
 				//execute command first to check if ther are no errors
-				$soapresult = $rclass->ExecuteSoapCommand("character changerace {$_cdata['name']}");
+				$soapresult = $rclass->ExecuteRemoteCommand("character changerace {$_cdata['name']}");
 				
 				if($soapresult['sent'])
 				{

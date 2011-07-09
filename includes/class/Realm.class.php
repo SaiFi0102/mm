@@ -10,7 +10,7 @@ if(!defined("INCLUDED"))
 class Realm
 {
 	public $rid;
-	public $soapconn;
+	public $remoteconn;
 	
 	private $realmconf;
 	private $db;
@@ -157,33 +157,93 @@ class Realm
 	 * 
 	 * @return boolean
 	 */
-	public function ExecuteSoapCommand($command)
+	public function ExecuteRemoteCommand($command)
 	{
-		//Setup SOAP Client
-		if(!$this->soapconn)
+		global $REMOTE_TYPE;
+		
+		//SOAP
+		if($REMOTE_TYPE == REMOTE_SOAP)
 		{
-			$this->soapconn = new SoapClient(NULL,
-			array(
-				"location" =>		"http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
-				"uri"				=> "urn:TC",
-				"style"				=> SOAP_RPC,
-				"login"				=> $this->realmconf['SOAP']['user'],
-				"password"			=> $this->realmconf['SOAP']['pass'],
-				"connection_timeout"=> 15,
-			));
+			//Setup SOAP Client
+			if(!$this->remoteconn)
+			{
+				$this->remoteconn = new SoapClient(NULL,
+				array(
+					"location" =>		"http://".$this->realmconf['IP'].":".$this->realmconf['SOAP']['port']."/",
+					"uri"				=> "urn:TC",
+					"style"				=> SOAP_RPC,
+					"login"				=> strtoupper($this->realmconf['SOAP']['user']),
+					"password"			=> $this->realmconf['SOAP']['pass'],
+					"connection_timeout"=> 10,
+				));
+			}
+			
+			
+			try //Try to execute function
+			{
+				$result = $this->remoteconn->executeCommand(new SoapParam($command, "command"));
+			}
+			catch(Exception $e) //Don't give fatal error if there is a problem
+			{
+				$this->_LogSoapError($e, $command);
+				return array('sent'=>false, 'message'=>$e->getMessage());
+			}
+			return array('sent'=>true, 'message'=>$result);
 		}
 		
+		//RA
+		if($REMOTE_TYPE == REMOTE_RA)
+		{
+			if($this->remoteconn)
+			{
+				fclose($this->remoteconn);
+			}
+			
+			$this->remoteconn = fsockopen($this->realmconf['IP'], $this->realmconf['SOAP']['port'], $errno, $errstr, 10);
+			if(!$this->remoteconn)
+			{
+				fclose($this->remoteconn);
+				return array('sent'=>false, 'message'=>$errstr);
+			}
+			
+			// get the message of the day
+			$motd = fgets($this->remoteconn);
+			
+			//Authorize
+			fwrite($this->remoteconn, strtoupper($this->realmconf['SOAP']['user'])."\n");
+			usleep(100);
+			fwrite($this->remoteconn, $this->realmconf['SOAP']['pass']."\n");
+			usleep(300);
+			
+			//Authorization results
+			$authresult = trim(fgets($this->remoteconn));
+			if(strpos($authresult, "failed") !== false)
+			{
+				fclose($this->remoteconn);
+				return array('sent'=>false, 'message'=>"Authorization failed for user " . strtoupper($this->realmconf['SOAP']['user']));
+			}
+			
+			//Send command
+			fwrite($this->remoteconn, $command."\n");
+			$result = fgets($this->remoteconn, 5000);
+			fclose($this->remoteconn);
+			
+			//if command was incorrect
+			if(stripos($result, "there is no such"))
+			{
+				return array('sent'=>false, 'message'=>$result);
+			}
+			//if $result is sent as false or empty or etc
+			if(!$result)
+			{
+				return array('sent'=>false, 'message'=>'Result was false');
+			}
+			
+			return array('sent'=>true, 'message'=>$result);
+		}
 		
-		try //Try to execute function
-		{
-			$result = $this->soapconn->executeCommand(new SoapParam($command, "command"));
-		}
-		catch(Exception $e) //Don't give fatal error if there is a problem
-		{
-			$this->_LogSoapError($e, $command);
-			return array('sent'=>false, 'message'=>$e->getMessage());
-		}
-		return array('sent'=>true, 'message'=>$result);
+		//Config error
+		return array('sent'=>false, 'message'=>$result);
 	}
 	
 	/**
@@ -282,7 +342,7 @@ class Realm
 			}
 			
 			//Now connect to SOAP and send the item
-			$result = $this->ExecuteSoapCommand($command);
+			$result = $this->ExecuteRemoteCommand($command);
 			if($result['sent'] != false)
 			{
 				$success = true;
@@ -308,7 +368,7 @@ class Realm
 			$command .= " " . $reward['gold'];
 			
 			//Now connect to SOAP and send the gold
-			$result = $this->ExecuteSoapCommand($command);
+			$result = $this->ExecuteRemoteCommand($command);
 			if($result['sent'] != false)
 			{
 				$success = true;
