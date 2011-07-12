@@ -52,6 +52,19 @@ $REALM[1] = array(
 	"This realm is all about KILLING, no matter the opponent is a horde or alliance. Everyone is your enemy! You do not have to focus on leveling or anything like getting ready for PvP by raiding for items or trading for gold. You start as a full leveled player at a shopping mall, all you have to do it just your favorite items from the mall and start killing in our PvP Arenas! For every kill you are rewarded [Badge of Justice] which can be turned-in for PvP Gear! Login now to find out what more we have!",
 );
 
+$REALM_STATUS_ONLY = array();
+$REALM_STATUS_ONLY[2] = array(
+	'CH_DB'	=> 'character1', //Database with the stored tables
+	'W_DB'	=> 'world1', //Database with the stored tables
+	'R_DB'	=> 'auth',
+	'NAME'	=> "Warground(WOTLK)",
+	'COLOR'	=> "#6688ff",
+	'CAP'	=> 200,
+	'IP'	=> 'realm.wowmortal.com',
+	'PORT'	=> 8094,
+	'LINK'	=> 'http://wotlk.wowmortal.com',
+);
+
 $REMOTE_TYPE = REMOTE_SOAP; //REMOTE_SOAP(0) = SOAP; REMOTE_RA(1) = RA
 
 /**

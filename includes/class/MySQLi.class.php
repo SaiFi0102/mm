@@ -103,6 +103,7 @@ $errorstring = "|----------------------------Connection Error-------------------
 	/**
 	 * Performs a MySQL query with strings escaped using printf method
 	 * @param string $query Query String
+	 * @param string $database Database Name
 	 * @param mixed ...
 	 * 
 	 * @return mysqli_result
