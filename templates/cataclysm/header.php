@@ -193,7 +193,7 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 </div>
 </div>
 </div>
-<span id="status_uptime_<?php print $rid; ?>" style="display: none;"></span>.
+<span id="status_uptime_<?php print $rid; ?>" style="display: none;"></span>
 </div>
 </td>
 </tr>
