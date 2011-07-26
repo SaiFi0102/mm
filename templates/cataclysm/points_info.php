@@ -92,7 +92,7 @@ $("#amount_alertpay").change(function()
 			<br /><br />
 		<?php }?>
 		
-		<?php if($cms->config['show_alertpay']) { ?>
+		<?php if($cms->config['show_paypal']) { ?>
 			<h5><b>Pay</b>Pal</h5>
 			<form action="https://<?php print PAYPAL_GATEWAY_URL; ?>/cgi-bin/webscr" method="post" target="paypal">
 			<b>$</b><input type="text" id="amount_paypal" name="amount" value="10" size="3" maxlength="6" /><br />
