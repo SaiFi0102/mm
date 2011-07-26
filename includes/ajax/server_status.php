@@ -25,12 +25,6 @@ foreach($REALM as $rid => $rdata)
 	$status[$rid] = $rclass->CheckRealmStatusAndOnlinePlayers();
 	unset($rclass);
 }
-foreach($REALM_STATUS_ONLY as $rid => $rdata)
-{
-	$rclass = new Realm($rid, $rdata['R_DB'], $rdata);
-	$status[$rid] = $rclass->CheckRealmStatusAndOnlinePlayers();
-	unset($rclass);
-}
 
 $print = json_encode($status);
 print $print;

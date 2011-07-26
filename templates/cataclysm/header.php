@@ -163,43 +163,6 @@ if(!$OFFLINE_MAINTENANCE || $USER['access'] >= 4) { ?>
 <?php
 }?>
 
-<?php foreach($REALM_STATUS_ONLY as $rid => $rdata)
-{?>
-<tr>
-<th style="color:<?php print $rdata['COLOR']; ?>;">
-<a href="<?php print $rdata['LINK']; ?>">
-<?php print $rdata['NAME']; ?>
-<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/spinner.gif' alt='Loading...' height='16' width='16' id="status_loadingicon_<?php print $rid; ?>" />
-<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/typography/approved-icon.png' alt='Server is up!' height='14' width='14' id="status_uparrow_<?php print $rid; ?>" style="display:none;" />
-<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/typography/alert-icon.png' alt='Server is down but it will be back up soon :)' height='14' width='14' id="status_downarrow_<?php print $rid; ?>" style="display:none;" />
-</a>
-</th>
-</tr>
-<tr>
-<td>
-<span id="status_loader_<?php print $rid; ?>">
-<img src='<?php print $cms->config['websiteurl']; ?>/images/cataclysm/spinner.gif' alt='Loading...' height='16' width='16' />
-</span>
-<div id="status_content_<?php print $rid; ?>" style="display:none;">
-<b><span id="status_online_<?php print $rid; ?>"></span></b> Online Players(Maximum Online: <b><span id="status_maxonline_<?php print $rid; ?>"></span></b>).<br />
-<div id="onlinebar">
-<div id="horde">
-<div class="obar_logo"></div>
-<div class="obar" style="width:94px;" id="status_horde_<?php print $rid; ?>"></div>
-</div>
-<div id="ally">
-<div class="obar_logo">
-<div class="obar" style="width:95px;" id="status_alliance_<?php print $rid; ?>"></div>
-</div>
-</div>
-</div>
-<span id="status_uptime_<?php print $rid; ?>" style="display: none;"></span>
-</div>
-</td>
-</tr>
-<?php
-}?>
-
 <tr>
 <th colspan="2" align="center">set realmlist <?php print $LOGON_REALMLIST; ?></th>
 </tr>

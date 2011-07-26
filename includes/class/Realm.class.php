@@ -14,38 +14,22 @@ class Realm
 	
 	private $realmconf;
 	private $db;
-	private $r_db;
 	
 	/**
 	 * Constructor
 	 * @param int $rid
 	 */
-	function __construct($rid, $r_db = DBNAME, $realmconf = null)
+	function __construct($rid)
 	{
-		global $REALM, $REALM_STATUS_ONLY, $DB;
-		
-		//If wrong realm id is given
-		/*if(!isset($REALM[$rid]) || !isset($REALM_STATUS_ONLY[$rid]))
+		global $REALM, $DB;
+		if(!isset($REALM[$rid]))
 		{
 			trigger_error("Wrong realm ID", E_USER_ERROR);
-		}*/
+		}
 		
-		//Realm ID and Configs
 		$this->rid = $rid;
-		if(!$realmconf)
-		{
-			$this->realmconf = $REALM[$rid];
-		}
-		else
-		{
-			$this->realmconf = $realmconf;
-		}
-		
-		//Database class
+		$this->realmconf = $REALM[$rid];
 		$this->db = $DB;
-		
-		//Realm/Auth Database
-		$this->r_db = $r_db;
 	}
 	
 	/**
@@ -117,12 +101,12 @@ class Realm
 		$query = new MMQueryBuilder();
 		$query->Select("`uptime`")->Columns("`starttime`")->Where("`realmid` = '%s'", $this->rid)
 		->Order("`starttime` DESC")->Limit("1")->Build();
-		$uptime = MMMySQLiFetch($this->db->query($query, $this->r_db), "onerow: 1");
+		$uptime = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		//Max Online Players Query
 		$query = new MMQueryBuilder();
 		$query->Select("`uptime`")->Columns(array("MAX(`maxplayers`)"=>"maxplayers"))->Where("`realmid` = '%s'", $this->rid)->Build();
-		$maxonline = MMMySQLiFetch($this->db->query($query, $this->r_db), "onerow: 1");
+		$maxonline = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		if($uptime['starttime'] == null)
 		{
@@ -210,7 +194,7 @@ class Realm
 		//RA
 		if($REMOTE_TYPE == REMOTE_RA)
 		{
-			if($this->remoteconn && is_resource($this->remoteconn))
+			if($this->remoteconn)
 			{
 				fclose($this->remoteconn);
 			}
@@ -239,14 +223,9 @@ class Realm
 				return array('sent'=>false, 'message'=>"Authorization failed for user " . strtoupper($this->realmconf['SOAP']['user']));
 			}
 			
-			//Escape newline from command
-			$command = str_replace("\r\n", "\\r\\n", $command);
-			$command = str_replace("\n", "\\n", $command);
-			
 			//Send command
 			fwrite($this->remoteconn, $command."\n");
 			$result = fgets($this->remoteconn, 5000);
-			usleep(300);
 			fclose($this->remoteconn);
 			
 			//if command was incorrect
@@ -289,7 +268,7 @@ class Realm
 		$reward_delivery_table = $votedonate ? "log_donatereward_delivery" : "log_votereward_delivery"; //$votedonate
 		$query = new MMQueryBuilder();
 		$query->Select("`".$reward_delivery_table."`")->Columns(array("MAX(`session`)"=>"maxsession"))->Build();
-		$session = MMMySQLiFetch($this->db->query($query, $this->r_db), "onerow: 1");
+		$session = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		$session = $session['maxsession'];
 		
 		if(empty($session))
@@ -305,7 +284,7 @@ class Realm
 		$rewards_table = $votedonate ? "rewards_donation" : "rewards_voting"; //$votedonate
 		$query = new MMQueryBuilder();
 		$query->Select("`".$rewards_table."`")->Columns("*")->Where("`id` = '%s' AND `realm` = '%s'", $rewardid, $this->rid)->Build();
-		$reward = MMMySQLiFetch($this->db->query($query, $this->r_db), "onerow: 1");
+		$reward = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		if(!count($reward)) //If reward does not exists
 		{
@@ -411,7 +390,7 @@ class Realm
 			$pointcolumn = $votedonate ? "donationpoints" : "votepoints"; //$votedonate
 			$query = new MMQueryBuilder();
 			$query->Update("`account_mm_extend`")->Columns(array("`".$pointcolumn."`"=>"`".$pointcolumn."` - '%s'"), $reward['points'])->Where("`accountid` = '%s'", $USER['id'])->Build();
-			$this->db->query($query, $this->r_db);
+			$this->db->query($query, DBNAME);
 			
 			//Update $USER variables so that it doesnt confuse player that no points were deducted cuz it takes one extra reload to reload USER vars because of positionning!
 			if($votedonate == REWARD_DONATE)
@@ -506,7 +485,7 @@ $errorstring = "\r\n
 			'`cost`'		=> "'%s'",
 		), $session, $command, $message, $cid, $this->rid, $rewardid, $sent, $cost)->Build();
 		
-		return $this->db->query($query, $this->r_db);
+		return $this->db->query($query, DBNAME);
 	}
 	
 }
