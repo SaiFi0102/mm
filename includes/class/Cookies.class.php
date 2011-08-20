@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../../index.php');
 	exit();
 }
 
@@ -29,7 +29,7 @@ class Cookies
 	 *
 	 * @param string $name
 	 * @param string $value
-	 * @param boolean $lifetime
+	 * @param bool $lifetime
 	 * @return bool
 	 */
 	public function SetCookie($name, $value, $lifetime = false)

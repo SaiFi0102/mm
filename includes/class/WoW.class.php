@@ -1,5 +1,12 @@
 <?php
 
+//################ Redirect if not included ################
+if(!defined("INCLUDED"))
+{
+	header('Location: ../../index.php');
+	exit();
+}
+
 // here go definitions as borrowed from Acent emu code
 define('SKILL_DEFENSE',95);
 

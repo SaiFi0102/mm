@@ -2,9 +2,14 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'iso2country' => true,
+	'ReCAPTCHA' => true,
+);
+
 //################ Required Files ################
 require_once("init.php");
-require_once("includes/recaptcha/recaptchalib.php");
 
 //################ PAGE ACCESS ################
 $cms->BannedAccess(false);
@@ -17,7 +22,7 @@ function FinalRegister($username, $password, $email, $countrycode, $sq1, $sq2, $
 	
 	$sha_pass = Sha1Pass($username, $password);
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Insert("`account`")->Columns(array(
 		"`username`"	=> "'%s'",
 		"`sha_pass_hash`"=> "'%s'",
@@ -34,20 +39,20 @@ function FinalRegister($username, $password, $email, $countrycode, $sq1, $sq2, $
 	if($return)
 	{
 		//Find the account id of the new account
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`account`")->Columns("`id`")->Where("`username` = '%s' AND `sha_pass_hash` = '%s'", $username, $sha_pass)->Build();
-		$accountid = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+		$id = MySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 		
 		//Insert extra details into account_mm_extend table
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Insert("`account_mm_extend`")->Columns(array(
-			"`accountid`"		=> "'%s'",
+			"`id`"		=> "'%s'",
 			"`countrycode`"		=> "'%s'",
 			"`secretquestion1`"	=> "'%s'",
 			"`secretquestion2`"	=> "'%s'",
 			"`secretanswer1`"	=> "'%s'",
 			"`secretanswer2`"	=> "'%s'",
-		), $accountid['id'], $countrycode, $sq1, $sq2, $sa1, $sa2)
+		), $id['id'], $countrycode, $sq1, $sq2, $sa1, $sa2)
 		->Build();
 		
 		$DB->query($query, DBNAME);
@@ -65,7 +70,7 @@ function GenerateAndSendPasswordReset()
 	$resetcode = RandomCharacters(20);
 	
 	//Query
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`account`")->Columns(array("`id`", "`username`"))->Where("`email` = '%s'", $_POST['email'])->Build();
 	$result = $DB->query($query, DBNAME);
 	if($result->num_rows < 1)
@@ -73,7 +78,7 @@ function GenerateAndSendPasswordReset()
 		return false;
 	}
 	//Userdata
-	$emailcheck = MMMySQLiFetch($result, "onerow: 1");
+	$emailcheck = MySQLiFetch($result, "onerow: 1");
 	
 $emailbody = "Dear ".FirstCharUpperThenLower($emailcheck['username']).",
 
@@ -86,8 +91,8 @@ If you haven't made this request please follow the link below to cancel the requ
 Regards,
 {$cms->config['websitename']} Staff.";
 	
-	$query = new MMQueryBuilder();
-	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"'%s'"), $resetcode)->Where("`accountid` = '%s'", $emailcheck['id'])->Build();
+	$query = new Query();
+	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"'%s'"), $resetcode)->Where("`id` = '%s'", $emailcheck['id'])->Build();
 	$DB->query($query, DBNAME);
 	
 	//Send email for reset intructions
@@ -98,8 +103,8 @@ function ResetPassword()
 {
 	global $DB, $cms;
 	
-	$query = new MMQueryBuilder();
-	$query->Select("`account`")->Columns("*")->Join("`account_mm_extend`", "LEFT")->JoinOn("`account`.`id`", "`account_mm_extend`.`accountid`")
+	$query = new Query();
+	$query->Select("`account`")->Columns("*")->Join("`account_mm_extend`", "LEFT")->JoinOn("`account`.`id`", "`account_mm_extend`.`id`")
 	->Where("`id` = '%s'", $_GET['uid'])->Build();
 	$result = $DB->query($query, DBNAME);
 	
@@ -107,7 +112,7 @@ function ResetPassword()
 	{
 		return false;
 	}
-	$data = MMMySQLiFetch($result, "onerow: 1");
+	$data = MySQLiFetch($result, "onerow: 1");
 	
 	if(empty($data['resetcode']))
 	{
@@ -130,13 +135,13 @@ Please login as soon as possible and change the password to your own choice from
 
 Regards,
 {$cms->config['websitename']} Staff";
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Update("`account`")->Columns(array("`sha_pass_hash`"=>"'%s'", "`sessionkey`"=>"''", "`v`"=>"''", "`s`"=>"''"), Sha1Pass($data['username'], $newpass))
 	->Where("`id` = '%s'", $_GET['uid'])->Build();
 	$DB->query($query, DBNAME);
 	
-	$query = new MMQueryBuilder();
-	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"''"))->Where("`accountid` = '%s'", $_GET['uid'])->Build();
+	$query = new Query();
+	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"''"))->Where("`id` = '%s'", $_GET['uid'])->Build();
 	$DB->query($query, DBNAME);
 	
 	SendEmail($data['email'], "Your new password", $emailbody);
@@ -150,8 +155,8 @@ function RemoveResetCode()
 		return false;
 	}
 	
-	$query = new MMQueryBuilder();
-	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"''"))->Where("`accountid` = '%s' AND `resetcode` = '%s'", $_GET['uid'], $_GET['resetcode'])->Build();
+	$query = new Query();
+	$query->Update("`account_mm_extend`")->Columns(array("`resetcode`"=>"''"))->Where("`id` = '%s' AND `resetcode` = '%s'", $_GET['uid'], $_GET['resetcode'])->Build();
 	$DB->query($query, DBNAME);
 	
 	return $DB->affected_rows;

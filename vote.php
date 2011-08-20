@@ -2,6 +2,12 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'WoW'	=> true,
+	'Realm'	=> true,
+);
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -25,7 +31,7 @@ define("RPPV", $cms->config['rppv']);
 
 //################ Page Functions ################
 //VOTE SPEND PAGE
-function ModifyVotePoints($accountid, $amount)
+function ModifyVotePoints($id, $amount)
 {
 	global $DB;
 	if($amount < 1)
@@ -37,8 +43,8 @@ function ModifyVotePoints($accountid, $amount)
 		$times = 1;
 	}
 	
-	$query = new MMQueryBuilder();
-	$query->Update("`account_mm_extend`")->Where("`accountid` = '%s'", $accountid)
+	$query = new Query();
+	$query->Update("`account_mm_extend`")->Where("`id` = '%s'", $id)
 	->Columns(array("`votepoints`" => "`votepoints` + '%s'", "`voted`" => "`voted` + '{$times}'"), $amount)->Build();
 	$DB->query($query, DBNAME);
 	
@@ -48,10 +54,10 @@ function FetchVoteRewards($rid)
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`rewards_voting`")->Columns("*")->Where("`realm` = '%s' AND `disabled` = '0'", $rid)->Build();
 	
-	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	$return = MySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
@@ -61,18 +67,18 @@ function FetchVoteLogs()
 	global $DB, $USER;
 	
 	//Logged in or not
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`log_votes`")->Columns("*");
 	if($USER['loggedin'])
 	{
-		$query->Where("`ip` = '%s' OR `accountid` = '%s'", GetIp(), $USER['id']);
+		$query->Where("`ip` = '%s' OR `id` = '%s'", GetIp(), $USER['id']);
 	}
 	else
 	{
 		$query->Where("`ip` = '%s'", GetIp());
 	}
 	$query->Build();
-	$votes = MMMySQLiFetch($DB->query($query, DBNAME));
+	$votes = MySQLiFetch($DB->query($query, DBNAME));
 	//Gateway ID to array key
 	$return = array();
 	foreach($votes as $vote)
@@ -87,35 +93,35 @@ function TallyVote()
 	global $DB, $USER;
 	
 	//Check if gateway exists
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`vote_gateways`")->Columns("*")->Where("`id` = '%s'", $_POST['gateway'])->Build();
 	$result = $DB->query($query, DBNAME);
 	if($result->num_rows == 0)
 	{
 		return false;
 	}
-	$gateway = MMMySQLiFetch($result, "onerow: 1");
+	$gateway = MySQLiFetch($result, "onerow: 1");
 	
 	//If already voted in last 12 hour
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`log_votes`")->Columns(array("COUNT(*)"=>"numrows"));
 	if($USER['loggedin'])
 	{
-		$query->Where("(`accountid` = '%s' OR `ip` = '%s') AND `gateway` = '%s'", $USER['id'], GetIp(), $_POST['gateway']);
+		$query->Where("(`id` = '%s' OR `ip` = '%s') AND `gateway` = '%s'", $USER['id'], GetIp(), $_POST['gateway']);
 	}
 	else
 	{
 		$query->Where("`ip` = '%s' AND `gateway` = '%s'", GetIp(), $_POST['gateway']);
 	}
 	$query->Build();
-	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	$result = MySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	if((int)$result['numrows'] == 0)
 	{
 		//Add vote to logs
-		$accountid = $USER['loggedin'] ? $USER['id'] : '0';
-		$query = new MMQueryBuilder();
-		$query->Insert("`log_votes`")->Columns(array("`gateway`"=>"'%s'", "`ip`"=>"'%s'", "`accountid`"=>"'%s'", "`time`"=>"'%s'"), $_POST['gateway'], GetIp(), $accountid, time())->Build();
+		$id = $USER['loggedin'] ? $USER['id'] : '0';
+		$query = new Query();
+		$query->Insert("`log_votes`")->Columns(array("`gateway`"=>"'%s'", "`ip`"=>"'%s'", "`id`"=>"'%s'", "`time`"=>"'%s'"), $_POST['gateway'], GetIp(), $id, time())->Build();
 		$DB->query($query, DBNAME);
 		
 		//Modify Vote Points

@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../index.php');
 	exit();
 }
 
@@ -14,7 +14,7 @@ if(!defined("INCLUDED"))
  */
 //Databases(USE p:<host or ip> in 'host' if u have PHP 5.3 to open persistent connections... saves alot of ram and speed)
 $DATABASE_CONNECTION = array(
-	'host'	=> 'p:127.0.0.1', //Hostname or IP Address of MySQL server
+	'host'	=> '127.0.0.1', //Hostname or IP Address of MySQL server
 	'user'	=> 'root', //Username of MySQL server
 	'pass'	=> 'root', //Password of the username above
 	'port'	=> '3306', //Listening Port of the MySQL server(Default: 3306)
@@ -89,7 +89,7 @@ $USERTIMEOUT = 5;
  * ***************** Core Configurations *******************
  * *********************************************************
  */
-$DEBUG = false; //Shows Debug messages on the footer
+$DEBUG = true; //Shows Debug messages on the footer
 $OFFLINE_MAINTENANCE = false;
 define("IPN_ALERTPAY_SECURITY_CODE", "oDOIxWomBxyxaEnQ");
 define("IPN_MONEYBOOKERS_PASSWORD", "password");

@@ -1,4 +1,12 @@
 <?php
+
+//################ Redirect if not included ################
+if(!defined("INCLUDED"))
+{
+	header('Location: ../index.php');
+	exit();
+}
+
 $ISO2COUNTRY = array(
 	"AF" => "AFGHANISTAN",
 	"AX" => "ÅLAND ISLANDS",

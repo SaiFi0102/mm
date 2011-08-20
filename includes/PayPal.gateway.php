@@ -2,7 +2,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../index.php');
 	exit();
 }
 
@@ -253,9 +253,9 @@ class PayPal
 		//If it is a cancelled reversal
 		if(!$cancelled_reversal)
 		{
-			$query = new MMQueryBuilder();
+			$query = new Query();
 			$query->Select("`log_payments_paypal`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`transaction_id` = '%s' AND `status` = '0'", $_POST['txn_id'])->Build();
-			$checkrecycle = MMMySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
+			$checkrecycle = MySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
 			$numrecycle = $checkrecycle['numrows'];
 			
 			if((int)$numrecycle > 0)
@@ -294,7 +294,7 @@ class PayPal
 		}
 		
 		//Delete pending payments with same transaction id
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Delete("`log_payments_paypal`")->Where("`transaction_id` = '%s' AND `status` = '2'", $_POST['txn_id'])->Build();
 		$this->sql->query($query, DBNAME);
 		
@@ -498,7 +498,7 @@ class PayPal
 			$table = "log_invalidpayments_paypal";
 		}
 		
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Insert("`$table`")->Columns($columns, $args)->Build();
 		$result = $this->sql->query($query, DBNAME);
 		

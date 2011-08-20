@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../../index.php');
 	exit();
 }
 
@@ -32,7 +32,7 @@ class Core
 	{
 		global $DB;
 		$this->page_access = ACCESS_ALL;
-		$this->db = $DB;
+		$this->db = &$DB;
 		$this->parseIncoming();
 		$this->LoadConfigs();
 	}
@@ -45,10 +45,10 @@ class Core
 	public function LoadConfigs()
 	{		
 		//Fetch Tables
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`configs`")->Columns("*")->Build();
 		$result = $this->db->query($query, DBNAME);
-		$configs = MMMySQLiFetch($result);
+		$configs = MySQLiFetch($result);
 		
 		//Config Varialbes are array with string only
 		//Now to set the variable with its value
@@ -261,8 +261,8 @@ class Core
 		
 		$key = htmlspecialchars(urldecode($key));
 		$key = str_replace (".."                , ""   , $key);
-		$key = preg_replace("/\_\_(.+?)\_\_/"   , ""   , $key);
-		$key = preg_replace("/^([\w\.\-\_]+)$/" , "$1" , $key);
+		$key = preg_replace('/\_\_(.+?)\_\_/'   , ""   , $key);
+		$key = preg_replace('/^([\w\.\-\_]+)$/' , "$1" , $key);
 		
 		return $key;
 	}
@@ -301,13 +301,13 @@ class Core
 		$val = str_replace ("'"				, "&#39;"         , $val); // IMPORTANT: It helps to increase sql query safety.
 		
 		// Ensure unicode chars are OK
-		$val = preg_replace("/&amp;#([0-9]+);/s", "&#\\1;", $val);
+		$val = preg_replace('/&amp;#([0-9]+);/s', "&#\\1;", $val);
 		
 		//-----------------------------------------
 		// Try and fix up HTML entities with missing ;
 		//-----------------------------------------
 		
-		$val = preg_replace("/&#(\d+?)([^\d;])/i", "&#\\1;\\2", $val);
+		$val = preg_replace('/&#(\d+?)([^\d;])/i', "&#\\1;\\2", $val);
 		
 		return $val;
 	}
@@ -323,7 +323,7 @@ class Core
 		if ($this->get_magic_quotes)
 		{
 			$t = stripslashes($t);
-			$t = preg_replace("/\\\(?!&amp;#|\?#)/", "&#092;", $t);
+			$t = preg_replace('/\\\(?!&amp;#|\?#)/', "&#092;", $t);
 		}
 		
 		return $t;
@@ -364,7 +364,7 @@ class Core
 	
 	public function CheckAccess()
 	{
-		global $USER, $uclass, $auth;
+		global $USER, $uclass, $UserSelf;
 		if($uclass->banned && $this->banned_allowed == false)
 		{
 			return false;
@@ -400,7 +400,7 @@ class Core
 	
 	/**
 	 * Gives access to banned user to the page if $bool = true
-	 * @param boolean $bool
+	 * @param bool $bool
 	 */
 	public function BannedAccess($bool)
 	{

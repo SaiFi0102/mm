@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../../index.php');
 	exit();
 }
 class Templates
@@ -48,10 +48,10 @@ class Templates
 	* Returns a single template in a string from the templatecache or the file with all DynamiCore compatible tags
 	*
 	* @param string $templatename Name of template to be fetched
-	* @param boolean $showheader Include header file or not
-	* @param boolean $showfooter Include footer file or not
-	* @param boolean $showheadinclude Include HTML headinclude file or not
-	* @param boolean $gethtmlcomments Wrap template in HTML comments showing the template name?
+	* @param bool $showheader Include header file or not
+	* @param bool $showfooter Include footer file or not
+	* @param bool $showheadinclude Include HTML headinclude file or not
+	* @param bool $gethtmlcomments Wrap template in HTML comments showing the template name?
 	*
 	* @return string
 	* @example $templates->FetchTemplate($templatename, true, true, true, true, 0);
@@ -83,9 +83,9 @@ class Templates
 	 * Gives Template link
 	 *
 	 * @param string $templatename Name of template to be fetched
-	 * @param boolean $showheader Include header file or not
-	 * @param boolean $showfooter Include footer file or not
-	 * @param boolean $showheadinclude Include HTML headinclude file or not
+	 * @param bool $showheader Include header file or not
+	 * @param bool $showfooter Include footer file or not
+	 * @param bool $showheadinclude Include HTML headinclude file or not
 	 * 
 	 * @return string
 	 * @example include(Output('news', true, true, true, true, 0));

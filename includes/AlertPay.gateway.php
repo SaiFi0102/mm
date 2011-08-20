@@ -2,7 +2,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../index.php');
 	exit();
 }
 
@@ -255,9 +255,9 @@ class AlertPay
 		$amount			= floatval($totalAmountReceived);
 		
 		//Check if transaction has been processed before and if it is "Completed"
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`log_payments_alertpay`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`transaction_id` = '%s' AND `status` = '0'", $transactionReferenceNumber)->Build();
-		$checkrecycle = MMMySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
+		$checkrecycle = MySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
 		$numrecycle = $checkrecycle['numrows'];
 		
 		if((int)$numrecycle > 0)
@@ -293,7 +293,7 @@ class AlertPay
 		}
 		
 		//Delete pending payments with same transaction id
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Delete("`log_payments_alertpay`")->Where("`transaction_id` = '%s' AND `status` = '2'", $transactionReferenceNumber)->Build();
 		$this->sql->query($query, DBNAME);
 				
@@ -403,7 +403,7 @@ class AlertPay
 			$table = "log_invalidpayments_alertpay";
 		}
 		
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Insert("`$table`")->Columns($columns, $args)->Build();
 		$result = $this->sql->query($query, DBNAME);
 		

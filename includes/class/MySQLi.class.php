@@ -3,53 +3,36 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../../index.php');
 	exit();
 }
 
-class MMMySQLi extends mysqli
+/**
+ * Extension of PHP's SPL mysqli
+ * Including Error reporting and logging,
+ * profiling queries and using a safe way to execute queries etc.
+ * 
+ * @author Saif <saifi0102@gmail.com>
+ * @uses mysqli
+ *
+ */
+class MMySQLi extends mysqli
 {
-	/**
-	 * 
-	 * An array of all queries executed
-	 * @var array
-	 */
-	public $ArrQuery = array();
+	public $LastQuery; //Last Query String
+	public $CurrentDatabase; //Current database pointer string
+	public $NumQueries = 0; //Total number of queries executed
+	public $QueriesExecutionTime = 0.0; //Total time taken for query execution
 	
-	/**
-	 * 
-	 * Last query string
-	 * @var string
-	 */
-	public $LastQuery;
-	
-	/**
-	 * 
-	 * Current Selected Database Name
-	 * @var string
-	 */
-	public $CurrentDatabase;
-	
-	/**
-	 * Number of queries
-	 * @var integer
-	 */
-	public $NumQueries = 0;
-	
-	/**
-	 * Total time taken to execute all queries
-	 * @var float
-	 */
-	public $QueriesExecutionTime = 0.0;
+	private $ArrQuery = array();
 	
 	/**
 	 * 
 	 * Connects to MySQL using MySQLi and checks if any error exists in connection
-	 * @param string $host
-	 * @param string $user
-	 * @param string $pass
-	 * @param string $db
-	 * @param mixed $port
+	 * @param string $host Prepend "p:" for persistent connections.
+	 * @param string $user MySQL Username
+	 * @param string $pass MySQL Password
+	 * @param string $db MySQL Database
+	 * @param mixed $port Default 3306
 	 * 
 	 * @see mysqli::__construct()
 	 */
@@ -92,16 +75,18 @@ $errorstring = "|----------------------------Connection Error-------------------
 	}
 	
 	/**
-	 * 
 	 * Closes MySQL connection
 	 */
 	public function __destruct()
 	{
-		$this->close();
+		if(isset($this->connect_error) && !$this->connect_error)
+		{
+			$this->close();
+		}
 	}
 	
 	/**
-	 * Performs a MySQL query with strings escaped using printf method
+	 * Performs a MySQL query with string escaped using printf method
 	 * @param string $query Query String
 	 * @param string $database Database Name
 	 * @param mixed ...
@@ -181,7 +166,7 @@ $errorstring = "|----------------------------Connection Error-------------------
 	 * 
 	 * Produces, logs MySQL query error and exits php execution
 	 * @param string $query
-	 * @param boolean $exit
+	 * @param bool $exit
 	 */
 	function error($query, $exit = true)
 	{
@@ -216,13 +201,12 @@ $errorstring = "|----------------------------Query Error------------------------
 }
 
 /**
- * 
  * Fetches data from mysqli_result in an array
  * @param mysqli_result $mysqli_result
  * 
  * @return array
  */
-function MMMySQLiFetch($mysqli_result)
+function MySQLiFetch($mysqli_result)
 {
 	//Arguments
 	$args = func_get_args(); array_shift($args); //Custom Arguments
@@ -287,24 +271,31 @@ function MMMySQLiFetch($mysqli_result)
 }
 
 $totalbuildtime = 0.0;
-class MMQueryBuilder
+
+/**
+ * Builds MySQL Queries step by step
+ * @author Saif <saifi0102@gmail.com>
+ *
+ */
+class Query
 {
 	//Variables
 	public $QueryType; //Query type like SELECT INSERT etc.
-	public $MMQryType; //Query type in integer to determine what kind of instructions to follow in other functions
+	public $MMQryType = MMQryType_Unset; //Query type in integer to determine what kind of instructions to follow in other functions
 	public $Columns; //Columns are in array
 	public $Table; //Table Name
 	public $Where; //Where Clause
 	public $Order; //Order Clause
+	public $Group; //Group Clause
 	public $Join; //Join Statement
 	public $JoinOn; //Join Conditions
-	public $JoinTable; //Table to Join
 	public $Limit;
 	
 	private $ColumnsFormatParam = array();
 	private $TableFormatParam = array();
 	private $WhereFormatParam = array();
 	private $OrderFormatParam = array();
+	private $GroupFormatParam = array();
 	private $JoinFormatParam = array();
 	private $JoinOnFormatParam = array();
 	private $LimitFormatParam = array();
@@ -312,13 +303,13 @@ class MMQueryBuilder
 	public $QueryString; //Built Query String
 	public $FormatParamArray = array(); //Array of all format string parameters
 	
-	//Constructor
-	public function __construct()
-	{
-		$this->MMQryType = MMQryType_Unset;
-	}
-	
 	//Query Types
+	
+	/**
+	 * SELECT Query type, used for start building a query
+	 * @param string $tablename
+	 * @return Query $this
+	 */
 	public function Select($tablename)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -345,6 +336,12 @@ class MMQueryBuilder
 		$this->Table = $tablename;
 		return $this;
 	}
+	
+	/**
+	 * UPDATE Query type, used for start building a query
+	 * @param string $tablename
+	 * @return Query $this
+	 */
 	public function Update($tablename)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -356,6 +353,12 @@ class MMQueryBuilder
 		$this->Table = $tablename;
 		return $this;
 	}
+	
+	/**
+	 * INSERT Query type, used for start building a query
+	 * @param string $tablename
+	 * @return Query $this
+	 */
 	public function Insert($tablename)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -367,6 +370,12 @@ class MMQueryBuilder
 		$this->Table = $tablename;
 		return $this;
 	}
+	
+	/**
+	 * REPLACE Query type, used for start building a query
+	 * @param string $tablename
+	 * @return Query $this
+	 */
 	public function Replace($tablename)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -378,6 +387,12 @@ class MMQueryBuilder
 		$this->Table = $tablename;
 		return $this;
 	}
+	
+	/**
+	 * DELETE Query type, used for start building a query
+	 * @param string $tablename
+	 * @return Query $this
+	 */
 	public function Delete($tablename)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -391,6 +406,12 @@ class MMQueryBuilder
 	}
 	
 	//Columns
+	
+	/**
+	 * Adds initial columns
+	 * @param string|array $columns
+	 * @return Query this
+	 */
 	public function Columns($columns)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -400,6 +421,12 @@ class MMQueryBuilder
 		$this->Columns = $columns;
 		return $this;
 	}
+	
+	/**
+	 * Adds extra columns
+	 * @param string|array $columns
+	 * @return Query $this
+	 */
 	public function AddColumns($columns)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -419,32 +446,92 @@ class MMQueryBuilder
 		{
 			$this->Columns .= ", " . $columns;
 		}
-		
 		return $this;
 	}
 	
 	//Join
+	/**
+	 * Adds initial join clause with table name and type. Query::JoinOn MUST also be called
+	 * @param string $jointable
+	 * @param string $jointype
+	 * @return Query $this
+	 */
 	public function Join($jointable, $jointype = "INNER")
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
 		$args = func_get_args(); array_shift($args); array_shift($args);
-		$this->JoinFormatParam = $args;
+		$this->JoinFormatParam = array();
+		$this->JoinFormatParam[] = $args;
 		
-		$this->JoinTable = $jointable;
-		$this->Join = $jointype;
+		$this->Join = array();
+		$this->Join[] = array(
+			'Type'	=> $jointype,
+			'Table'	=> $jointable,
+		);
 		return $this;
 	}
+	
+	/**
+	 * Adds initial join on clause with a condition. Query::Join MUST also be called
+	 * @param string $var1
+	 * @param string $var2
+	 * @return Query $this
+	 * 
+	 * @todo $var3, $var4, ...
+	 */
 	public function JoinOn($var1, $var2)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
 		$args = func_get_args(); array_shift($args); array_shift($args);
-		$this->JoinOnFormatParam = $args;
+		$this->JoinOnFormatParam = array();
+		$this->JoinOnFormatParam[] = $args;
 		
-		$this->JoinOn = $var1 . " = " . $var2;
+		$this->JoinOn = array();
+		$this->JoinOn[] = $var1 . " = " . $var2;
+		return $this;
+	}
+	
+	/**
+	 * @see Query::Join
+	 * @param string $jointable
+	 * @param string $jointype
+	 * @return Query $this
+	 */
+	public function AddJoin($jointable, $jointype = "INNER")
+	{
+		//Merge FormatParamArray with this function's Format String Arguments
+		$args = func_get_args(); array_shift($args); array_shift($args);
+		$this->JoinFormatParam[] = $args;
+		
+		$this->Join[] = array(
+			'Type'	=> $jointype,
+			'Table'	=> $jointable,
+		);
+		return $this;
+	}
+	
+	/**
+	 * @see Query::JoinOn
+	 * @param string $var1
+	 * @param string $var2
+	 * @return Query $this
+	 */
+	public function AddJoinOn($var1, $var2)
+	{
+		//Merge FormatParamArray with this function's Format String Arguments
+		$args = func_get_args(); array_shift($args); array_shift($args);
+		$this->JoinOnFormatParam[] = $args;
+		
+		$this->JoinOn[] = $var1 . " = " . $var2;
 		return $this;
 	}
 	
 	//Where, Order and Limit
+	/**
+	 * Adds initial where clause
+	 * @param string $string
+	 * @return Query $this
+	 */
 	public function Where($string)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -454,6 +541,33 @@ class MMQueryBuilder
 		$this->Where = $string;
 		return $this;
 	}
+	
+	/**
+	 * Adds where clause
+	 * @param string $operator
+	 * @param string $string
+	 * @return Query $this
+	 */
+	public function AddWhere($operator, $string)
+	{
+		//Merge FormatParamArray with this function's Format String Arguments
+		$args = func_get_args(); array_shift($args); array_shift($args);
+		$this->WhereFormatParam = array_merge($this->WhereFormatParam, $args);
+		
+		if(strlen($this->Where) > 0)
+		{
+			$this->Where .= " " . $operator;
+		}
+		$this->Where .= " " . $string;
+		
+		return $this;
+	}
+	
+	/**
+	 * Adds initial order clase
+	 * @param string $string
+	 * @return Query $this
+	 */
 	public function Order($string)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -463,6 +577,43 @@ class MMQueryBuilder
 		$this->Order = $string;
 		return $this;
 	}
+	
+	/**
+	 * Adds extra order clause
+	 * @param string $string
+	 * @return Query $this
+	 */
+	public function AddOrder($string)
+	{
+		//Merge FormatParamArray with this function's Format String Arguments
+		$args = func_get_args(); array_shift($args);
+		$this->OrderFormatParam = array_merge($this->OrderFormatParam, $args);
+		
+		$this->Order .= ", " . $string;
+		return $this;
+	}
+	
+	/**
+	 * Adds group clause
+	 * @param string $string
+	 * @return Query $this
+	 */
+	public function Group($string)
+	{
+		//Merge FormatParamArray with this function's Format String Arguments
+		$args = func_get_args(); array_shift($args);
+		$this->GroupFormatParam = array_merge($this->GroupFormatParam, $args);
+		
+		$this->Group = $string;
+		return $this;
+	}
+	
+	/**
+	 * Adds limit clause with start and repeat
+	 * @param string $var1
+	 * @param string $var2
+	 * @return Query $this
+	 */
 	public function Limit($var1, $var2 = null)
 	{
 		//Merge FormatParamArray with this function's Format String Arguments
@@ -481,6 +632,11 @@ class MMQueryBuilder
 	}
 	
 	//Build
+	/**
+	 * Builds the Query with data given
+	 * 
+	 * @return string Query String
+	 */
 	public function Build()
 	{
 		global $totalbuildtime;
@@ -608,11 +764,20 @@ class MMQueryBuilder
 		//Join
 		if($this->MMQryType == MMQryType_Select)
 		{
-			if($this->Join && $this->JoinOn)
+			if($this->Join)
 			{
-				$this->FormatParamArray = array_merge($this->FormatParamArray, $this->JoinFormatParam);
-				$this->FormatParamArray = array_merge($this->FormatParamArray, $this->JoinOnFormatParam);
-				$query .= " " . $this->Join . " JOIN " . $this->JoinTable . " ON " . $this->JoinOn;
+				foreach($this->JoinFormatParam as $JoinFormatParam)
+				{
+					$this->FormatParamArray = array_merge($this->FormatParamArray, $this->JoinFormatParam);
+				}
+				foreach($this->JoinOnFormatParam as $JoinOnFormatParam)
+				{
+					$this->FormatParamArray = array_merge($this->FormatParamArray, $this->JoinOnFormatParam);
+				}
+				foreach($this->Join as $key => $join)
+				{
+					$query .= " " . $join['Type'] . " JOIN " . $join['Table'] . " ON " . $this->JoinOn[$key];
+				}
 			}
 		}
 		
@@ -621,6 +786,11 @@ class MMQueryBuilder
 		{
 			$this->FormatParamArray = array_merge($this->FormatParamArray, $this->WhereFormatParam);
 			$query .= " WHERE " . $this->Where;
+		}
+		if($this->Group)
+		{
+			$this->FormatParamArray = array_merge($this->FormatParamArray, $this->GroupFormatParam);
+			$query .= " GROUP BY " . $this->Group;
 		}
 		if($this->Order)
 		{

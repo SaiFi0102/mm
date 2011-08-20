@@ -2,6 +2,9 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array();
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -15,8 +18,8 @@ $page_name[] = array("Login"=>"login.php");
 //################ Page Functions ################
 function LogIn($user, $pass, $lifetime)
 {
-	global $auth;
-	if($auth->Login($user, $pass, $lifetime))
+	global $UserSelf;
+	if($UserSelf->Login($user, $pass, $lifetime))
 	{
 		return true;
 	}
@@ -77,7 +80,7 @@ if(isset($_POST['submit']))
 				{
 					$rdloc = "index.php";
 				}
-				if(preg_match("#(.+)://#i", $rdloc))
+				if(preg_match('#(.+)://#i', $rdloc))
 				{
 					$rdloc = "index.php";
 				}

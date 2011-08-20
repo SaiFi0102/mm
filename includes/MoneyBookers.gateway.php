@@ -2,7 +2,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../index.php');
 	exit();
 }
 
@@ -250,9 +250,9 @@ class MoneyBookers
 		$txn_id 		= $_POST['mb_transaction_id'];
 		
 		//Check if transaction has been processed before and if it is "Completed"
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`log_payments_moneybookers`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`transaction_id` = '%s' AND `status` = '0'", $_POST['mb_transaction_id'])->Build();
-		$checkrecycle = MMMySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
+		$checkrecycle = MySQLiFetch($this->sql->query($query, DBNAME), "onerow: 1");
 		$numrecycle = $checkrecycle['numrows'];
 		
 		if((int)$numrecycle > 0)
@@ -288,7 +288,7 @@ class MoneyBookers
 		}
 		
 		//Delete pending payments with same transaction id
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Delete("`log_payments_moneybookers`")->Where("`transaction_id` = '%s' AND `status` = '2'", $_POST['mb_transaction_id'])->Build();
 		$this->sql->query($query, DBNAME);
 				
@@ -472,7 +472,7 @@ class MoneyBookers
 			$table = "log_invalidpayments_moneybookers";
 		}
 		
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Insert("`$table`")->Columns($columns, $args)->Build();
 		$result = $this->sql->query($query, DBNAME);
 		

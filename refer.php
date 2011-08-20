@@ -2,6 +2,9 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array();
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -16,9 +19,9 @@ $page_name[] = array("Referrals"=>"refer.php");
 function FetchRefferals()
 {
 	global $DB, $USER;
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`account_referrals`")->Columns(array("*", "(SELECT `username` FROM `account` WHERE `id`=`account_referrals`.`to`)" => "username"))->Where("`by` = '%s'", $USER['id'])->Build();
-	$referrals = MMMySQLiFetch($DB->query($query, DBNAME));
+	$referrals = MySQLiFetch($DB->query($query, DBNAME));
 	
 	return $referrals;
 }

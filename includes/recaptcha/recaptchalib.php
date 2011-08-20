@@ -32,6 +32,13 @@
  * THE SOFTWARE.
  */
 
+//################ Redirect if not included ################
+if(!defined("INCLUDED"))
+{
+	header('Location: ../../index.php');
+	exit();
+}
+
 /**
  * The reCAPTCHA server URL's
  */

@@ -8,6 +8,13 @@
  * file that was distributed with this source code.
  */
 
+//################ Redirect if not included ################
+if(!defined("INCLUDED"))
+{
+	header('Location: ../../index.php');
+	exit();
+}
+
 /*
  * Autoloader and dependency injection initialization for Swift Mailer.
  */

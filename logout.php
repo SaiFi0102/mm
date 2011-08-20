@@ -2,6 +2,9 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array();
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -13,7 +16,7 @@ eval($cms->SetPageAccess(ACCESS_REGISTERED));
 $page_name[] = array("Logging Out");
 
 //################ Page Functions ################
-$auth->Logout($USER['id']);
+$UserSelf->Logout($USER['id']);
 
 $REDIRECT_MESSAGE = "You were successfully logged out!";
 $REDIRECT_LOCATION = "index.php";

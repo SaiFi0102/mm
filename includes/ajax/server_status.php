@@ -3,15 +3,24 @@ define("INCLUDED", true); //This is for returning a die message if INCLUDED is n
 set_include_path("../../");
 $AJAX_PAGE = true;
 
-//################ Required Files ################
-require_once("init.php");
-error_reporting(E_ERROR);
-
 //################ Required Data ################
 if(!isset($_POST['sure']))
 {
 	exit("Error: Please report an administrator!");
 }
+if(empty($_POST))
+{
+	exit;
+}
+
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'Realm'	=> true,
+);
+
+//################ Required Files ################
+require_once("init.php");
+error_reporting(E_ERROR);
 
 //################ Ajax has ALL ACCESS ################
 $cms->BannedAccess(true);

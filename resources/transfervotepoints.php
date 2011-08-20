@@ -24,7 +24,7 @@ $old = $LOGONDB->Select("id, points, times_voted", "voting_points", "WHERE date 
 foreach($old as $val)
 {
 	$LOGONDB->Update(array("date"=>"0"), "voting_points", "WHERE id='%s'", $val['id']);
-	$LOGONDB->Insert(array("accountid"=>"'%s'", "votepoints"=>"'%s'", "voted"=>"'%s'"), "account_mm_extend", true, $val['id'], $val['points'], $val['times_voted']);
+	$LOGONDB->Insert(array("id"=>"'%s'", "votepoints"=>"'%s'", "voted"=>"'%s'"), "account_mm_extend", true, $val['id'], $val['points'], $val['times_voted']);
 	print("Updated Vote/Donation Status for account ". $val['id'] ."<br /><br />");
 }
 unset($old);

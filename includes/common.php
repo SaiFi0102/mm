@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../index.php');
 	exit();
 }
 

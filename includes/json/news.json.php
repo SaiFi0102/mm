@@ -3,10 +3,14 @@ define("INCLUDED", true); //This is for returning a die message if INCLUDED is n
 set_include_path("../../");
 $AJAX_PAGE = true;
 
+//################ Required Data ################
 if(empty($_POST))
 {
 	exit;
 }
+
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array();
 
 //################ Required Files ################
 require_once("init.php");
@@ -20,13 +24,13 @@ function GetTotalNews()
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`news`")->Columns(array("COUNT(*)"=>"newscount"))->Build();
-	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	$result = MySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	return $result['newscount'];
 }
-function FetchNews($ordercolumn, $ordermethod, $limitstart="0", $limitrows="5")
+function FetchNews($ordercolumn, $ordermethod, $limitstart=0, $limitrows=5)
 {
 	global $DB;
 	
@@ -58,9 +62,9 @@ function FetchNews($ordercolumn, $ordermethod, $limitstart="0", $limitrows="5")
 		$limitrows = 10; //Do not allow more than 10 rows in a query
 	}
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`news`")->Columns("*")->Order("`sticky` DESC, `%s` %s", $ordercolumn, $ordermethod)->Limit("%s", "%s", $limitstart, $limitrows)->Build();
-	$news = MMMySQLiFetch($DB->query($query, DBNAME));	
+	$news = MySQLiFetch($DB->query($query, DBNAME));	
 	
 	for($i = 0; $i < count($news); $i++)
 	{
@@ -86,8 +90,4 @@ switch($_POST['data'])
 		print json_encode(array_merge($totalnews, $fetchnews));
 	break;
 }
-
-//################ Template's Output ################
-
-
 ?>

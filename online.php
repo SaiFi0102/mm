@@ -2,6 +2,12 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'WoW'	=> true,
+	'Realm'	=> true,
+);
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -18,9 +24,9 @@ function FetchOnlinePlayers()
 {
 	global $DB, $REALM;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`characters`")->Columns("*")->Where("`online` <> '0'")->Build();
-	$return = MMMySQLiFetch($DB->query($query, $REALM[$_GET['rid']]['CH_DB']));
+	$return = MySQLiFetch($DB->query($query, $REALM[$_GET['rid']]['CH_DB']));
 		
 	return $return;
 }

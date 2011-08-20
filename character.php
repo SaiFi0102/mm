@@ -2,6 +2,12 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'WoW'	=> true,
+	'Realm'	=> true,
+);
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -92,9 +98,9 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 				$cms->ErrorPopulate("The cost of this tool is {$cms->config['cost_customizetool']} Vote Points. You only have {$USER['votepoints']} Vote Points. <a href='vote.php'>Click here to vote for us</a>.");
 			}
 			//Check if user was ever banned
-			$query = new MMQueryBuilder();
+			$query = new Query();
 			$query->Select("`account_banned`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`id` = '%s'", $USER['id'])->Build();
-			$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+			$result = MySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 			if((int)$result['numrows'] > 0)
 			{
 				$cms->ErrorPopulate("You are not allowed to use this tool.");
@@ -109,8 +115,8 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 				if($soapresult['sent'])
 				{
 					//Deduct points
-					$query = new MMQueryBuilder();
-					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_customizetool'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+					$query = new Query();
+					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_customizetool'])->Where("`id` = '%s'", $USER['id'])->Build();
 					$result = $DB->query($query, DBNAME);
 					
 					//Deduct Points from GLOBAL varaible to remove confusion because of positioning
@@ -125,7 +131,7 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 				}
 				
 				//Insert entry in log
-				$query = new MMQueryBuilder();
+				$query = new Query();
 				$query->Insert("`log_customizetool`")->Columns(array(
 					"`account`"		=> "'%s'",
 					"`character`"	=> "'%s'",
@@ -167,8 +173,8 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 				if($soapresult['sent'])
 				{
 					//Deduct points
-					$query = new MMQueryBuilder();
-					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_factionchange'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+					$query = new Query();
+					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_factionchange'])->Where("`id` = '%s'", $USER['id'])->Build();
 					$result = $DB->query($query, DBNAME);
 					
 					if($result)
@@ -208,8 +214,8 @@ if(isset($_GET['act']) && $_cdata['account'] == $USER['id'])
 				if($soapresult['sent'])
 				{
 					//Deduct points
-					$query = new MMQueryBuilder();
-					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_racechange'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+					$query = new Query();
+					$query->Update("`account_mm_extend`")->Columns(array("`votepoints`"=>"`votepoints` - '%s'"), $cms->config['cost_racechange'])->Where("`id` = '%s'", $USER['id'])->Build();
 					$result = $DB->query($query, DBNAME);
 					
 					if($result)

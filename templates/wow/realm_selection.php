@@ -1,7 +1,7 @@
 <?php
 //Prepare the link without realm id
-$url = preg_replace(array("#\?rid=(.+)&#i", "#&rid=(.+)&#i", "#\?rid=(.+)#i", "#&rid=(.+)#i", ), array("&", "&", "", ""), $_SERVER['REQUEST_URI']);
-$get = preg_match("#\?(.*?)#i", $url) ?  "&" :  "?";
+$url = preg_replace(array('#\?rid=(.+)&#i', '#&rid=(.+)&#i', '#\?rid=(.+)#i', '#&rid=(.+)#i', ), array("&", "&", "", ""), $_SERVER['REQUEST_URI']);
+$get = preg_match('#\?(.*?)#i', $url) ?  "&" :  "?";
 $url = $url.$get."rid=";
 ?>
 <div class="main">

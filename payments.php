@@ -2,6 +2,9 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array();
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -13,7 +16,7 @@ eval($cms->SetPageAccess(ACCESS_ALL));
 $page_name[] = array("Payments");
 
 //################ Page Functions ################
-function ModifyDonationPoints($accountid, $amount)
+function ModifyDonationPoints($id, $amount)
 {
 	global $DB, $ppd;
 	
@@ -28,8 +31,8 @@ function ModifyDonationPoints($accountid, $amount)
 	}
 	$amount = $amount * $ppd; //Amount of Dollars * Points per dollar specified by gateway
 	
-	$query = new MMQueryBuilder();
-	$query->Update("`account_mm_extend`")->Where("`accountid` = '%s'", $accountid)
+	$query = new Query();
+	$query->Update("`account_mm_extend`")->Where("`id` = '%s'", $id)
 	->Columns(array("`donationpoints`"=>"`donationpoints` + '%s'", "`donated`"=>"`donated` + '%s'"), $amount, $times)->Build();
 	
 	$DB->query($query, DBNAME);
@@ -71,7 +74,7 @@ if($validation == "noob")
 }
 if($validation != false && is_array($validation))
 {
-	ModifyDonationPoints($validation['accountid'], $validation['amount']);
+	ModifyDonationPoints($validation['id'], $validation['amount']);
 }
 
 ?>

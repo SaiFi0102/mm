@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../../index.php');
 	exit();
 }
 
@@ -47,9 +47,9 @@ class Realm
 		$Where = "`account` = '%s' ";
 		$Where .= $extra;
 		
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`characters`")->Columns("*")->Where($Where, $args)->Build();
-		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		$data = MySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
 		
 		return $data;
 	}
@@ -67,9 +67,9 @@ class Realm
 		$Where  = "`guid` = '%s' ";
 		$Where .= $extra;
 		
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`characters`")->Columns("*")->Where($Where, $args)->Build();
-		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
+		$data = MySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
 		
 		return $data;
 	}
@@ -86,9 +86,9 @@ class Realm
 		$Where  = "`guid` = '%s' ";
 		$Where .= $extra;
 		
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`character_homebind`")->Columns("*")->Where($Where, $args)->Build();
-		$data = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
+		$data = MySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']));
 		
 		return $data;
 	}
@@ -98,15 +98,15 @@ class Realm
 		$status = pfsockopen($this->realmconf['IP'], $this->realmconf['PORT'], $errno, $errstr, 5);
 		$startimee = microtime(1);
 		//Uptime Query
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`uptime`")->Columns("`starttime`")->Where("`realmid` = '%s'", $this->rid)
 		->Order("`starttime` DESC")->Limit("1")->Build();
-		$uptime = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		$uptime = MySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		//Max Online Players Query
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`uptime`")->Columns(array("MAX(`maxplayers`)"=>"maxplayers"))->Where("`realmid` = '%s'", $this->rid)->Build();
-		$maxonline = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		$maxonline = MySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		if($uptime['starttime'] == null)
 		{
@@ -134,12 +134,12 @@ class Realm
 		}
 		
 		//Online Players Query
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`characters`")->Where("`online` <> 0")
 		->Columns(array("COUNT(*)"=>"numrows", "(SELECT COUNT(*) FROM `characters` WHERE `online` <> 0 AND (`race`='1' OR `race`='3' OR `race`='4' OR `race`='7' OR `race`='11'))"=>"numalliance"))
 		->Build();
 		
-		$result = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
+		$result = MySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
 		
 		return array(
 			"status"	=> true,
@@ -250,7 +250,7 @@ class Realm
 	 * Checks and Sends Rewards By WoW Mail
 	 * @param mixed $rewardid
 	 * @param mixed $characterid
-	 * @param integer $votedonate
+	 * @param int $votedonate
 	 * 
 	 * @return array(message,bool)
 	 */
@@ -266,9 +266,9 @@ class Realm
 		
 		//Setting a log session
 		$reward_delivery_table = $votedonate ? "log_donatereward_delivery" : "log_votereward_delivery"; //$votedonate
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`".$reward_delivery_table."`")->Columns(array("MAX(`session`)"=>"maxsession"))->Build();
-		$session = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		$session = MySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		$session = $session['maxsession'];
 		
 		if(empty($session))
@@ -282,9 +282,9 @@ class Realm
 		
 		//Fetch Reward and Check for errors
 		$rewards_table = $votedonate ? "rewards_donation" : "rewards_voting"; //$votedonate
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`".$rewards_table."`")->Columns("*")->Where("`id` = '%s' AND `realm` = '%s'", $rewardid, $this->rid)->Build();
-		$reward = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		$reward = MySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		if(!count($reward)) //If reward does not exists
 		{
@@ -299,9 +299,9 @@ class Realm
 		}
 		
 		//Fetch Character and check if it exists
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`characters`")->Columns("`name`")->Where("`guid` = '%s' AND `account` = '%s'", $characterid, $USER['id'])->Build();
-		$character = MMMySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
+		$character = MySQLiFetch($this->db->query($query, $this->realmconf['CH_DB']), "onerow: 1");
 		
 		if(!count($character))
 		{
@@ -388,8 +388,8 @@ class Realm
 		if($success)
 		{
 			$pointcolumn = $votedonate ? "donationpoints" : "votepoints"; //$votedonate
-			$query = new MMQueryBuilder();
-			$query->Update("`account_mm_extend`")->Columns(array("`".$pointcolumn."`"=>"`".$pointcolumn."` - '%s'"), $reward['points'])->Where("`accountid` = '%s'", $USER['id'])->Build();
+			$query = new Query();
+			$query->Update("`account_mm_extend`")->Columns(array("`".$pointcolumn."`"=>"`".$pointcolumn."` - '%s'"), $reward['points'])->Where("`id` = '%s'", $USER['id'])->Build();
 			$this->db->query($query, DBNAME);
 			
 			//Update $USER variables so that it doesnt confuse player that no points were deducted cuz it takes one extra reload to reload USER vars because of positionning!
@@ -458,7 +458,7 @@ $errorstring = "\r\n
 				//Log donated for character in characters table
 				if($sent)
 				{
-					$query = new MMQueryBuilder();
+					$query = new Query();
 					$query->Replace("`character_mm_extend`")->Columns(array("`guid`"=>"'%s'", "`donated`"=>"'1'"), $cid)->Build();
 					$this->db->query($query, $this->realmconf['CH_DB']);
 				}
@@ -473,7 +473,7 @@ $errorstring = "\r\n
 		$sent = $sent ? 1 : 0;
 		
 		//Insert into DB
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Insert($table)->Columns(array(
 			'`session`'		=> "'%s'",
 			'`command`'		=> "'%s'",

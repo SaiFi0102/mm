@@ -2,6 +2,9 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array();
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -22,7 +25,7 @@ function UpdateAccount($changeflags, $changepassword)
 	if($changeflags)	$newclient = FixExpansionFlags($_POST['newflags']);
 	if($changepassword)	$newpass = Sha1Pass($USER['username'], $_POST['newpassword']);
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Update("`account`")->Where("`id` = '%s' AND `sha_pass_hash` = '%s'", $USER['id'], $currentpasshash);
 	
 	if($changeflags)

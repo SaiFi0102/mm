@@ -2,6 +2,12 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'WoW'	=> true,
+	'Realm'	=> true,
+);
+
 //################ Required Files ################
 require_once("init.php");
 
@@ -25,9 +31,9 @@ function FetchTransactionsPayPal($uid)
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`log_payments_paypal`")->Columns("*")->Where("`account_id` = '%s'", $uid)->Order("`transaction_id` DESC, `timestamp` ASC")->Build();
-	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	$return = MySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
@@ -35,9 +41,9 @@ function FetchTransactionsMoneyBookers($uid)
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`log_payments_moneybookers`")->Columns("*")->Where("`account_id` = '%s'", $uid)->Order("`transaction_id` DESC, `timestamp` ASC")->Build();
-	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	$return = MySQLiFetch($DB->query($query, DBNAME));
 		
 	return $return;
 }
@@ -45,9 +51,9 @@ function FetchTransactionsAlertPay($uid)
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`log_payments_alertpay`")->Columns("*")->Where("`account_id` = '%s'", $uid)->Order("`transaction_id` DESC, `timestamp` ASC")->Build();
-	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	$return = MySQLiFetch($DB->query($query, DBNAME));
 		
 	return $return;
 }
@@ -55,9 +61,9 @@ function FetchDonationRewards($rid)
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`rewards_donation`")->Columns("*")->Where("`realm` = '%s' AND `disabled` = '0'", $rid)->Build();
-	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	$return = MySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }

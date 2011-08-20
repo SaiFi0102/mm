@@ -3,20 +3,12 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../../index.php');
 	exit();
 }
 
 class Users
 {
-	/**
-	 * Users Handler
-	 * 
-	 * @param string $eventname
-	 * @return string
-	 * 
-	 */
-	
 	public $user = array();
 	public $ban;
 	public $banned;
@@ -76,7 +68,7 @@ class Users
 	public function ClearOfflineUsers($offset = 0)
 	{
 		$timeout = UserTimeout($offset);
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Update("`online`")->Columns(array("`online`" => "'0'"))->Where("`lastvisit` < '%s' AND `online` = '1'", $timeout)->Build();
 		$this->db->query($query, DBNAME);
 	}
@@ -88,7 +80,7 @@ class Users
 	function ClearExpiredVotes()
 	{
 		$time = (time()-12*60*60);
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Delete("`log_votes`")->Where("`time` < '%s'", $time)->Build();
 		$this->db->query($query, DBNAME);
 	}
@@ -104,7 +96,7 @@ class Users
 		$uid = $this->user['loggedin'] ? $this->user['id'] : 0;
 		
 		//Build UPDATE Query for existing entry
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Update("`online`")->Where("`uid` = '%s' AND `ip` = '%s'", $uid, GetIp())
 		->Columns(array(
 			'`lastvisit`'	=> "'%s'",
@@ -136,7 +128,7 @@ class Users
 		//Build INSERT Query for new entry
 		if($this->db->affected_rows < 1 && $GLOBALS['AJAX_PAGE'] != true)
 		{
-			$query = new MMQueryBuilder();
+			$query = new Query();
 			$query->Insert("`online`")
 			->Columns(array(
 				'`uid`'					=> "'%s'",
@@ -167,13 +159,13 @@ class Users
 	
 	public function BanStatus()
 	{
-		global $auth;
+		global $UserSelf;
 		$uid = false;
 		if($this->user['loggedin'])
 		{
 			$uid = $this->user['id'];
 		}
-		$ban = $auth->BanCheck($uid, $_SERVER['REMOTE_ADDR']);
+		$ban = $UserSelf->BanCheck($uid, $_SERVER['REMOTE_ADDR']);
 		if(!$ban)
 		{
 			$this->ban = false;
@@ -189,9 +181,9 @@ class Users
 	public function IsFirstVisit()
 	{
 		global $USER;
-		$query = new MMQueryBuilder();
+		$query = new Query();
 		$query->Select("`online`")->Columns("visits")->Where("`ip` = '%s'", GetIp())->Build();
-		$online = MMMySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
+		$online = MySQLiFetch($this->db->query($query, DBNAME), "onerow: 1");
 		
 		if($online['visits'] == null)
 		{

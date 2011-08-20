@@ -2,6 +2,12 @@
 define("INCLUDED", true); //This is for returning a die message if INCLUDED is not defined on any of the template
 $AJAX_PAGE = false;
 
+//################ Required Resources ################
+$REQUIRED_RESOURCES = array(
+	'WoW'	=> true,
+	'Realm'	=> true,
+);
+
 //################ Required Files ################
 require_once("init.php");
 

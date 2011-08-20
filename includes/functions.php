@@ -3,7 +3,7 @@
 //################ Redirect if not included ################
 if(!defined("INCLUDED"))
 {
-	header('Location: index.php');
+	header('Location: ../index.php');
 	exit();
 }
 
@@ -11,7 +11,7 @@ if(!defined("INCLUDED"))
  * Validates Email address format
  * 
  * @param string $data Email address
- * @param boolean $strict
+ * @param bool $strict
  * @return boolean
  */
 function ValidateEmail($data, $strict = false) 
@@ -57,21 +57,20 @@ function GetIp()
  * @param string $string time()'s format
  * @return string
  */
-function FormatTime($string = '')
+function FormatTime($string = "")
 {
 	if(empty($string))
 	{
 		// use "now":
 		$time = time();
 	}
-	
-	elseif (preg_match('/^\d{14}$/', $string))
+	elseif(preg_match('/^\d{14}$/', $string))
 	{
 		// it is mysql timestamp format of YYYYMMDDHHMMSS?			
 		$time = mktime(substr($string, 8, 2),substr($string, 10, 2),substr($string, 12, 2),
 					   substr($string, 4, 2),substr($string, 6, 2),substr($string, 0, 4));
 	}
-	elseif (is_numeric($string))
+	elseif(is_numeric($string))
 	{
 		// it is a numeric string, we handle it as timestamp
 		$time = (int)$string;
@@ -116,7 +115,7 @@ function _strtoupper($string)
  * &Alias of print_r
  *
  * @param mixed $expression
- * @param unknown_type $return
+ * @param bool $return
  */
 function _print_r($expression, $return = null)
 {
@@ -131,7 +130,7 @@ function _print_r($expression, $return = null)
  * &Alias of var_dump()
  *
  * @param mixed $expression1
- * @param unknown_type $expression2
+ * @param mixed $expression2
  */
 function _var_dump($expression1, $expression2 = null)
 {
@@ -141,19 +140,22 @@ function _var_dump($expression1, $expression2 = null)
 }
 
 /**
- * Sets the first character to upper case and returns
+ * Sets only the first character to uppercase
  *
  * @param string $str
  * @return string
  */
 function FirstCharUpper($str)
 {
-	$firstletter = substr($str, 0, 1);
-	$restletters = substr($str, 1);
-	$firstletter = strtoupper($firstletter);
-	return $firstletter.$restletters;
+	return ucfirst($str);
 }
 
+/**
+ * Sets the first character to uppercase and the rest to lowercase
+ * 
+ * @param string $str
+ * @return string
+ */
 function FirstCharUpperThenLower($str)
 {
 	$firstletter = substr($str, 0, 1);
@@ -164,10 +166,10 @@ function FirstCharUpperThenLower($str)
 }
 
 /**
- * Converts MySQL Timestamp to date(); format
+ * Converts MySQL Timestamp to date() format
  *
- * @param string $timestamp TimeStamp. For now set null or dont set $timestamp
- * @param string $format Date(); format. For information check www.php.net/date
+ * @param string $timestamp MySQL Timestamp, empty value will be treated as current time
+ * @param string $format date() format, for information check www.php.net/date
  * @return string
  */
 function ConvertMysqlTimestamp($timestamp = null, $format = "j F Y, g:i a")
@@ -177,22 +179,21 @@ function ConvertMysqlTimestamp($timestamp = null, $format = "j F Y, g:i a")
 }
 
 /**
- * Sha1 Password Format
- * 
- * @param $user
- * @param $pass
+ * Calculate the SHA1 hash string using username and password in MaNGOS format
+ * @param string $username
+ * @param string $password
  * @return string
  */
-function Sha1Pass($user, $pass)
+function Sha1Pass($username, $password)
 {
-	$str = strtoupper($user). ":" . strtoupper($pass);
+	$str = strtoupper($username). ":" . strtoupper($password);
 	return sha1($str);
 }
 
 /**
  * Returns the the time in unix format $offset minutes before actual time
- * @param $offset
- * @return Int
+ * @param int $offset
+ * @return int
  */
 function UserTimeout($offset = 0)
 {
@@ -205,9 +206,9 @@ function UserTimeout($offset = 0)
 }
 
 /**
- * Returns Date of Ban Timeout but if timestamp is 0 or null it means banned for ever
+ * Returns Date of Ban Timeout but if timestamp is 0 or empty it means banned for ever
  * @param $timestamp
- * @return unknown_type
+ * @return string
  */
 function BanTimeOut($timestamp, $format = "j F Y, g:i a")
 {
@@ -251,9 +252,9 @@ function CheckUsername($username)
 		return USERNAME_LENTH_ABOVE;
 	}
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`username` = '%s'", $username)->Build();
-	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	$result = MySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	if((int)$result['numrows'] > 0)
 	{
@@ -288,9 +289,9 @@ function CheckEmail($email)
 		return EMAIL_ILLEGAL_SPACE;
 	}
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`account`")->Columns(array("COUNT(*)"=>"numrows"))->Where("`email` = '%s'", $email)->Build();
-	$result = MMMySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
+	$result = MySQLiFetch($DB->query($query, DBNAME), "onerow: 1");
 	
 	if((int)$result['numrows'] > 0)
 	{
@@ -594,9 +595,9 @@ function FetchItemsData($rewards, $rid)
 	}
 	
 	//Fetch
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`item_template`")->Columns(array("`entry`","`name`","`quality`"))->Where($Where)->Build();
-	$ir = MMMySQLiFetch($DB->query($query, $REALM[$rid]['W_DB']));
+	$ir = MySQLiFetch($DB->query($query, $REALM[$rid]['W_DB']));
 	
 	
 	$itemarray = array();
@@ -640,15 +641,16 @@ function FetchVoteGateways()
 {
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`vote_gateways`")->Columns("*")->Build();
-	$return = MMMySQLiFetch($DB->query($query, DBNAME));
+	$return = MySQLiFetch($DB->query($query, DBNAME));
 	
 	return $return;
 }
 /**
  * Returns an array with hours minutes and seconds left!
  * @param $timestamp
+ * @author Unknown
  */
 function StrTimeLeft($integer) 
 {
@@ -719,6 +721,13 @@ function StrTimeLeft($integer)
 	return $return;
 }
 
+/**
+ * Gives the difference in date time in an array
+ * @param int $date
+ * @param int $date2
+ * @return array
+ * @author Unknown
+ */
 function DateDiff($date, $date2 = 0)
 {
     if(!$date2)
@@ -770,6 +779,12 @@ function DateDiff($date, $date2 = 0)
     return $date_diff;
 }
 
+/**
+ * Converts DateDiff array to string
+ * @param int $date
+ * @param int $date2
+ * @return string
+ */
 function StrDateDiff($date, $date2=0)
 {
 	$DateDiff = DateDiff($date, $date2);
@@ -805,19 +820,25 @@ function StrDateDiff($date, $date2=0)
 /**
  * Returns random 50 player names with thier guid
  * @param $rid
+ * @todo Realm Class
  */
 function RandomOnlinePlayers($rid)
 {
 	global $DB, $REALM;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`characters`")->Columns(array("`guid`", "`name`"))
 	->Where("`online` <> 0")->Order("RAND()")->Limit("50")->Build();
-	$return = MMMySQLiFetch($DB->query($query, $REALM[$rid]['CH_DB']));
+	$return = MySQLiFetch($DB->query($query, $REALM[$rid]['CH_DB']));
 	
 	return $return;
 }
 
+/**
+ * Removes ?ref=... for login.php links
+ * @param string $url
+ * @return string
+ */
 function RemoveGetRefFromLogin($url)
 {
 	$url = urldecode($url);
@@ -828,7 +849,9 @@ function RemoveGetRefFromLogin($url)
 /**
  * Generates a random characters based on lower case, upper case letters and numbers
  * while it doesnt lets more than 4 consecutive type(lower,upper,number) be generated
- * @param $length
+ * 
+ * @param int $length
+ * @return string alphanumeric
  */
 function RandomCharacters($length)
 {
@@ -846,7 +869,7 @@ function RandomCharacters($length)
 	{
 		if((rand(0, 1) == 0 && $countletters <= 3) || $countnumbers > 3) //0 means letters, 1 means numbers
 		{
-			if((rand(0, 1) == 0 && $countlower <= 3) || $countupper > 3)//0 means lower case, 1 means upper case
+			if((rand(0, 1) == 0 && $countlower <= 3) || $countupper > 3) //0 means lower case, 1 means upper case
 			{
 				$round = rand(0, strlen($lowerletters));
 				$return .= substr($lowerletters, ($round - 1), 1);
@@ -887,6 +910,11 @@ function RandomCharacters($length)
 	return $return;
 }
 
+/**
+ * Checks if an array is Associative array
+ * @param array $array
+ * @return bool
+ */
 function IsAssocArray($array)
 {
     if(is_array($array) && !is_numeric(array_shift(array_keys($array))))
@@ -897,7 +925,6 @@ function IsAssocArray($array)
 }
 
 /**
- * 
  * Returns country ISO 3166-Alpha-1(2 Letter) Code
  * From IP
  * @param string $ip
@@ -913,7 +940,7 @@ function GetCountryCodeByIp($ip)
 	}
 	global $DB;
 	
-	$query = new MMQueryBuilder();
+	$query = new Query();
 	$query->Select("`ip2country`")->Columns("`country_code`")->Where("'%s' BETWEEN `begin_ip_num` AND `end_ip_num`", $longip)->Build();
 	$result = $DB->query($query, DBNAME);
 	
@@ -921,7 +948,7 @@ function GetCountryCodeByIp($ip)
 	{
 		return false; //If that range of ip is not availible in our database
 	}
-	$data = MMMySQLiFetch($result, "onerow: 1");
+	$data = MySQLiFetch($result, "onerow: 1");
 	if($data['country_code'] == "EU")
 	{
 		return false; //EU(rope) is not an exact country
@@ -941,10 +968,13 @@ function GetCountryCodeByIp($ip)
  * @param string $attatch Path to attatchment file
  * @param string $characterset Dont change or set this value if u dont know what you are doing
  * 
+ * @uses Swift
  * @return array
  */
 function SendEmail($to, $subject, $body, $from = null, $bodytype = 'text/plain', $attatch = null, $characterset = 'UTF-8')
 {
+	//Initialize
+	require_once(DOC_ROOT."/includes/mail/swift_required.php");
 	global $email, $cms;
 	$fail = null;
 	
